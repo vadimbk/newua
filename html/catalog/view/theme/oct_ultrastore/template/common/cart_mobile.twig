@@ -1,0 +1,15 @@
+<a href="{{ wishlist_link }}" class="us-mobile-top-btn us-mobile-top-btn-wishlist d-lg-none h-100">
+	<span class="us-mobile-top-btn-item"><img src="catalog/view/theme/oct_ultrastore/img/wishlist-mobile.svg" alt="" /></span>
+</a>
+<a href="{{ compare_link }}" class="us-mobile-top-btn us-mobile-top-btn-compare d-lg-none h-100">
+	<span class="us-mobile-top-btn-item"><img src="catalog/view/theme/oct_ultrastore/img/compare-mobile.svg" alt="" /></span>
+</a>
+{% if oct_popup_cart_status is defined and oct_popup_cart_status %}
+<a href="javascript:;" id="us_cart_mobile" class="us-mobile-top-btn us-mobile-top-btn-cart d-lg-none h-100" onclick="octPopupCart()">
+	<span class="us-mobile-top-btn-item"><img src="catalog/view/theme/oct_ultrastore/img/cart-mobile.svg" alt="" /><span id="mobile_cart_index" class="mobile-header-index">{{ total_products }}</span></span>
+</a>
+{% else %}
+<a href="{{ cart_link }}" id="us_cart_mobile" class="us-mobile-top-btn us-mobile-top-btn-cart d-lg-none h-100">
+	<span class="us-mobile-top-btn-item"><img src="catalog/view/theme/oct_ultrastore/img/cart-mobile.svg" /><span id="mobile_cart_index" class="mobile-header-index">{{ total_products }}</span></span>
+</a>
+{% endif %}

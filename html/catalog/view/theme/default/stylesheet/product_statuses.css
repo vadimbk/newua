@@ -1,0 +1,227 @@
+.thumbnails li,
+.image {
+  position: relative;
+}
+
+/* Statuses */
+.product-status img {
+  margin-right: 15px;
+  border: 0;
+}
+.product-status .status-name {
+  position: relative;
+  bottom: 20px;
+}
+
+.category-status img {
+  margin-right: 3px;
+  border: 0;
+}
+
+.status-inline {
+  display: inline;
+}
+
+/* Stickers and Text statuses */
+
+.product-sticker,
+.category-sticker {  
+  position: absolute;
+  z-index: 1;
+}
+.product-sticker img,
+.category-sticker img {
+  border: 0 !important;
+}
+
+.product-sticker {
+  top: 18px;
+  right:  18px;  
+  bottom: 18px;
+  left: 18px;
+}
+.category-sticker {
+  top: 9px;
+  right:  9px;  
+  bottom: 9px;
+  left: 9px;
+}
+
+.product-sticker.left-top,
+.category-sticker.left-top {
+  right: unset;  
+  bottom: unset;
+}
+.product-sticker.left-bottom,
+.category-sticker.left-bottom {  
+  top: unset;
+  right: unset;  
+}
+.product-sticker.right-top,
+.category-sticker.right-top {  
+  bottom: unset;
+  left: unset;  
+}
+.product-sticker.right-bottom,
+.category-sticker.right-bottom {  
+  top: unset;
+  left: unset;  
+}
+.product-sticker.center,
+.category-sticker.center {  
+  margin: auto;  
+  left:0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+.product-sticker.left-center,
+.category-sticker.left-center {  
+  margin: auto;  
+  top: 0;
+  bottom: 0;
+  right: unset;  
+}
+.product-sticker.right-center,
+.category-sticker.right-center {
+  margin: auto;  
+  top: 0;
+  bottom: 0;
+  left: unset;  
+}
+.product-sticker.center-top,
+.category-sticker.center-top {  
+  margin: auto;  
+  left:0;
+  right: 0;
+  bottom: unset;
+}
+.product-sticker.center-bottom,
+.category-sticker.center-bottom {  
+  margin: auto;  
+  left:0;
+  right: 0;
+  top: unset;
+}
+
+/* Text statuses */
+
+.product-sticker,
+.category-sticker {
+  height: fit-content;
+  width: fit-content;  
+}
+
+.product-sticker .text,
+.category-sticker .text,
+.product-status.text,
+.category-status.text {
+  text-align: center;
+  padding: 5px 15px 4px;
+  border-radius: 2px;
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: default;
+  height: fit-content;
+  width: fit-content;  
+}
+
+.product-sticker .text,
+.category-sticker .text {
+  width: 100%;  
+}
+
+.product-sticker div:not(:last-child),
+.category-sticker div:not(:last-child) {
+  margin-bottom: 3px;
+}
+
+.product-status.text,
+.category-status.text {
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
+.product-status.text.status-inline,
+.category-status.text.status-inline {
+  display: inline-grid;
+}
+
+.category-sticker .text,
+.category-status .text {
+  padding: 0px 7px 0px;
+  font-size: 9px;
+}
+
+.product-sticker .text.oval,
+.category-sticker .text.oval, 
+.product-status.text.oval,
+.category-status.text.oval {
+  border-radius: 20px;
+}
+
+.product-sticker .text.circle,
+.product-status.text.circle {  
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  padding: 11px 0 0;
+  font-size: 15px;
+  line-height: 25px;
+  -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
+  border-radius: 25px;
+}
+
+.category-sticker .text.circle,
+.category-status.text.circle {
+  width: 38px;
+  height: 38px;
+  text-align: center;
+  padding: 10px 0 0;
+  font-size: 12px;
+  line-height: 19px;
+  -webkit-border-radius: 19px;
+  -moz-border-radius: 19px;
+  border-radius: 19px;  
+}
+
+.product-sticker .text.circle_corner,
+.product-status.text.circle_corner {  
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  padding: 11px 0 0;
+  font-size: 15px;
+  line-height: 25px;
+  -webkit-border-radius: 25px 0 25px 25px;
+  -moz-border-radius: 25px 0 25px 25px;
+  border-radius: 25px 0 25px 25px;
+}
+
+.category-sticker .text.circle_corner,
+.category-status.text.circle_corner {
+  width: 38px;
+  height: 38px;
+  text-align: center;
+  padding: 10px 0 0;
+  font-size: 12px;
+  line-height: 19px;
+  -webkit-border-radius: 19px 0 19px 19px;
+  -moz-border-radius: 19px 0 19px 19px;
+  border-radius: 19px 0 19px 19px;
+}
+
+/* Custom text statuses add below */
+
+.product-sticker .text.my_custom_type1,
+.category-sticker .text.my_custom_type1,
+.product-status.text.my_custom_type1,
+.category-status.text.my_custom_type1 {
+  padding: 4px 15px 5px;
+  font-size: 15px;
+  text-transform: none;
+}

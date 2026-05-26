@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+<name>SP AUTO SEO FAQ Template</name>
+<code>sp_seo_faq_template</code>
+<version>6.1</version>
+<author>spectre</author>
+<link>https://freelancer.od.ua/</link>
+<file path="catalog/view/theme/*/template/product/category.tpl">
+	<operation error="skip">
+		<search><![CDATA[<?php if (!$categories && !$products) { ?>]]></search>
+		<add position="before"><![CDATA[<?php if (!empty($faq_output)) { ?><div class="sp-seo-faq"><?php echo $faq_output; ?></div><?php } ?>]]></add>
+	</operation>
+</file>
+<file path="catalog/view/theme/*/template/product/category.twig">
+	<operation error="skip">
+		<search><![CDATA[{% if not categories and not products %}]]></search>
+		<add position="before"><![CDATA[{% if faq_output %}<div class="sp-seo-faq">{{ faq_output }}</div>{% endif %}]]></add>
+	</operation>
+</file>
+<file path="catalog/view/theme/*/template/product/product.tpl">
+	<operation error="skip">
+		<search><![CDATA[<?php if ($products) { ?>]]></search>
+		<add position="before"><![CDATA[<?php if (!empty($faq_output)) { ?><div class="sp-seo-faq"><?php echo $faq_output; ?></div><?php } ?>]]></add>
+	</operation>
+</file>
+<file path="catalog/view/theme/*/template/product/product.twig">
+	<operation error="skip">
+		<search><![CDATA[{% if products %}]]></search>
+		<add position="before"><![CDATA[{% if faq_output %}<div class="sp-seo-faq">{{ faq_output }}</div>{% endif %}]]></add>
+	</operation>
+</file>
+<file path="catalog/view/theme/*/template/product/manufacturer_info.tpl">
+	<operation error="skip">
+	<search><![CDATA[<div class="col-sm-6 text-right"><?php echo $results; ?></div>]]></search>
+		<add position="after" offset="1"><![CDATA[
+			<?php if (!empty($faq_output)) { ?><div class="sp-seo-faq"><?php echo $faq_output; ?></div><?php } ?>
+		]]></add>
+	</operation>
+</file>
+<file path="catalog/view/theme/*/template/product/manufacturer_info.twig">
+	<operation error="skip">
+	<search><![CDATA[<div class="col-sm-6 text-right">{{ results }}</div>]]></search>
+		<add position="after" offset="1"><![CDATA[
+			{% if faq_output %}<div class="sp-seo-faq">{{ faq_output }}</div>{% endif %}
+		]]></add>
+	</operation>
+</file>
+<file path="catalog/view/theme/*/template/information/information.tpl">
+	<operation error="skip">
+		<search><![CDATA[<?php echo $description; ?><?php echo $content_bottom; ?></div>]]></search>
+		<add position="replace"><![CDATA[<?php echo $description; ?><?php if (!empty($faq_output)) { ?><div class="sp-seo-faq"><?php echo $faq_output; ?></div><?php } ?><?php echo $content_bottom; ?></div>]]></add>
+	</operation>
+</file>
+<file path="catalog/view/theme/*/template/information/information.twig">
+	<operation error="skip">
+		<search><![CDATA[{{ description }}{{ content_bottom }}</div>]]></search>
+		<add position="replace"><![CDATA[{{ description }}{% if faq_output %}<div class="sp-seo-faq">{{ faq_output }}</div>{% endif %}{{ content_bottom }}</div>]]></add>
+	</operation>
+</file>
+<file path="catalog/view/theme/*/template/blog/*.twig">
+	<operation error="skip">
+		<search><![CDATA[{{ content_bottom }}]]></search>
+		<add position="before"><![CDATA[{% if faq_output %}<div class="sp-seo-faq">{{ faq_output }}</div>{% endif %}]]></add>
+	</operation>
+</file>
+<file path="catalog/view/theme/*/template/{product,information}/*.tpl">
+	<operation error="skip">
+		<search><![CDATA[<div class="seo-faq"></div>]]></search>
+		<add position="replace"><![CDATA[<?php if (!empty($faq_output)) { ?><div class="sp-seo-faq"><?php echo $faq_output; ?></div><?php } ?>]]></add>
+	</operation>
+</file>
+<file path="catalog/view/theme/*/template/{product,blog,information}/*.twig">
+	<operation error="skip">
+		<search><![CDATA[<div class="seo-faq"></div>]]></search>
+		<add position="replace"><![CDATA[{% if faq_output %}<div class="sp-seo-faq">{{ faq_output }}</div>{% endif %}]]></add>
+	</operation>
+</file>
+<file path="catalog/view/theme/*/template/common/home.tpl">
+	<operation error="skip">
+		<search><![CDATA[<?php echo $content_bottom; ?>]]></search>
+		<add position="replace"><![CDATA[<?php if (!empty($faq_output)) { ?><div class="sp-seo-faq"><?php echo $faq_output; ?></div><?php } ?><?php echo $content_bottom; ?>]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[<div class="seo-faq"></div>]]></search>
+		<add position="replace"><![CDATA[<?php if (!empty($faq_output)) { ?><div class="sp-seo-faq"><?php echo $faq_output; ?></div><?php } ?>]]></add>
+	</operation>
+</file>
+<file path="catalog/view/theme/*/template/common/home.twig">
+	<operation error="skip">
+		<search><![CDATA[{{ content_bottom }}]]></search>
+		<add position="replace"><![CDATA[{% if faq_output %}<div class="sp-seo-faq">{{ faq_output }}</div>{% endif %}{{ content_bottom }}]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[<div class="seo-faq"></div>]]></search>
+		<add position="replace"><![CDATA[{% if faq_output %}<div class="sp-seo-faq">{{ faq_output }}</div>{% endif %}]]></add>
+	</operation>
+</file>
+</modification>

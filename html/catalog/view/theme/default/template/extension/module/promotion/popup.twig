@@ -1,0 +1,71 @@
+<div id="promotion-popup{{ promotion['promotion_id'] }}" class="modal fade text-left">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title"><span class="str">{{ promotion['name'] }}</span></span>
+      </div>
+      <div class="modal-body">
+				{% if (promotion['thumb_popup'] is not empty) %} 
+					<div class="popup-image">
+						{% if (promotion['gift']['href'] is not empty) %} 
+							<a href = "{{ promotion['gift']['href'] }}" title="{{ promotion['gift']['name'] }}">
+								<img src="{{ promotion['thumb_popup'] }}" />
+							</a>
+						{% else %} 
+							<img src="{{ promotion['thumb_popup'] }}" />
+						{% endif %} 
+					</div>
+				{% endif %} 
+
+				<div class="popup-description">
+					{{ promotion['description'] }} 
+				</div>
+
+				{% if (promotion['href'] is not empty) %} 
+					<div class="promotion-link"><a href = "{{ promotion['href'] }}" title="{{ promotion['name'] }}">{{ promotion_about }}</a></div>
+				{% endif %} 
+
+				{% if (promotion['products']) %} 
+					<div class="products-wrapper">
+
+						<div class="products-title">{{ promotion_products }}</div>
+
+						<div class="promotion-products">
+							{% for promotion_product in promotion['products'] %} 
+								{% if (promotion_product['href'] is not empty) %} 
+									<div class="promotion-product">
+										<div class="product-image">
+											<img src="{{ promotion_product['thumb'] }}" />
+										</div>
+										<div class="product-description">
+											<div class="product-name">
+												<a href="{{ promotion_product['href'] }}" title="{{ promotion_product['name'] }}">
+													{{ promotion_product['name'] }} 
+												</a>
+											</div>    
+											<div class="promotion-product-price">
+												{% if (promotion_product['price']) %} 
+													<div class="product-price">
+														{% if (not promotion_product['special']) %} 
+															{{ promotion_product['price'] }} 
+														{% else %} 
+															<span class="product-price-old">{{ promotion_product['price'] }}</span> <span class="product-price-new">{{ promotion_product['special'] }}</span>
+														{% endif %} 
+													</div>
+												{% endif %} 
+											</div>                          
+										</div>
+									</div>
+								{% endif %} 
+							{% endfor %} 
+						</div>
+					</div>
+					{% if (promotion['href'] is not empty and promotion['see_all']) %} 
+						<div class="promotion-see-all">{{ promotion_total_products ~ promotion['products_total'] }} <a href = "{{ promotion['href'] }}" title="{{ promotion['name'] }}">{{ promotion_see_all }}</a></div>
+					{% endif %}				
+				{% endif %}								
+      </div>
+			<div class="clearfix"></div>
+    </div>
+  </div>		
+</div>

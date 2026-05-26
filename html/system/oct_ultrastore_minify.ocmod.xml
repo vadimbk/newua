@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>oct_ultrastore_minify</code>
+	<name>Octemplates - Minify</name>
+	<version>1.0.0</version>
+	<author>Octemplates</author>
+	<link>http://octemplates.net/</link>
+	<file path="catalog/controller/common/header.php">
+		<operation error="skip">
+			<search><![CDATA[$data['styles'] = $this->document->getStyles();]]></search>
+			<add position="replace"><![CDATA[
+			$this->load->model('octemplates/widgets/oct_minify');
+				
+			$this->document->addOctStyle('catalog/view/theme/oct_ultrastore/stylesheet/bootstrap-reboot.min.css');
+			$this->document->addOctStyle('catalog/view/theme/oct_ultrastore/stylesheet/bootstrap.min.css');
+			$this->document->addOctStyle('catalog/view/theme/oct_ultrastore/stylesheet/fontawesome-free-5.6.1-web/css/all.css');
+			$this->document->addOctStyle('catalog/view/theme/oct_ultrastore/stylesheet/owl.carousel.min.css');
+			$this->document->addOctStyle('catalog/view/theme/oct_ultrastore/stylesheet/fonts.css');
+			$this->document->addOctStyle('catalog/view/theme/oct_ultrastore/stylesheet/main.css');
+			$this->document->addOctStyle('catalog/view/theme/oct_ultrastore/stylesheet/responsive.css');
+
+			if (file_exists(DIR_TEMPLATE.'oct_ultrastore/stylesheet/dynamic_stylesheet.css')) {
+				$file_size = filesize(DIR_TEMPLATE.'oct_ultrastore/stylesheet/dynamic_stylesheet.css');
+
+				if ($file_size) {
+					$this->document->addOctStyle('catalog/view/theme/oct_ultrastore/stylesheet/dynamic_stylesheet.css');
+				}
+			}
+			
+			$data['styles'] = $this->model_octemplates_widgets_oct_minify->octMinifyCss($this->document->getOctStyles());
+			]]></add>
+    	</operation>
+    	<operation error="skip">
+			<search><![CDATA[$data['scripts'] = $this->document->getScripts('header');]]></search>
+			<add position="after"><![CDATA[
+			$this->document->addOctScript('catalog/view/theme/oct_ultrastore/js/jquery-3.3.1.min.js');
+			$this->document->addOctScript('catalog/view/theme/oct_ultrastore/js/popper.min.js');
+			$this->document->addOctScript('catalog/view/theme/oct_ultrastore/js/bootstrap.min.js');
+			$this->document->addOctScript('catalog/view/theme/oct_ultrastore/js/main.js');
+			$this->document->addOctScript('catalog/view/theme/oct_ultrastore/js/bootstrap-notify/bootstrap-notify.js');
+			$this->document->addOctScript('catalog/view/theme/oct_ultrastore/js/common.js');
+
+			if ($this->config->get('theme_oct_ultrastore_lazyload')) {
+				$this->document->addOctStyle('catalog/view/theme/oct_ultrastore/js/lazyload/jquery.lazyload.min.js');
+			}
+			
+			$data['scripts'] = $this->model_octemplates_widgets_oct_minify->octMinifyJs($this->document->getOctScripts());
+			]]></add>
+    	</operation>
+	</file>
+	<file path="system/library/document.php">
+	    <operation>
+			<search><![CDATA[private $scripts = array();]]></search>
+			<add position="after"><![CDATA[
+			private $octStyles = [];
+			private $octScripts = [];
+			
+			public function addOctStyle($href, $rel = 'stylesheet', $media = 'screen') {
+				$href = $this->removeVersion($href);
+				
+				$this->octStyles[$href] = [
+					'href'  => $href,
+					'rel'   => $rel,
+					'media' => $media
+				];
+			}
+		
+			public function getOctStyles() {
+				$styles = $this->styles;
+				$this->styles = [];
+				
+				foreach ($styles as $style) {
+					$href = $this->removeVersion($style['href']);
+					
+					$this->styles[$href] = [
+						'href'  => $href,
+						'rel'   => $style['rel'],
+						'media' => $style['media']
+					];
+				}
+				
+				return array_merge($this->octStyles, $this->styles);
+			}
+		
+			public function addOctScript($href, $postion = 'header') {
+				$href = $this->removeVersion($href);
+				
+				$this->octScripts[$postion][$href] = $href;
+			}
+		
+			public function getOctScripts($postion = 'header') {
+				if (isset($this->octScripts[$postion])) {
+					$scripts = isset($this->scripts[$postion]) ? $this->scripts[$postion] : [];
+					$this->scripts[$postion] = [];
+					
+					foreach ($scripts as $script) {
+						$href = $this->removeVersion($script);
+						
+						$this->scripts[$postion][$href] = $href;
+					}
+					
+					return array_merge($this->octScripts[$postion], $this->scripts[$postion]);
+				} else {
+					return array();
+				}
+			}
+			
+			private function removeVersion($link) {
+				$href = explode('?', $link);
+				
+				if (file_exists($_SERVER['DOCUMENT_ROOT'] . '/' . ltrim($href[0]))) {
+			       $link = $href[0];
+		        }
+		        
+		        return $link;
+		    }
+			]]></add>
+    	</operation>
+    </file>
+</modification>

@@ -1,0 +1,52 @@
+<div class="row row-padding-top">
+	<div class="col-lg-12">
+		<div class="us-main-shop-title">
+			{{ heading_title }}
+		</div>
+	</div>
+</div>
+<div id="us-product-reviews_{{ module }}" class="row us-product-reviews-row">
+	{% for review in reviews %} 
+	<div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 col-margin-bottom us-item">
+		<div class="us-reviews-block h-100 d-flex flex-column">
+			<div class="us-reviews-block-top d-flex align-items-center">
+				<div class="us-reviews-block-top-icon">
+					<img src="catalog/view/theme/oct_ultrastore/img/user-icon.svg" alt="{{ review.author }}">
+				</div>
+				<div class="us-reviews-block-top-info">
+					<div class="us-reviews-block-top-info-author">{{ review.author }}</div>
+					<div class="us-reviews-block-top-info-date">{{ review.date }}</div>
+				</div>
+			</div>
+			<a href="{{ review.href }}" class="us-reviews-block-photo">
+				<img src="{{ review.thumb }}" class="us-reviews-block-photo-img" alt="{{ review.name }}">
+			</a>
+			<div class="us-reviews-block-rating us-module-rating-stars">
+				{% if review.rating %}
+				{% for i in 1..5 %}
+				{% if review.rating < i %}
+				<span class="us-module-rating-star"></span>
+				{% else %}
+				<span class="us-module-rating-star us-module-rating-star-is"></span>
+				{% endif %}
+				{% endfor %}
+				{% endif %} 
+			</div>
+			<a href="{{ review.href }}" class="us-reviews-block-title" title="{{ review.name }}">{{ review.name }}</a>
+			<div class="us-reviews-block-text">{{ review.text }}</div>
+		</div>
+	</div>
+	{% endfor %} 
+</div>
+<div class="row">
+	<div class="col-lg-12">
+		<div class="us-module-button">
+			<button id="us-reviews-btn{{ module }}" class="us-module-btn">
+			{{ button_show_more }}
+			</button>
+		</div>
+	</div>
+</div>
+<script>
+octShowProducts("us-reviews-btn{{ module }}", "us-product-reviews_{{ module }}", "4", "{{ reviews_count }}");
+</script>

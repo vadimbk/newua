@@ -1,0 +1,66 @@
+<div class="category-promotion">
+
+	<div class="promotion-details">
+		{% if (promotion['thumb'] is not empty) %} 
+			<div class="promotion-image">
+				{% if (promotion['gift']['href'] is not empty) %} 
+					<a href = "{{ promotion['gift']['href'] }}" title="{{ promotion['gift']['name'] }}">
+						<img src="{{ promotion['thumb'] }}" />
+					</a>
+				{% else %} 
+					<img src="{{ promotion['thumb'] }}" />
+				{% endif %} 
+			</div>
+		{% endif %} 
+
+		<div class="details-title">
+			<a data-toggle="modal" href="#promotion-popup{{ promotion['promotion_id'] }}">{{ promotion['name'] }}</a>
+		</div>
+		{{ promotion['popup'] }}    
+	</div> 
+
+	{% if (promotion['options']['category']['timer']['type'] == 'text_period') %} 
+
+		{% if (promotion['text_timer']['text_period'] is not empty) %} 
+			<div class="promotion-text-timer" style="{{promotion['options']['category']['timer']['font_size'] is not empty ? 'font-size: ' ~ promotion['options']['category']['timer']['font_size'] ~ 'px' : '' }}">
+				<div class="text-timer-text-period">{{ text_special_do }}<br> {{ promotion['text_timer']['text_period'] }}</div>
+			</div>		
+		{% endif %} 
+
+	{% elseif (promotion['options']['category']['timer']['type'] != 'disable' and promotion['active'] and not promotion['date_end_empty']) %} 
+
+		{% set rand = random(1, 10000) %} 
+		<div class="promotion-timer">
+			<div class="timer-title">
+				{{ promotion_valid }} 
+			</div>
+			<div class="timer-counter">
+				<div id="counter{{ promotion['promotion_id'] ~ rand }}"></div>
+			</div>
+		</div>
+
+		<script>
+	    $(document).ready(function () {
+	      var date = new Date('{{ promotion['date_end'] }}');
+	      //date.setTime(date.getTime() + date.getTimezoneOffset()*60*1000);
+	      $('#counter{{ promotion['promotion_id'] ~ rand }}').timeTo({
+	      timeTo: date,
+	              displayCaptions: true,
+	{% if (promotion['options']['category']['timer']['theme'] == 'black') %} 
+		      theme: 'black',
+	{% endif %} 
+	{% if (promotion['options']['category']['timer']['font_size'] is not empty) %} 
+		      fontSize: {{ promotion['options']['category']['timer']['font_size'] }},
+	{% endif %} 
+	{% if (promotion['options']['category']['timer']['type'] == 'static') %} 
+		      start: false,
+	{% endif %} 
+
+	      lang: '{{promotion_counter_language is not empty ? promotion_counter_language : 'en' }}'
+	    });
+	    });
+		</script>					  
+
+	{% endif %} 
+
+</div>

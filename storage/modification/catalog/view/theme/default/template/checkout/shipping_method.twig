@@ -1,0 +1,79 @@
+{% if error_warning %}
+<div class="alert alert-warning alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}</div>
+{% endif %}
+
+{% if ee_tracking and ee_checkout %}
+    <script type="text/javascript"><!--
+       	var ee_data = JSON.parse('{{ ee_data }}');
+        ee_data['url'] = window.location.href;
+        ee_data['title'] = document.title;
+        $.ajax({
+            url: 'index.php?route=extension/module/ee_tracking/checkout',
+            type: 'post',
+            data: ee_data,
+            dataType: 'json',
+            success: function(json) {
+                if (json) {
+                    console.log(json);
+                }
+            },
+            {% if ee_checkout_log %}
+            error: function(xhr, exc, error) {
+                $.post('index.php?route=extension/module/ee_tracking/checkoutlog', { 'error': error + ' (exc: ' + exc + ' status: ' + xhr.statusText + ')', 'url': window.location.href }, function( logs ) {
+                	console.log(logs);
+                });
+            }
+            {% endif %}
+        });
+        $(document).on('change', 'input[name="shipping_method"]', function() {
+            $.ajax({
+                url: 'index.php?route=extension/module/ee_tracking/checkoutoption',
+                type: 'post',
+                data: { 'step': 4, 'step_option': $(this).data('eet-name'), 'url': window.location.href, 'title': document.title },
+                dataType: 'json',
+                success: function(json) {
+                    if (json) {
+                        console.log(json);
+                    }
+                },
+                {% if ee_checkout_log %}
+                error: function(xhr, exc, error) {
+                    $.post('index.php?route=extension/module/ee_tracking/checkoutlog', { 'error': error + ' (exc: ' + exc + ' status: ' + xhr.statusText + ')', 'url': window.location.href }, function( logs ) {
+                    	console.log(logs);
+                    });
+                }
+                {% endif %}
+            });
+        });
+        //--></script>
+{% endif %}
+{% if shipping_methods %}
+<p>{{ text_shipping_method }}</p>
+{% for shipping_method in shipping_methods %}
+<p><strong>{{ shipping_method.title }}</strong></p>
+{% if not shipping_method.error %}
+{% for quote in shipping_method.quote %}
+<div class="radio">
+  <label> {% if quote.code == code or not code %}
+    {% set code = quote.code %}
+    <input type="radio" name="shipping_method" {% if ee_checkout %}data-eet-name="{{ quote.ee_title ? quote.ee_title|e : quote.title|e }}"{% endif %} value="{{ quote.code }}" checked="checked" />
+    {% else %}
+    <input type="radio" name="shipping_method" {% if ee_checkout %}data-eet-name="{{ quote.ee_title ? quote.ee_title|e : quote.title|e }}"{% endif %} value="{{ quote.code }}" />
+    {% endif %}
+    {{ quote.title }} - {{ quote.text }}</label>
+</div>
+{% endfor %}
+{% else %}
+<div class="alert alert-danger alert-dismissible">{{ shipping_method.error }}</div>
+{% endif %}
+{% endfor %}
+{% endif %}
+<p><strong>{{ text_comments }}</strong></p>
+<p>
+  <textarea name="comment" rows="8" class="form-control">{{ comment }}</textarea>
+</p>
+<div class="buttons">
+  <div class="pull-right">
+    <input type="button" value="{{ button_continue }}" id="button-shipping-method" data-loading-text="{{ text_loading }}" class="btn btn-primary" />
+  </div>
+</div>

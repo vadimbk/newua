@@ -1,0 +1,206 @@
+{% if (only_manager) %} 
+	{% if (styles is defined) %} 
+		{% for style in styles %} 
+		<link type="text/css" href="{{ style['href'] }}" rel="{{ style['rel'] }}" media="{{ style['media'] }}" />
+		{% endfor %} 
+	{% endif %} 
+	{% if (scripts is defined) %} 
+		{% for script in scripts %} 
+		<script type="text/javascript" src="{{ script }}"></script>
+		{% endfor %} 
+	{% endif %} 
+	<script type="text/javascript" charset="utf-8">
+		$(document).ready(function() {
+			$('#elfinder').elfinder(
+				// 1st Arg - options
+				{	
+					commandsOptions: {
+						getfile: { multiple: {{ multiple }} }
+					},
+					getFileCallback : function(file, fm) {
+						{% if (thumb) %} 
+							 $.ajax({
+							  url: 'index.php?route=extension/module/imagemanager/getthumb&thumb=' + encodeURIComponent(file.path) + '&user_token=' + getURLVar('user_token'),
+							  dataType: 'text',
+							  success: function(text) {
+								$('#{{ thumb }}').find('img').attr('src', text);
+							  }
+							});
+						{% endif %} 
+						{% if (target) %} 
+							$('#{{ target }}').val(file.path);
+						{% endif %} 
+						{% if (editor) %} 
+							$('#{{ editor }}').summernote('editor.insertImage', file.url);
+						{% endif %} 
+						//CKEditor
+						{% if (cke) %} 
+					      var cke_target = '{{ cke }}' || null;
+						  cke_target = cke_target.split( ':' ); //link,txtUrl
+						  CKEDITOR.dialog.getCurrent().setValueOf(cke_target[0], cke_target[1], '/image/' + file.path);
+						{% endif %} 
+						{% if (multiple == 'true') %} 
+							file.forEach(function(item, i, file) {
+								$.ajax({
+								  url: 'index.php?route=extension/module/imagemanager/getthumb&thumb=' + encodeURIComponent(item.path) + '&user_token=' + getURLVar('user_token'),
+								  dataType: 'text',
+								  success: function(text) {
+									html  = '<tr id="image-row' + image_row + '">';
+									html += '  <td class="text-left"><a href="" id="thumb-image' + image_row + '"data-toggle="image" class="img-thumbnail"><img src="' + text + '" alt="" title="" data-placeholder="{{ placeholder }}" /></a><input type="hidden" name="product_image[' + image_row + '][image]" value="' + item.path + '" id="input-image' + image_row + '" /></td>';
+									html += '  <td class="text-right"><input type="text" name="product_image[' + image_row + '][sort_order]" value="0" placeholder="0" class="form-control" /></td>';
+									html += '  <td class="text-left"><button type="button" onclick="$(\'#image-row' + image_row  + '\').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+									html += '</tr>';
+
+									$('#images tbody').append(html);
+
+									image_row++;
+								  }
+								});
+								
+							});
+						{% endif %} 
+						// close popup window
+						$('#modal-image').modal('hide');
+					},
+					useBrowserHistory : false,
+					resizable : false,
+					cssAutoLoad : false,               // Disable CSS auto loading
+					baseUrl : 'view/javascript/elfinder/',                    // Base URL to css/*, js/*
+					url : '{{ connector }}'  // connector URL (REQUIRED)
+					// , lang: 'ru'                    // language (OPTIONAL)
+				},
+				// 2nd Arg - before boot up function
+				function(fm, extraObj) {
+					// `init` event callback function
+					fm.bind('init', function() {
+
+					});
+					// Optional for set document.title dynamically.
+					
+					fm.bind('open', function() {
+						var path = '',
+							cwd  = fm.cwd();
+						if (cwd) {
+							path = fm.path(cwd.hash) || null;
+						}
+						
+					}).bind('destroy', function() {
+						
+					});
+				}
+			);
+		});
+	</script>
+	<div id="filemanager" class="modal-dialog modal-lg">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		  <h4 class="modal-title">{{ heading_title }}</h4>
+		</div>
+			<div id="elfinder"></div>
+		
+	  </div>
+	</div>
+{% else %} 
+	{{ header }}{{ column_left }} 
+	<div id="content">
+	  <div class="page-header">
+		<div class="container-fluid">
+		  <div class="pull-right">
+			<button type="submit" form="form-imagemanager" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+			<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+		  <h1>{{ heading_title }}</h1>
+		  <ul class="breadcrumb">
+			{% for breadcrumb in breadcrumbs %} 
+			<li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+			{% endfor %} 
+		  </ul>
+		</div>
+	  </div>
+	  <div class="container-fluid">
+		{% if (error_warning) %} 
+		<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }} 
+		  <button type="button" class="close" data-dismiss="alert">&times;</button>
+		</div>
+		{% endif %} 
+		<div class="panel panel-default">
+		  <div class="panel-heading">
+			<h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+		  </div>
+		  <div class="panel-body">
+			<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-imagemanager" class="form-horizontal">
+			  <ul class="nav nav-tabs">
+				<li class="active"><a href="#tab-general" data-toggle="tab">{{ tab_general }}</a></li>
+				<li><a href="#tab-watermark" data-toggle="tab">{{ tab_watermark }}</a></li>
+			  </ul>
+			  <div class="tab-content">
+				<div class="tab-pane active" id="tab-general">
+				  <div class="form-group">
+					<label class="col-sm-2 control-label" for="input-allow-mime"><span data-toggle="tooltip" data-container="#tab-general" title="{{ help_allow_mime }}">{{ entry_allow_mime }}</span></label>
+					<div class="col-sm-10">
+					  <input type="text" name="imagemanager_allow_mime" value="{{ imagemanager_allow_mime }}" placeholder="{{ entry_allow_mime }}" id="input-allow-mime" class="form-control" />
+					</div>
+				  </div>
+				  <div class="form-group">
+					<label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+					<div class="col-sm-10">
+					  <select name="imagemanager_status" id="input-status" class="form-control">
+						{% if (imagemanager_status) %} 
+						<option value="1" selected="selected">{{ text_enabled }}</option>
+						<option value="0">{{ text_disabled }}</option>
+						{% else %} 
+						<option value="1">{{ text_enabled }}</option>
+						<option value="0" selected="selected">{{ text_disabled }}</option>
+						{% endif %} 
+					  </select>
+					</div>
+				  </div>
+				</div>
+				<div class="tab-pane" id="tab-watermark">
+				  <div class="form-group">
+					<label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+					<div class="col-sm-10">
+					  <select name="imagemanager_wm_status" id="input-status" class="form-control">
+						{% if (imagemanager_wm_status) %} 
+						<option value="1" selected="selected">{{ text_enabled }}</option>
+						<option value="0">{{ text_disabled }}</option>
+						{% else %} 
+						<option value="1">{{ text_enabled }}</option>
+						<option value="0" selected="selected">{{ text_disabled }}</option>
+						{% endif %} 
+					  </select>
+					</div>
+				  </div>
+				  <div class="form-group">
+					<label class="col-sm-2 control-label" for="input-image">{{ entry_image }}</label>
+					<div class="col-sm-10"><a href="" id="thumb-image" data-toggle="image" class="img-thumbnail"><img src="{{ wm_thumb }}" alt="" title="" data-placeholder="{{ placeholder }}" /></a>
+					  <input type="hidden" name="imagemanager_wm_image" value="{{ imagemanager_wm_image }}" id="input-image" />
+					</div>
+				  </div>
+				  <div class="form-group">
+					<label class="col-sm-2 control-label" for="input-margin-right">{{ entry_margin_right }}</label>
+					<div class="col-sm-10">
+					  <input type="text" name="imagemanager_wm_mr" value="{{ imagemanager_wm_mr }}" placeholder="{{ entry_margin_right }}" id="input-margin-right" class="form-control" />
+					</div>
+				  </div>
+				  <div class="form-group">
+					<label class="col-sm-2 control-label" for="input-margin-bottom">{{ entry_margin_bottom }}</label>
+					<div class="col-sm-10">
+					  <input type="text" name="imagemanager_wm_mb" value="{{ imagemanager_wm_mb }}" placeholder="{{ entry_margin_bottom }}" id="input-margin-bottom" class="form-control" />
+					</div>
+				  </div>
+				  <div class="form-group">
+					<label class="col-sm-2 control-label" for="input-transparency"><span data-toggle="tooltip" data-container="#tab-watermark" title="{{ help_transparency }}">{{ entry_transparency }}</span></label>
+					<div class="col-sm-10">
+					  <input type="text" name="imagemanager_wm_trans" value="{{ imagemanager_wm_trans }}" placeholder="{{ entry_transparency }}" id="input-transparency" class="form-control" />
+					</div>
+				  </div>
+				</div>
+			  </div>
+			</form>
+			
+		  </div>
+		</div>
+	  </div>
+	{{ footer }} 
+{% endif %}

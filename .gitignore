@@ -1,0 +1,106 @@
+# =====================================================================
+# .gitignore — radio-shop.com.ua (OpenCart 3.0.2.0)
+# Repo root: /var/www/radio-shop.com.ua/
+# =====================================================================
+
+# --- OpenCart environment-specific configs (DB credentials, host URLs) ---
+html/config.php
+html/admin/config.php
+
+# --- OS / IDE / editor ---
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+.claude/
+
+# --- Logs ---
+*.log
+access.log
+log/
+storage/logs/
+
+# --- Backups, dumps, archives ---
+save/
+*.bak
+*.bak-*
+*.orig
+*.rej
+*.sql
+*.sql.gz
+*.sql.bz2
+*.dump
+*.tar.gz
+*.tgz
+*.zip
+.htaccess.[0-9]*
+.htaccess.bak*
+
+# --- Temp / runtime caches at repo root ---
+tmp/
+/cache/
+
+# --- OpenCart storage/ (runtime, not source) ---
+storage/cache/
+storage/session/
+storage/upload/
+storage/download/
+# storage/modification/ is OCMOD output, but tracked here: Refresh is rare,
+# critical fixes are applied directly to both html/ and mod/, and the active
+# code path is mod/ (autoloader prefers it). A future Refresh will produce
+# one big regen-commit; that is acceptable noise.
+storage/vendor/
+storage/marketplace/
+storage/output_rep.txt
+
+# --- OpenCart user content & generated thumbnails ---
+html/image/cache/
+html/image/catalog/
+html/image/data/
+
+# --- OpenCart generated feeds / large XML exports ---
+html/ocext_*.xml
+html/ukr_google_feed.xml
+html/product_rec.xml
+html/feeds.html
+html/price/
+html/xml_facebook/
+html/genfeed/
+
+# --- OpenCart import/export logs dumped under image/ by extensions ---
+html/image/ocext_*
+html/image/ocext_log/
+
+# --- OpenCart minified asset cache (runtime-generated) ---
+html/min/
+
+# --- Local index/stub files left over from recovery ---
+html/index.html1
+html/file.txt
+html/opcache.php
+
+# --- Project-local working dirs (excluded from VCS by user request) ---
+html/sales/*.xml
+html/sales/*.txt
+html/saved/
+html/rcs/
+html/tcom/
+html/biakom/
+html/bosch/
+html/mclub/
+
+# --- Composer / Node (in case they appear) ---
+vendor/
+node_modules/
+.env
+.env.local
+.env.*.local
+
+# --- Misc ---
+*.pid
+*.lock
+!composer.lock
+!package-lock.json

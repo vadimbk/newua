@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+<name>SP AUTO SEO FAQ</name>
+<code>sp_auto_seo_faq</code>
+<version>6.1</version>
+<author>spectre</author>
+<link>https://freelancer.od.ua/</link>
+<file path="catalog/controller/product/category.php">
+	<operation error="skip">
+		<search><![CDATA[$data['pagination'] = $pagination->render();]]></search>
+		<add position="before"><![CDATA[
+		if ($this->config->get('sp_auto_seo_faq_status')) {
+			$this->load->model('extension/module/sp_auto_seo_faq');
+			$data['faq_output'] = $this->model_extension_module_sp_auto_seo_faq->getCategoryFaq($category_info, $data, $page);
+		}
+		]]></add>
+	</operation>
+</file>
+<file path="catalog/controller/product/product.php">
+	<operation error="skip">
+		<search><![CDATA[$this->model_catalog_product->updateViewed($this->request->get['product_id']);]]></search>
+		<add position="before"><![CDATA[
+		if ($this->config->get('sp_auto_seo_faq_status')) {
+			$this->load->model('extension/module/sp_auto_seo_faq');
+			$data['faq_output'] = $this->model_extension_module_sp_auto_seo_faq->getProductFaq($product_info, $data, !empty($category_info) ? $category_info : []);
+		}
+		]]></add> 
+	</operation>
+</file>
+<file path="catalog/controller/product/manufacturer.php">
+	<operation error="skip">
+		<search><![CDATA[$data['pagination'] = $pagination->render();]]></search>
+		<add position="before"><![CDATA[
+		if ($this->config->get('sp_auto_seo_faq_status')) {
+			$this->load->model('extension/module/sp_auto_seo_faq');
+			$data['faq_output'] = $this->model_extension_module_sp_auto_seo_faq->getManufacturerFaq($manufacturer_info, $data, $page);
+		}
+		]]></add>
+	</operation>
+</file>
+<file path="catalog/controller/information/information.php">
+	<operation error="skip">
+		<search><![CDATA[$data['description'] =]]></search>
+			<add position="after"><![CDATA[
+		if ($this->config->get('sp_auto_seo_faq_status')) {
+			$this->load->model('extension/module/sp_auto_seo_faq');
+			$data['faq_output'] = $this->model_extension_module_sp_auto_seo_faq->getInformationFaq($information_info, $data);
+		}
+		]]></add>
+	</operation>
+</file>
+<file path="catalog/controller/blog/category.php">
+	<operation error="skip">
+		<search><![CDATA[$data['pagination'] =]]></search>
+			<add position="after"><![CDATA[
+		if ($this->config->get('sp_auto_seo_faq_status')) {
+			$this->load->model('extension/module/sp_auto_seo_faq');
+			$data['faq_output'] = $this->model_extension_module_sp_auto_seo_faq->getOcstoreBlogCategoryFaq($category_info, $data);
+		}
+		]]></add>
+	</operation>
+</file>
+<file path="catalog/controller/blog/article.php">
+	<operation error="skip">
+		<search><![CDATA[$this->model_blog_article->updateViewed]]></search>
+			<add position="before"><![CDATA[
+	if ($this->config->get('sp_auto_seo_faq_status')) {
+		$this->load->model('extension/module/sp_auto_seo_faq');
+		$data['faq_output'] = $this->model_extension_module_sp_auto_seo_faq->getOcstoreBlogArticleFaq($article_info, $data);
+	}
+		]]></add>
+	</operation>
+</file>
+<file path="catalog/model/catalog/product.php">
+	<operation error="skip">
+		<search><![CDATA['p.quantity',]]></search>
+			<add position="after"><![CDATA[ 
+				'p.viewed',
+			]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[if (!empty($data['filter_manufacturer_id'])) {]]></search>
+		<add position="before"><![CDATA[
+		if (!empty($data['only_stock'])) {
+			$sql .= " AND p.quantity > 0 ";
+		}
+		if (!empty($data['only_special'])) {
+			$sql .= " AND EXISTS (SELECT price FROM " . DB_PREFIX . "product_special ps WHERE ps.product_id = p.product_id AND ps.customer_group_id = '" . (int) $this->config->get('config_customer_group_id') . "' AND ((ps.date_start = '0000-00-00' OR ps.date_start < NOW()) AND (ps.date_end = '0000-00-00' OR ps.date_end > NOW())) ORDER BY ps.priority ASC, ps.price ASC LIMIT 1) ";
+		}
+		]]></add>
+	</operation>
+</file>
+<file path="catalog/controller/common/home.php">
+	<operation error="skip">
+		<search><![CDATA[$data['column_left'] =]]></search>
+			<add position="before"><![CDATA[
+		if ($this->config->get('sp_auto_seo_faq_status')) {
+			$this->load->model('extension/module/sp_auto_seo_faq');
+			$data['faq_output'] = $this->model_extension_module_sp_auto_seo_faq->getHomeFaq();
+		}
+	]]></add>
+	</operation>
+</file> 
+<file path="catalog/controller/octemplates/blog/oct_blogcategory.php">
+	<operation error="skip">
+		<search><![CDATA[$pagination = new Pagination();]]></search>
+			<add position="before"><![CDATA[
+		if ($this->config->get('sp_auto_seo_faq_status')) {
+			$this->load->model('extension/module/sp_auto_seo_faq');
+			$data['faq_output'] = $this->model_extension_module_sp_auto_seo_faq->getOctBlogCategoryFaq($blog_category_info, $blog_category_info['blogcategory_id']);
+		}
+		]]></add>
+	</operation>
+</file>
+<file path="catalog/controller/octemplates/blog/oct_blogarticle.php">
+	<operation error="skip">
+		<search><![CDATA[$data['tags'] = [];]]></search>
+			<add position="before"><![CDATA[
+		if ($this->config->get('sp_auto_seo_faq_status')) {
+			$this->load->model('extension/module/sp_auto_seo_faq');
+			$data['faq_output'] = $this->model_extension_module_sp_auto_seo_faq->getOctBlogArticleFaq($article_info);
+		}
+		]]></add>
+	</operation>
+</file> 
+</modification>

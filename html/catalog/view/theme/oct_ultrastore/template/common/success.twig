@@ -1,0 +1,60 @@
+{{ header }}
+<div id="common-success" class="container flex-container">
+	<nav aria-label="breadcrumb">
+	  <ul class="breadcrumb us-breadcrumb">
+	    {% for breadcrumb in breadcrumbs %}
+	    <li class="breadcrumb-item us-breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+	    {% endfor %}
+	  </ul>
+	</nav>
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="us-main-shop-title">{{ heading_title }}</div>
+		</div>
+	</div>
+	<div class="content-top-box">{{ content_top }}</div>
+	<div class="row">{{ column_left }}
+	    {% if column_left and column_right %}
+	    {% set class = 'col-sm-6' %}
+	    {% elseif column_left or column_right %}
+	    {% set class = 'col-sm-9' %}
+	    {% else %}
+	    {% set class = 'col-sm-12' %}
+	    {% endif %}
+	    <div id="content" class="{{ class }}">
+		    <div class="us-content">
+			{% if text_order_id %}
+			{{ text_message }}
+					<span class="success">{{ text_order_id }}.</span>
+			{{ text_message_2 }}		
+			
+			{% else %}
+		      {{ text_message }}
+			{% endif %}
+		      {{ text_success }}
+		      <div class="buttons mt-4">
+		        <a href="{{ continue }}" class="us-module-btn us-module-btn-greeny">{{ button_continue }}</a>
+		      </div>
+		      {{ content_bottom }}
+		    </div>
+	    </div>
+	    {{ column_right }}
+	</div>
+</div>
+<!--	
+{% if fb_str %}	
+<script>
+fbq('track', 'Purchase', {
+content_ids: [{{ fb_str }}],
+content_type: 'product',
+value: {{ total_order }},
+currency: 'UAH'
+});
+</script>    
+{% endif %}
+-->
+
+
+ 
+
+{{ footer }}

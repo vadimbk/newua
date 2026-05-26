@@ -1,0 +1,37 @@
+<div id="search" class="input-group header-input-group">
+	<input type="text" id="input_search" name="search" value="{{ search }}" placeholder="{{ text_search }}" class="input-lg h-100 header-input" />
+	<button type="button"  id="oct-search-button" class="btn btn-search header-btn-search h-100"><i class="fa fa-search"></i></button>
+	<div id="us_livesearch_close" onclick="clearLiveSearch();"><i class="fas fa-times"></i></div>
+	<div id="us_livesearch"></div>
+</div>
+
+{% if oct_live_search_status %}
+<script>
+function clearLiveSearch() {
+	$('#us_livesearch_close').removeClass('visible');
+	$('#us_livesearch').removeClass('expanded');
+	$('#us_livesearch').html('');
+	$('#input_search').val('');
+}
+
+$(document).ready(function() {
+	let timer, delay = {{ delay_setting }};
+
+	$('#input_search').keyup(function() {
+	    let _this = $(this);
+
+	    clearTimeout(timer);
+
+	    timer = setTimeout(function() {
+	        let value = $('header #search input[name=\'search\']').val();
+
+			if (value.length > {{ count_symbol }}) {
+				let key = encodeURIComponent(value);
+				octsearch.search(key, 'desktop');
+			}
+
+	    }, delay );
+	});
+});
+</script>
+{% endif %}

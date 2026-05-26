@@ -1,0 +1,41 @@
+.bg-transition {
+  -webkit-transition: background-color 650ms linear 200ms;
+  -moz-transition: background-color 650ms linear 200ms;
+  -ms-transition: background-color 650ms linear 200ms;
+  -o-transition: background-color 650ms linear 200ms;
+  transition: background-color 650ms linear 200ms;
+
+  background-color: rgba(0, 0, 0, 0)!important;
+}
+
+.module-ocdepartment .collapse > .list-group-item:first-child,
+.module-ocdepartment .collapsing > .list-group-item:first-child,
+.module-ocdepartment .carousel-inner > .item > .list-group-item:first-child {
+	border-top-width: 1px;
+}
+
+.module-ocdepartment .carousel-inner > .item > .list-group-item:first-child,
+.module-ocdepartment .carousel-inner > .item > .ocd-child-collapse > .list-group-item:last-child,
+.module-ocdepartment .ocd-child-carousel + .list-group-item,
+.module-ocdepartment .ocd-child-carousel + .list-group-item:hover,
+.module-ocdepartment .ocd-child-carousel + .list-group-item:focus,
+.module-ocdepartment .ocd-child-collapse + .list-group-item,
+.module-ocdepartment .ocd-child-collapse + .list-group-item:hover,
+.module-ocdepartment .ocd-child-collapse + .list-group-item:focus{
+  border-bottom-width: 0;
+}
+
+.module-ocdepartment .list-group-item[data-toggle]:hover,
+.module-ocdepartment .list-group-item[data-slide]:hover {
+	border-left-width: 0;
+	border-right-width: 0;
+}
+
+.module-ocdepartment .list-group-item[data-toggle]:hover,
+.module-ocdepartment .list-group-item[data-slide]:hover {
+	border-left-width: 0;
+	border-right-width: 0;
+}
+
+#ocdepartment-mobile-container{}
+#ocdepartment-mobile-container .module-ocdepartment{margin: 0 -15px; border: none;}

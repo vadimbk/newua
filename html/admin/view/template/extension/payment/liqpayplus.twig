@@ -1,0 +1,882 @@
+{{ header }}<style type="text/css">
+.error{
+    color: red;
+}
+</style>
+{{ column_left }} 
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form-cod" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+        <a href="{{ cloner }}" data-toggle="tooltip" title="{{ button_cloner }}" class="btn btn-default">{{ entry_cloner }}</a>
+        <a href="{{ log }}" data-toggle="tooltip" title="{{ heading_title_logs }}" class="btn btn-default">{{ button_logs }}</a>
+      </div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %} 
+        <li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+        {% endfor %} 
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if (error_warning) %} 
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }} 
+      <button type="button" class="close" data-dismiss="alert">&times;</button> 
+    </div>
+    {% endif %} 
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i></h3>
+      </div>
+      <div class="panel-body">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-cod" class="form-horizontal">
+        <table class="table">
+        <thead>
+           <h4>{{ text_allset }}</h4>
+        </thead>
+        <tr>
+        <td width="25%"><span class="required">*</span> {{ entry_license }}</td>
+        <td><input type="text" name="{{ pname }}_license" value="{{ artpr_license }}" />
+          <br />
+          {% if (error_license) %} 
+          <span class="error">{{ error_license }}</span>
+          {% endif %}</td>
+        </tr>
+        <tr>
+        <td width="25%"><span class="required">*</span> {{ entry_login }}</td>
+        <td><input type="text" name="{{ pname }}_login" value="{{ artpr_login }}" />
+          <br />
+          {% if (error_login) %} 
+          <span class="error">{{ error_login }}</span>
+          {% endif %}</td>
+        </tr>
+        <tr>
+        <td><span class="required">*</span> {{ entry_password }}</td>
+        <td><input name="{{ pname }}_password" value="{{ artpr_password }}" />
+          <br />
+          {% if (error_password) %} 
+          <span class="error">{{ error_password }}</span>
+          {% endif %}</td>
+        </tr>
+        <tr>
+          <td><span class="required">*</span> {{ entry_result_url }}</td>
+          <td>{{ copy_result_url }}</td>
+        </tr>
+        <tr>
+          {% set pole = 'currency_merch' %} 
+          <td>{{ _context['entry_' ~ pole] }}</td>
+          <td>
+            <select name="{{ pname }}_{{ pole }}">
+            {% for ar in manypoles[pole] %} 
+            {% if _context['artpr_' ~ pole] == ar %} 
+            <option value="{{ ar }}" selected="selected"/>{{ ar }}</option>
+             {% else %} 
+              <option value="{{ ar }}" />{{ ar }}</option>
+            {% endif %} 
+            {% endfor %} 
+            </select>
+          </td>
+        </tr>  
+        <tr>
+          <td>{{ entry_currency_shop }}</td>
+          <td><select name="{{ pname }}_currency_shop">
+                    {% for currency in currencies %} 
+                    {% if (currency['code'] == artpr_currency_shop) %} 
+                    <option value="{{ currency['code'] }}" selected="selected">{{ currency['title'] }}</option>
+                    {% else %} 
+                    <option value="{{ currency['code'] }}">{{ currency['title'] }}</option>
+                    {% endif %} 
+                    {% endfor %} 
+              </select>
+          </td>
+        </tr>
+        {% if (twostage_show == constant('true')) %} 
+        <tr>
+          <td width="25%">{{ entry_twostage }}</td>
+          <td>{% if (artpr_twostage) %} 
+            <input type="radio" name="{{ pname }}_twostage" value="1" checked="checked" />
+            {{ text_twostage }} 
+            <input type="radio" name="{{ pname }}_twostage" value="0" />
+            {{ text_onestage }} 
+            {% else %} 
+            <input type="radio" name="{{ pname }}_twostage" value="1" />
+            {{ text_twostage }} 
+            <input type="radio" name="{{ pname }}_twostage" value="0" checked="checked" />
+            {{ text_onestage }} 
+            {% endif %}</td>
+        </tr>
+        {% endif %} 
+        <tr>
+          <td width="25%">{{ entry_debug }}</td>
+          <td>{% if (artpr_debug) %} 
+            <input type="radio" name="{{ pname }}_debug" value="1" checked="checked" />
+            {{ text_yes }} 
+            <input type="radio" name="{{ pname }}_debug" value="0" />
+            {{ text_no }} 
+            {% else %} 
+            <input type="radio" name="{{ pname }}_debug" value="1" />
+            {{ text_yes }} 
+            <input type="radio" name="{{ pname }}_debug" value="0" checked="checked" />
+            {{ text_no }} 
+            {% endif %}</td>
+        </tr>
+        </table>
+        <table class="table">
+        <thead>
+           <h4>{{ text_orderset }}</h4>
+        </thead>
+        <tr>
+          <td width="25%">{{ entry_returnpage }}</td>
+          <td>{% if (artpr_returnpage) %} 
+            <input type="radio" name="{{ pname }}_returnpage" value="1" checked="checked" />
+            {{ entry_returnpage_default }} 
+            <input type="radio" name="{{ pname }}_returnpage" value="0" />
+            {{ entry_returnpage_self }} 
+            {% else %} 
+            <input type="radio" name="{{ pname }}_returnpage" value="1" />
+            {{ entry_returnpage_default }} 
+            <input type="radio" name="{{ pname }}_returnpage" value="0" checked="checked" />
+            {{ entry_returnpage_self }} 
+            {% endif %}</td>
+        </tr>
+        <tr>
+          <td>{{ entry_otlog }}</td>
+          <td>{% if (artpr_otlog == 'pay') %} 
+            <input type="radio" name="{{ pname }}_otlog" id="stock_tab" value="stock" />
+            {{ entry_otlog_stock }} 
+            <input type="radio" name="{{ pname }}_otlog" id="pay_tab" value="pay" checked="checked" />
+            {{ entry_otlog_pay }} 
+            <input type="radio" name="{{ pname }}_otlog" id="standard_tab" value="0" />
+            {{ entry_otlog_standard }} 
+            {% elseif (artpr_otlog == 'stock') %} 
+            <input type="radio" name="{{ pname }}_otlog" id="stock_tab" value="stock" checked="checked" />
+            {{ entry_otlog_stock }} 
+            <input type="radio" name="{{ pname }}_otlog" id="pay_tab" value="pay" />
+            {{ entry_otlog_pay }} 
+            <input type="radio" name="{{ pname }}_otlog" id="standard_tab" value="0" />
+            {{ entry_otlog_standard }} 
+            {% else %} 
+            <input type="radio" name="{{ pname }}_otlog" id="stock_tab" value="stock" />
+            {{ entry_otlog_stock }} 
+            <input type="radio" name="{{ pname }}_otlog" id="pay_tab" value="pay" />
+            {{ entry_otlog_pay }} 
+            <input type="radio" name="{{ pname }}_otlog" id="standard_tab" value="0" checked="checked" />
+            {{ entry_otlog_standard }} 
+            {% endif %}</td>
+        </tr>
+        <tr>
+          <td>{{ entry_name_tab }}</td>
+          <td>{% if (artpr_name_attach) %} 
+            <input type="radio" name="{{ pname }}_name_attach" value="1" checked="checked" />
+            {{ text_my }} 
+            <input type="radio" name="{{ pname }}_name_attach" value="0" />
+            {{ text_default }} 
+            {% else %} 
+            <input type="radio" name="{{ pname }}_name_attach" value="1" />
+            {{ text_my }} 
+            <input type="radio" name="{{ pname }}_name_attach" value="0" checked="checked" />
+            {{ text_default }} 
+            {% endif %}</td>
+        </tr>
+        <tr>
+          <td>{{ entry_name }}</td>
+          <td>{% for language in languages %}<img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" style="vertical-align:top;"/> <textarea name="{{ pname }}_name_{{language.language_id }}" cols="50" rows="1">{% if _context[pname ~ '_name_' ~ language.language_id] %}{{ _context[pname ~ '_name_' ~ language.language_id] }}{% endif %}</textarea><br />
+          {% endfor %}</td>
+        </tr>
+        <tr>
+          <td>{{ entry_fixen }}</td>
+          <td>{% if (artpr_fixen == 'sum') %} 
+            <input type="radio" name="{{ pname }}_fixen" value="sum" checked="checked" />
+            {{ entry_fixen_sum }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="proc_sum" />
+            {{ entry_fixen_proc_sum }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="proc_noship" />
+            {{ entry_fixen_proc_noship }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="order_noship" />
+            {{ entry_fixen_order_noship }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="proc_ship" />
+            {{ entry_fixen_proc_ship }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="ship" />
+            {{ entry_fixen_ship }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="fix" />
+            {{ entry_fixen_fix }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="proc" />
+            {{ entry_fixen_proc }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="0" />
+            {{ entry_fixen_order }} 
+            {% elseif (artpr_fixen == 'proc_sum') %} 
+            <input type="radio" name="{{ pname }}_fixen" value="sum" />
+            {{ entry_fixen_sum }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="proc_sum" checked="checked" />
+            {{ entry_fixen_proc_sum }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="proc_noship" />
+            {{ entry_fixen_proc_noship }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="order_noship" />
+            {{ entry_fixen_order_noship }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="proc_ship" />
+            {{ entry_fixen_proc_ship }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="ship" />
+            {{ entry_fixen_ship }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="fix" />
+            {{ entry_fixen_fix }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="proc" />
+            {{ entry_fixen_proc }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="0" />
+            {{ entry_fixen_order }} 
+            {% elseif (artpr_fixen == 'proc_noship') %} 
+            <input type="radio" name="{{ pname }}_fixen" value="sum" />
+            {{ entry_fixen_sum }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="proc_sum" />
+            {{ entry_fixen_proc_sum }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="proc_noship" checked="checked" />
+            {{ entry_fixen_proc_noship }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="order_noship" />
+            {{ entry_fixen_order_noship }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="proc_ship" />
+            {{ entry_fixen_proc_ship }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="ship" />
+            {{ entry_fixen_ship }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="fix" />
+            {{ entry_fixen_fix }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="proc" />
+            {{ entry_fixen_proc }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="0" />
+            {{ entry_fixen_order }} 
+            {% elseif (artpr_fixen == 'order_noship') %} 
+            <input type="radio" name="{{ pname }}_fixen" value="sum" />
+            {{ entry_fixen_sum }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="proc_sum" />
+            {{ entry_fixen_proc_sum }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="proc_noship" />
+            {{ entry_fixen_proc_noship }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="order_noship" checked="checked" />
+            {{ entry_fixen_order_noship }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="proc_ship" />
+            {{ entry_fixen_proc_ship }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="ship" />
+            {{ entry_fixen_ship }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="fix" />
+            {{ entry_fixen_fix }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="proc" />
+            {{ entry_fixen_proc }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="0" />
+            {{ entry_fixen_order }} 
+            {% elseif (artpr_fixen == 'proc_ship') %} 
+            <input type="radio" name="{{ pname }}_fixen" value="sum" />
+            {{ entry_fixen_sum }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="proc_sum" />
+            {{ entry_fixen_proc_sum }}<br/> 
+            <input type="radio" name="{{ pname }}_fixen" value="proc_noship" />
+            {{ entry_fixen_proc_noship }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="order_noship" />
+            {{ entry_fixen_order_noship }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="proc_ship" checked="checked" />
+            {{ entry_fixen_proc_ship }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="ship" />
+            {{ entry_fixen_ship }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="fix" />
+            {{ entry_fixen_fix }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="proc" />
+            {{ entry_fixen_proc }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="0" />
+            {{ entry_fixen_order }} 
+            {% elseif (artpr_fixen == 'ship') %} 
+            <input type="radio" name="{{ pname }}_fixen" value="sum" />
+            {{ entry_fixen_sum }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="proc_sum" />
+            {{ entry_fixen_proc_sum }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="proc_noship" />
+            {{ entry_fixen_proc_noship }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="order_noship" />
+            {{ entry_fixen_order_noship }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="proc_ship" />
+            {{ entry_fixen_proc_ship }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="ship" checked="checked" />
+            {{ entry_fixen_ship }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="fix" />
+            {{ entry_fixen_fix }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="proc" />
+            {{ entry_fixen_proc }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="0" />
+            {{ entry_fixen_order }} 
+          {% elseif (artpr_fixen == 'proc') %} 
+            <input type="radio" name="{{ pname }}_fixen" value="sum" />
+            {{ entry_fixen_sum }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="proc_sum" />
+            {{ entry_fixen_proc_sum }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="proc_noship" />
+            {{ entry_fixen_proc_noship }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="order_noship" />
+            {{ entry_fixen_order_noship }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="proc_ship" />
+            {{ entry_fixen_proc_ship }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="ship" />
+            {{ entry_fixen_ship }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="fix" />
+            {{ entry_fixen_fix }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="proc" checked="checked" />
+            {{ entry_fixen_proc }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="0" />
+            {{ entry_fixen_order }} 
+            {% elseif (artpr_fixen == 'fix') %} 
+            <input type="radio" name="{{ pname }}_fixen" value="sum" />
+            {{ entry_fixen_sum }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="proc_sum" />
+            {{ entry_fixen_proc_sum }}<br/> 
+            <input type="radio" name="{{ pname }}_fixen" value="proc_noship" />
+            {{ entry_fixen_proc_noship }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="order_noship" />
+            {{ entry_fixen_order_noship }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="proc_ship" />
+            {{ entry_fixen_proc_ship }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="ship" />
+            {{ entry_fixen_ship }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="fix" checked="checked" />
+            {{ entry_fixen_fix }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="proc" />
+            {{ entry_fixen_proc }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="0" />
+            {{ entry_fixen_order }} 
+            {% else %} 
+            <input type="radio" name="{{ pname }}_fixen" value="sum" />
+            {{ entry_fixen_sum }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="proc_sum" />
+            {{ entry_fixen_proc_sum }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="proc_noship" />
+            {{ entry_fixen_proc_noship }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="order_noship" />
+            {{ entry_fixen_order_noship }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="proc_ship" />
+            {{ entry_fixen_proc_ship }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="ship" />
+            {{ entry_fixen_ship }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="fix" />
+            {{ entry_fixen_fix }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="proc" />
+            {{ entry_fixen_proc }}<br/>
+            <input type="radio" name="{{ pname }}_fixen" value="0" checked="checked" />
+            {{ entry_fixen_order }} 
+            {% endif %}</td>
+        </tr>
+        <tr>
+          <td>{{ entry_fixen_amount }}</td>
+          <td><input type="text" name="{{ pname }}_fixen_amount" value="{{ artpr_fixen_amount is defined ? artpr_fixen_amount : '' }}" ><br />
+          {% if (error_fixen) %} 
+          <span class="error">{{ error_fixen }}</span>
+          {% endif %}</td>
+        </tr>
+        <tr>
+          <td>{{ entry_minpay }}</td>
+          <td><input type="text" name="{{ pname }}_minpay" value="{{ artpr_minpay is defined ? artpr_minpay : '' }}" >руб.</td>
+        </tr>
+        <tr>
+          <td>{{ entry_maxpay }}</td>
+          <td><input type="text" name="{{ pname }}_maxpay" value="{{ artpr_maxpay is defined ? artpr_maxpay : '' }}" >руб.</td>
+        </tr>
+        <tr>
+          <td>{{ entry_formcomment }}</td>
+          <td>{% for language in languages %}<img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" style="vertical-align:top;"/> <textarea name="{{ pname }}_formcomment_{{ language.language_id }}" cols="50" rows="1">{% if _context[pname ~ '_formcomment_' ~ language.language_id] %}{{ _context[pname ~ '_formcomment_' ~ language.language_id] }}{% endif %}</textarea><br />{% endfor %}
+            </td>
+        </tr>
+        <tr>
+          <td>{{ entry_later }}</td>
+          <td>{% if (artpr_button_later) %} 
+            <input type="radio" name="{{ pname }}_button_later" value="1" checked="checked" />
+            {{ text_yes }} 
+            <input type="radio" name="{{ pname }}_button_later" value="0" />
+            {{ text_no }} 
+            {% else %} 
+            <input type="radio" name="{{ pname }}_button_later" value="1" />
+            {{ text_yes }} 
+            <input type="radio" name="{{ pname }}_button_later" value="0" checked="checked" />
+            {{ text_no }} 
+            {% endif %}</td>
+        </tr>
+        <tr class="hideotlog" {% if (artpr_otlog == 'pay') %}style="display:none;"{% endif %}>
+          <td>{{ text_createorder_or_notcreate }}</td>
+          <td>{% if (artpr_createorder_or_notcreate) %} 
+            <input type="radio" name="{{ pname }}_createorder_or_notcreate" value="1" checked="checked" id="nocreate" />
+            {{ text_yes }} 
+            <input type="radio" name="{{ pname }}_createorder_or_notcreate" value="0" id="create" />
+            {{ text_no }} 
+            {% else %} 
+            <input type="radio" name="{{ pname }}_createorder_or_notcreate" value="1" id="nocreate" />
+            {{ text_yes }} 
+            <input type="radio" name="{{ pname }}_createorder_or_notcreate" value="0" checked="checked" id="create" />
+            {{ text_no }} 
+            {% endif %}</td>
+       </tr>
+        <tr>
+          <td>{{ entry_success_alert_admin_tab }}</td>
+          <td>{% if (artpr_success_alert_admin) %} 
+            <input type="radio" name="{{ pname }}_success_alert_admin" value="1" checked="checked" />
+            {{ text_yes }} 
+            <input type="radio" name="{{ pname }}_success_alert_admin" value="0" />
+            {{ text_no }} 
+            {% else %} 
+            <input type="radio" name="{{ pname }}_success_alert_admin" value="1" />
+            {{ text_yes }} 
+            <input type="radio" name="{{ pname }}_success_alert_admin" value="0" checked="checked" />
+            {{ text_no }} 
+            {% endif %}</td>
+        </tr>
+        <tr>
+          <td>{{ entry_success_alert_customer_tab }}</td>
+          <td>{% if (artpr_success_alert_customer) %} 
+            <input type="radio" name="{{ pname }}_success_alert_customer" value="1" checked="checked" />
+            {{ text_yes }} 
+            <input type="radio" name="{{ pname }}_success_alert_customer" value="0" />
+            {{ text_no }} 
+            {% else %} 
+            <input type="radio" name="{{ pname }}_success_alert_customer" value="1" />
+            {{ text_yes }} 
+            <input type="radio" name="{{ pname }}_success_alert_customer" value="0" checked="checked" />
+            {{ text_no }} 
+            {% endif %}</td>
+        </tr>
+        <tr>
+          <td>{{ entry_instruction_tab }}</td>
+          <td>{% if (artpr_instruction_attach) %} 
+            <input type="radio" name="{{ pname }}_instruction_attach" value="1" checked="checked" />
+            {{ text_yes }} 
+            <input type="radio" name="{{ pname }}_instruction_attach" value="0" />
+            {{ text_no }} 
+            {% else %} 
+            <input type="radio" name="{{ pname }}_instruction_attach" value="1" />
+            {{ text_yes }} 
+            <input type="radio" name="{{ pname }}_instruction_attach" value="0" checked="checked" />
+            {{ text_no }} 
+            {% endif %}</td>
+        </tr>
+        <tr>
+          <td>{{ entry_instruction }}</td>
+          <td>{% for language in languages %}<img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" style="vertical-align:top;"/> <textarea name="{{ pname }}_instruction_{{language.language_id }}" cols="50" rows="3">{% if _context[pname ~ '_instruction_' ~ language.language_id] %}{{ _context[pname ~ '_instruction_' ~ language.language_id] }}{% endif %}</textarea><br />{% endfor %}</td>
+        </tr>
+        <tr>
+          <td>{{ entry_mail_instruction_tab }}</td>
+          <td>{% if (artpr_mail_instruction_attach) %} 
+            <input type="radio" name="{{ pname }}_mail_instruction_attach" value="1" checked="checked" />
+            {{ text_yes }} 
+            <input type="radio" name="{{ pname }}_mail_instruction_attach" value="0" />
+            {{ text_no }} 
+            {% else %} 
+            <input type="radio" name="{{ pname }}_mail_instruction_attach" value="1" />
+            {{ text_yes }} 
+            <input type="radio" name="{{ pname }}_mail_instruction_attach" value="0" checked="checked" />
+            {{ text_no }} 
+            {% endif %}</td>
+        </tr>
+        <tr>
+          <td>{{ entry_mail_instruction }}</td>
+          <td>{% for language in languages %}<img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" style="vertical-align:top;"/> <textarea name="{{ pname }}_mail_instruction_{{language.language_id }}" cols="50" rows="3">{% if _context[pname ~ '_mail_instruction_' ~ language.language_id] %}{{ _context[pname ~ '_mail_instruction_' ~ language.language_id] }}{% endif %}</textarea><br />{% endfor %}</td>
+        </tr>
+        <tr>
+          <td>{{ entry_success_comment_tab }}</td>
+          <td>{% if (artpr_success_comment_attach) %} 
+            <input type="radio" name="{{ pname }}_success_comment_attach" value="1" checked="checked" />
+            {{ text_yes }} 
+            <input type="radio" name="{{ pname }}_success_comment_attach" value="0" />
+            {{ text_no }} 
+            {% else %} 
+            <input type="radio" name="{{ pname }}_success_comment_attach" value="1" />
+            {{ text_yes }} 
+            <input type="radio" name="{{ pname }}_success_comment_attach" value="0" checked="checked" />
+            {{ text_no }} 
+            {% endif %}</td>
+        </tr>
+        <tr>
+          <td>{{ entry_success_comment }}</td>
+          <td>{% for language in languages %}<img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" style="vertical-align:top;"/> <textarea name="{{ pname }}_success_comment_{{language.language_id }}" cols="50" rows="3">{% if _context[pname ~ '_success_comment_' ~ language.language_id] %}{{ _context[pname ~ '_success_comment_' ~ language.language_id] }}{% endif %}</textarea><br />{% endfor %}</td>
+        </tr>
+        <tr>
+          <td>{{ entry_hrefpage_tab }}</td>
+          <td>{% if (artpr_hrefpage_text_attach) %} 
+            <input type="radio" name="{{ pname }}_hrefpage_text_attach" value="1" checked="checked" />
+            {{ text_my }} 
+            <input type="radio" name="{{ pname }}_hrefpage_text_attach" value="0" />
+            {{ text_default }} 
+            {% else %} 
+            <input type="radio" name="{{ pname }}_hrefpage_text_attach" value="1" />
+            {{ text_my }} 
+            <input type="radio" name="{{ pname }}_hrefpage_text_attach" value="0" checked="checked" />
+            {{ text_default }} 
+            {% endif %}</td>
+        </tr>
+        <tr>
+          <td>{{ entry_hrefpage }}</td>
+          <td>{% for language in languages %}<img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" style="vertical-align:top;"/> <textarea name="{{ pname }}_hrefpage_text_{{language.language_id }}" cols="50" rows="3">{% if _context[pname ~ '_hrefpage_text_' ~ language.language_id] %}{{ _context[pname ~ '_hrefpage_text_' ~ language.language_id] }}{% endif %}</textarea><br />{% endfor %}</td>
+        </tr>
+        <tr>
+          <td>{{ entry_success_page_tab }}</td>
+          <td>{% if (artpr_success_page_text_attach) %} 
+            <input type="radio" name="{{ pname }}_success_page_text_attach" value="1" checked="checked" />
+            {{ text_my }} 
+            <input type="radio" name="{{ pname }}_success_page_text_attach" value="0" />
+            {{ text_default }} 
+            {% else %} 
+            <input type="radio" name="{{ pname }}_success_page_text_attach" value="1" />
+            {{ text_my }} 
+            <input type="radio" name="{{ pname }}_success_page_text_attach" value="0" checked="checked" />
+            {{ text_default }} 
+            {% endif %}</td>
+        </tr>
+        <tr>
+          <td>{{ entry_success_page_text }}</td>
+          <td>{% for language in languages %}<img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" style="vertical-align:top;"/> <textarea name="{{ pname }}_success_page_text_{{language.language_id }}" cols="50" rows="3">{% if _context[pname ~ '_success_page_text_' ~ language.language_id] %}{{ _context[pname ~ '_success_page_text_' ~ language.language_id] }}{% endif %}</textarea><br />{% endfor %}</td>
+        </tr>
+         <tr>
+          <td>{{ entry_waiting_page_tab }}</td>
+          <td>{% if (artpr_waiting_page_text_attach) %} 
+            <input type="radio" name="{{ pname }}_waiting_page_text_attach" value="1" checked="checked" />
+            {{ text_my }} 
+            <input type="radio" name="{{ pname }}_waiting_page_text_attach" value="0" />
+            {{ text_default }} 
+            {% else %} 
+            <input type="radio" name="{{ pname }}_waiting_page_text_attach" value="1" />
+            {{ text_my }} 
+            <input type="radio" name="{{ pname }}_waiting_page_text_attach" value="0" checked="checked" />
+            {{ text_default }} 
+            {% endif %}</td>
+        </tr>
+        <tr>
+          <td>{{ entry_waiting_page_text }}</td>
+          <td>{% for language in languages %}<img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" style="vertical-align:top;"/> <textarea name="{{ pname }}_waiting_page_text_{{language.language_id }}" cols="50" rows="3">{% if _context[pname ~ '_waiting_page_text_' ~ language.language_id] %}{{ _context[pname ~ '_waiting_page_text_' ~ language.language_id] }}{% endif %}</textarea><br />{% endfor %}</td>
+        </tr>
+        <tr class="showotlog" {% if (artpr_otlog != 'stock' and artpr_otlog != 'pay') %}style="display:none;"{% endif %}>
+        <td>{{ entry_start_status }}</td>
+        <td><select name="{{ pname }}_start_status_id">
+            {% for order_status in order_statuses %} 
+            {% if (order_status['order_status_id'] == artpr_start_status_id) %} 
+            <option value="{{ order_status['order_status_id'] }}" selected="selected">{{ order_status['name'] }}</option>
+            {% else %} 
+            <option value="{{ order_status['order_status_id'] }}">{{ order_status['name'] }}</option>
+            {% endif %} 
+            {% endfor %} 
+          </select></td>
+        </tr>
+        <tr>
+        <td>{{ entry_on_status }}</td>
+        <td><select name="{{ pname }}_on_status_id">
+            {% for order_status in order_statuses %} 
+            {% if (order_status['order_status_id'] == artpr_on_status_id) %} 
+            <option value="{{ order_status['order_status_id'] }}" selected="selected">{{ order_status['name'] }}</option>
+            {% else %} 
+            <option value="{{ order_status['order_status_id'] }}">{{ order_status['name'] }}</option>
+            {% endif %} 
+            {% endfor %} 
+          </select></td>
+        </tr>
+        <tr>
+        <td>{{ entry_order_status }}</td>
+        <td><select name="{{ pname }}_order_status_id">
+            {% for order_status in order_statuses %} 
+            {% if (order_status['order_status_id'] == artpr_order_status_id) %} 
+            <option value="{{ order_status['order_status_id'] }}" selected="selected">{{ order_status['name'] }}</option>
+            {% else %} 
+            <option value="{{ order_status['order_status_id'] }}">{{ order_status['name'] }}</option>
+            {% endif %} 
+            {% endfor %} 
+          </select></td>
+        </tr>
+        <tr>
+        <td>{{ entry_currency_pay }}</td>
+        <td><input name="{{ pname }}_currency_pay[]" id="artpr_currency_pay_all" value="all" {% if (artpr_currency_pay['0'] == 'all') %} {{ 'checked' }} {% endif %} type="checkbox" >&nbsp<label for="artpr_currency_pay_all">{{ text_all_currency_pay }}</label><br/>
+        {% set i = 0 %} {% for currency in currencies %} {% set i = i + 1 %} 
+            <input name="{{ pname }}_currency_pay[]" id="artpr_currency_pay_{{ i }}" value="{{ currency['code'] }}" {% if (artpr_currency_pay is defined) %} {% for artpr_curr in artpr_currency_pay %} {% if (artpr_curr == currency['code']) %} {{ 'checked' }} {% endif %}{% endfor %}{% endif %} type="checkbox" class="checkboxc" onclick="toggleParentCheckedCur(this.checked)">&nbsp<label for="artpr_currency_pay_{{ i }}">{{ currency['title'] }}</label><br/>
+        {% endfor %} 
+        {% if (error_currency_pay) %} 
+            <span class="error">{{ error_currency_pay }}</span>
+        {% endif %} 
+        </td>
+        </tr>
+        <tr>
+        <td>{{ entry_gruppa }}</td>
+        <td><input name="{{ pname }}_gruppa[]" id="artpr_gruppa_all" value="all" {% if (artpr_gruppa['0'] == 'all') %} {{ 'checked' }} {% endif %} type="checkbox" >&nbsp<label for="artpr_gruppa_all">{{ text_all_groups }}</label><br/>
+        {% set i = 0 %} {% for group in artpr_groups %} {% set i = i + 1 %} 
+            <input name="{{ pname }}_gruppa[]" id="artpr_gruppa_{{ i }}" value="{{ group['customer_group_id'] }}" {% if (artpr_gruppa is defined) %} {% for artpr_gru in artpr_gruppa %} {% if (artpr_gru == group['customer_group_id']) %} {{ 'checked' }} {% endif %}{% endfor %}{% endif %} type="checkbox" class="checkboxg" onclick="toggleParentChecked(this.checked)">&nbsp<label for="artpr_gruppa_{{ i }}">{{ group['name'] }}</label><br/>
+        {% endfor %} 
+        {% if (error_dgruppa) %} 
+            <span class="error">{{ error_dgruppa }}</span>
+        {% endif %} 
+        </td>
+        </tr>
+        <tr>
+        <td>{{ entry_shipping }}</td>
+        <td>
+            <input name="{{ pname }}_shippings[]" id="artpr_shippings_all" value="all" {% if (artpr_shippings['0'] == 'all') %} {{ 'checked' }} {% endif %} type="checkbox" ><label for="artpr_shippings_all">{{ text_all_shipping }}</label><br/>
+                            {% set i = 0 %} {% for shipping_code,shipping_name in shipping_on %} {% set i = i + 1 %} 
+                              <input name="{{ pname }}_shippings[]" id="artpr_shippings_{{ i }}" value="{{ shipping_code }}" {% if (artpr_shippings is defined) %} {% for artpr_shipping in artpr_shippings %} {% if (artpr_shipping == shipping_code) %} {{ 'checked' }} {% endif %}{% endfor %}{% endif %} type="checkbox" class="checkbox_ship" onclick="toggleParentCheckedShip(this.checked)"><label for="artpr_shippings_{{ i }}">{{ shipping_name }}</label><br/>{% endfor %} 
+                            {% if (error_dshippings) %} 
+                              <span class="error">{{ error_dshippings }}</span>
+                            {% endif %} 
+                           </td>
+                        </tr>
+        <tr>
+              <td>{{ entry_store }}</td>
+              <td><div class="scrollbox">
+                  {% set class = 'even' %} 
+                  <div class="{{ class }}">
+                    {% if 0 in artpr_store %}
+                    <input type="checkbox" name="{{ pname }}_store[]" value="0" checked="checked" />
+                    {{ text_default }} 
+                    {% else %} 
+                    <input type="checkbox" name="{{ pname }}_store[]" value="0" />
+                    {{ text_default }} 
+                    {% endif %} 
+                  </div>
+                  {% for store in stores %} 
+                  {% set class = class == 'even' ? 'odd' : 'even' %} 
+                  <div class="{{ class }}">
+                    {% if store['store_id'] in artpr_store %}
+                    <input type="checkbox" name="{{ pname }}_store[]" value="{{ store['store_id'] }}" checked="checked" />
+                    {{ store['name'] }} 
+                    {% else %} 
+                    <input type="checkbox" name="{{ pname }}_store[]" value="{{ store['store_id'] }}" />
+                    {{ store['name'] }} 
+                    {% endif %} 
+                  </div>
+                  {% endfor %} 
+                </div></td>
+        </tr>
+        <tr>
+        <td>{{ entry_geo_zone }}</td>
+        <td><select name="{{ pname }}_geo_zone_id">
+            <option value="0">{{ text_all_zones }}</option>
+            {% for geo_zone in geo_zones %} 
+            {% if (geo_zone['geo_zone_id'] == artpr_geo_zone_id) %} 
+            <option value="{{ geo_zone['geo_zone_id'] }}" selected="selected">{{ geo_zone['name'] }}</option>
+            {% else %} 
+            <option value="{{ geo_zone['geo_zone_id'] }}">{{ geo_zone['name'] }}</option>
+            {% endif %} 
+            {% endfor %} 
+          </select></td>
+        </tr>
+        <tr>
+          <td>{{ entry_showadmin }}</td>
+          <td>{% if (artpr_showadmin == 'none') %} 
+            <input type="radio" name="{{ pname }}_showadmin" value="none" checked="checked" />
+            {{ text_showadmin_none }}<br/>
+            <input type="radio" name="{{ pname }}_showadmin" value="only" />
+            {{ text_showadmin_only }}<br/>
+            <input type="radio" name="{{ pname }}_showadmin" value="main" />
+            {{ text_showadmin_main }}<br/>
+            <input type="radio" name="{{ pname }}_showadmin" value="0" />
+            {{ text_showadmin_default }} 
+            {% elseif (artpr_showadmin == 'main') %} 
+            <input type="radio" name="{{ pname }}_showadmin" value="none" />
+            {{ text_showadmin_none }}<br/>
+            <input type="radio" name="{{ pname }}_showadmin" value="only" />
+            {{ text_showadmin_only }}<br/>
+            <input type="radio" name="{{ pname }}_showadmin" value="main" checked="checked" />
+            {{ text_showadmin_main }}<br/>
+            <input type="radio" name="{{ pname }}_showadmin" value="0" />
+            {{ text_showadmin_default }} 
+            {% elseif (artpr_showadmin == 'only') %} 
+            <input type="radio" name="{{ pname }}_showadmin" value="none" />
+            {{ text_showadmin_none }}<br/>
+            <input type="radio" name="{{ pname }}_showadmin" value="only" checked="checked" />
+            {{ text_showadmin_only }}<br/>
+            <input type="radio" name="{{ pname }}_showadmin" value="main" />
+            {{ text_showadmin_main }}<br/>
+            <input type="radio" name="{{ pname }}_showadmin" value="0" />
+            {{ text_showadmin_default }} 
+            {% else %} 
+            <input type="radio" name="{{ pname }}_showadmin" value="none" />
+            {{ text_showadmin_none }}<br/>
+            <input type="radio" name="{{ pname }}_showadmin" value="only" />
+            {{ text_showadmin_only }}<br/>
+            <input type="radio" name="{{ pname }}_showadmin" value="main" />
+            {{ text_showadmin_main }}<br/>
+            <input type="radio" name="{{ pname }}_showadmin" value="0" checked="checked" />
+            {{ text_showadmin_default }} 
+            {% endif %}</td>
+        </tr>
+        <tr>
+        <td>{{ entry_status }}</td>
+        <td><select name="{{ pname }}_status">
+            {% if (artpr_status) %} 
+            <option value="1" selected="selected">{{ text_enabled }}</option>
+            <option value="0">{{ text_disabled }}</option>
+            {% else %} 
+            <option value="1">{{ text_enabled }}</option>
+            <option value="0" selected="selected">{{ text_disabled }}</option>
+            {% endif %} 
+          </select></td>
+        </tr>
+         <tr>
+          <td>{{ entry_sort_order }}</td>
+          <td><input type="text" name="{{ pname }}_sort_order" value="{{ artpr_sort_order }}" size="1" /></td>
+        </tr>
+        </table>
+        <table class="table">
+        <thead>
+           <h4>{{ text_balance }}</h4>
+        </thead>
+        <tr>
+          <td width="25%">{{ entry_artprbalance }}</td>
+          <td>{% if (artpr_artprbalance) %} 
+            <input type="radio" name="{{ pname }}_artprbalance" value="1" checked="checked" />
+            {{ text_yes }} 
+            <input type="radio" name="{{ pname }}_artprbalance" value="0" />
+            {{ text_no }} 
+            {% else %} 
+            <input type="radio" name="{{ pname }}_artprbalance" value="1" />
+            {{ text_yes }} 
+            <input type="radio" name="{{ pname }}_artprbalance" value="0" checked="checked" />
+            {{ text_no }} 
+            {% endif %}</td>
+        </tr>
+        <tr>
+          <td>{{ entry_balance_name }}</td>
+          <td>{% for language in languages %}<img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" style="vertical-align:top;"/> <textarea name="{{ pname }}_balance_name_{{ language.language_id }}" cols="50" rows="1">{% if _context[pname ~ '_balance_name_' ~ language.language_id] %}{{ _context[pname ~ '_balance_name_' ~ language.language_id] }}{% endif %}</textarea><br />{% endfor %}
+            </td>
+        </tr>
+        <tr>
+          <td>{{ entry_balance_url }}</td>
+          <td>{{ copy_balance_url }}</td>
+        </tr>
+        <tr>
+          <td>{{ entry_balance_sort }}</td>
+          <td><input type="text" name="{{ pname }}_balance_sort" value="{{ artpr_balance_sort }}" size="1" /></td>
+        </tr>
+        </table>
+        <table class="table">
+        <thead>
+           <h4>{{ text_fpay }}</h4>
+        </thead>
+        <tr>
+          <td width="25%">{{ entry_artprfpay }}</td>
+          <td>{% if (artpr_artprfpay) %} 
+            <input type="radio" name="{{ pname }}_artprfpay" value="1" checked="checked" />
+            {{ text_yes }} 
+            <input type="radio" name="{{ pname }}_artprfpay" value="0" />
+            {{ text_no }} 
+            {% else %} 
+            <input type="radio" name="{{ pname }}_artprfpay" value="1" />
+            {{ text_yes }} 
+            <input type="radio" name="{{ pname }}_artprfpay" value="0" checked="checked" />
+            {{ text_no }} 
+            {% endif %}</td>
+        </tr>
+        <tr>
+          <td>{{ entry_fpay_name }}</td>
+          <td>{% for language in languages %}<img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" style="vertical-align:top;"/> <textarea name="{{ pname }}_fpay_name_{{ language.language_id }}" cols="50" rows="1">{% if _context[pname ~ '_fpay_name_' ~ language.language_id] %}{{ _context[pname ~ '_fpay_name_' ~ language.language_id] }}{% endif %}</textarea><br />{% endfor %}
+            </td>
+        </tr>
+        <tr>
+          <td>{{ entry_fpay_url }}</td>
+          <td>{{ copy_fpay_url }}</td>
+        </tr>
+        <tr>
+          <td>{{ entry_fpay_sort }}</td>
+          <td><input type="text" name="{{ pname }}_fpay_sort" value="{{ artpr_fpay_sort }}" size="1" /></td>
+        </tr>
+        </table>
+        <input type="hidden" name="{{ pname }}_methodcode" value="{{ methodcode }}" />
+        <input type="hidden" name="{{ pname }}_balance_href" value="{{ balance_href }}" />
+        <input type="hidden" name="{{ pname }}_fpay_href" value="{{ fpay_href }}" />
+        </div>
+      </form>
+    </div>
+      <p style="text-align:center;">{{ version_name }} {{ version }}</p>
+  </div>
+</div>
+<script>
+  $(document).ready(function() {
+    $('#pay_tab').click(function () {
+      $('#create').prop("checked", true);
+      $('.hideotlog').hide('fast');
+      $('.showotlog').show('fast');
+    });
+    $('#stock_tab').click(function () {
+      $('#create').prop("checked", true);
+      $('.hideotlog').hide('fast');
+      $('.showotlog').show('fast');
+    });
+    $('#standard_tab').click(function () {
+      $('.hideotlog').show('fast');
+      $('.showotlog').hide('fast');
+    });
+
+
+    $('#artpr_currency_pay_all').click(function(){
+      var checked = $(this).is (':checked');
+      $('.checkboxc').prop('checked', checked);
+    });
+
+    $('.checkboxc').on('change', function(){
+        $('#artpr_currency_pay_all').prop('checked', $('.checkboxc').length == $('.checkboxc:checked').length);
+    });
+
+    
+    $('#artpr_gruppa_all').click(function(){
+      var checked = $(this).is (':checked');
+      $('.checkboxg').prop('checked', checked);
+    });
+
+    $('.checkboxg').on('change', function(){
+        $('#artpr_gruppa_all').prop('checked', $('.checkboxg').length == $('.checkboxg:checked').length);
+    });
+
+
+
+    $('#artpr_shippings_all').click(function(){
+      var checked = $(this).is (':checked');
+      $('.checkbox_ship').prop('checked', checked);
+    });
+
+    $('.checkbox_ship').on('change', function(){
+        $('#artpr_shippings_all').prop('checked', $('.checkbox_ship').length == $('.checkbox_ship:checked').length);
+    });
+
+});
+
+function toggleParentCheckedCur(status) {
+     if(status==false)
+     $("#artpr_currency_pay_all").attr("checked",status); 
+     else
+     {
+        var isallchecked = true;
+        $(".checkboxc").each(function() {
+        if(!$(this).attr("checked"))
+           isallchecked = false;
+     })
+     if(isallchecked)
+        $("#artpr_currency_pay_all").attr("checked", true);
+     } 
+}
+
+function toggleParentChecked(status) {
+     if(status==false)
+     $("#artpr_gruppa_all").attr("checked",status); 
+     else
+     {
+        var isallchecked = true;
+        $(".checkboxg").each(function() {
+        if(!$(this).attr("checked"))
+           isallchecked = false;
+     })
+     if(isallchecked)
+        $("#artpr_gruppa_all").attr("checked", true);
+     } 
+}
+
+function toggleParentCheckedShip(status) {
+     if(status==false)
+     $("#artpr_shippings_all").attr("checked",status); 
+     else
+     {
+        var isallchecked_ship = true;
+        $(".checkbox_ship").each(function() {
+        if(!$(this).attr("checked"))
+           isallchecked_ship = false;
+     })
+     if(isallchecked_ship)
+        $("#artpr_shippings_all").attr("checked", true); 
+     } 
+}
+</script>
+{{ footer }}

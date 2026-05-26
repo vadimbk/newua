@@ -1,0 +1,45 @@
+<file path="system/library/seopro.php" error="skip">
+    <operation error="skip">
+        <search position="replace"><![CDATA[, 301]]></search>
+        <add position="replace"><![CDATA[, $lm_redirect]]></add>
+    </operation>
+</file>
+
+<file path="system/library/seopro.php" error="skip">
+    <operation error="skip">
+        <search position="before"><![CDATA[$this->response->redirect]]></search>
+        <add position="before"><![CDATA[
+	        if (isset($this->request->get['route']) && $this->request->get['route'] == 'product/search') {
+	        	$lm_redirect = 302;
+	        } else {
+	        	$lm_redirect = 301;
+	        }
+]]></add>
+    </operation>
+</file>
+
+<file path="system/library/seopro.php" error="skip">
+    <operation error="skip">
+        <search position="replace"><![CDATA[$this->detectLanguage]]></search>
+        <add position="replace"><![CDATA[//$this->detectLanguage]]></add>
+    </operation>
+</file>
+
+<file path="system/library/seopro.php" error="skip">
+    <operation error="skip">
+        <search position="replace"><![CDATA[$host = rtrim($host, '/');]]></search>
+        <add position="replace"><![CDATA[//$host = rtrim($host, '/');]]></add>
+    </operation>
+</file>
+
+<file path="catalog/controller/common/home.php" error="skip">
+    <operation error="skip">
+        <search position="replace"><![CDATA[$canonical = rtrim($canonical]]></search>
+        <add position="replace"><![CDATA[//$canonical = rtrim($canonical]]></add>
+    </operation>
+</file>
+
+
+
+
+

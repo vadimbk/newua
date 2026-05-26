@@ -1,0 +1,29 @@
+<div class="modal" id="modal-upload" tabindex="-1" role="dialog">
+  <form method="post" action="{{ import }}" enctype="multipart/form-data" class="form-horizontal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">{{ text_import }}</h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="col-lg-3 control-label">{{ entry_import_file }}:</label>
+            <div class="col-lg-9">
+              <div class="input-group">
+				  <input type="file" style="" name="filename" multiple>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">{{ button_close }}</button>
+          <button class="btn btn-success" type="submit">{{ text_import }}</a>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+			

@@ -1,0 +1,25 @@
+{% if values %}
+<div class="table-responsive">
+  <table class="table table-bordered table-hover">
+{% for value in values %}
+<tr>
+	<td>
+	{{ value.value }}
+	</td>
+	<td>
+	{% if value.any_val %}
+		{% for code,val in value.any_val %}
+
+		{% for valu in val %}
+		<span><img src="language/{{ code }}/{{ code }}.png" alt="{{ code }}" /></span>{{ valu.text }}<br />
+		{% endfor %}
+		{% endfor %}
+	{% endif %}
+	</td>
+</tr>
+{% endfor %}
+</table>
+<div class="result-view">{{ pagination }}</div>
+<div class="result-view">{{ results }}</div>
+</div>
+{% endif %}

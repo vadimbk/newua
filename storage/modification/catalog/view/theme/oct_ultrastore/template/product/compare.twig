@@ -1,0 +1,178 @@
+{{ header }}
+<!--<script src="catalog/view/javascript/avail.js" ></script>
+<link href="catalog/view/theme/default/stylesheet/availability.css" type="text/css" rel="stylesheet" media="screen" />-->
+<div id="product-compare" class="container">
+	{{ oct_breadcrumbs }}
+	<div class="row">
+		<div class="col-lg-12">
+			{% if fx_span %}
+        		{{ fx_span }}
+        	{% else %}
+				<h1 class="us-main-shop-title">{{ heading_title }}</h1>
+        	{% endif %}
+		</div>
+	</div>
+	<div class="content-top-box">{{ content_top }}</div>
+	{% if success %}
+	<script>
+	usNotify('success', '{{ success }}');
+	</script>
+	{% endif %}
+  <div class="row">{{ column_left }}
+    {% if column_left and column_right %}
+    {% set class = 'col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'col-sm-9' %}
+    {% else %}
+    {% set class = 'col-sm-12' %}
+    {% endif %}
+    <div id="content" class="{{ class }}">
+	    <div class="us-content us-content-compare">
+	      {% if products %}
+	      <div class="us-content-title us-content-compare-title">{{ text_product }}</div>
+	      <table class="table us-table-compare table-responsive">
+	        <tbody>
+	          <tr class="us-table-compare-product">
+	            <td>{{ text_name }}</td>
+	            {% for product in products %}
+	            <td class="us-table-product-name text-center"><a href="{{ product.href }}" {% if ee_tracking and ee_click %}onclick="ee_product.click('{{ product.product_id }}', '{{ product.ee_position }}', '{{ ee_type }}')"{% endif %}>{{ product.name }}</a></td>
+	            {% endfor %} </tr>
+	          <tr class="us-table-compare-img">
+	            <td class="align-middle">{{ text_image }}</td>
+	            {% for product in products %}
+	            <td class="text-center">{% if product.thumb %} <img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" /> {% endif %}</td>
+	            {% endfor %} </tr>
+	          <tr class="us-table-compare-price">
+	            <td>{{ text_price }}</td>
+	            {% for product in products %}
+	            <td class="us-module-price text-center">{% if product.price %}
+	              {% if not product.special %}
+	              <span class="us-module-price-actual">{{ product.price }}</span>
+	              {% else %} <span class="us-module-price-old">{{ product.price }}</span><span class="us-module-price-new">{{ product.special }}</span>
+	              {% endif %}
+	              {% endif %}</td>
+	            {% endfor %} </tr>
+	          <tr class="us-table-compare-model">
+	            <td>{{ text_model }}</td>
+	            {% for product in products %}
+	            <td class="text-center">{{ product.model }}</td>
+	            {% endfor %} </tr>
+	          <tr class="us-table-compare-producer">
+	            <td>{{ text_manufacturer }}</td>
+	            {% for product in products %}
+	            <td class="text-center">{{ product.manufacturer }}</td>
+	            {% endfor %} </tr>
+	          <tr class="us-table-compare-have">
+	            <td>{{ text_availability }}</td>
+	            {% for product in products %}
+	            <td class="text-center">{{ product.availability }}</td>
+	            {% endfor %} </tr>
+	        {% if review_status %}
+	        <tr class="us-table-compare-rating">
+	          <td class="align-middle">{{ text_rating }}</td>
+	          {% for product in products %}
+	          <td class="text-center">
+		          <div class="us-module-rating-stars d-flex align-items-center justify-content-center">
+				  	  {% for i in 1..5 %}
+			          {% if product.rating < i %}
+			          <span class="us-module-rating-star"></span>
+			          {% else %}
+			          <span class="us-module-rating-star us-module-rating-star-is"></span>
+			          {% endif %}
+			          {% endfor %}
+		          </div>
+		          <div class="us-table-compare-review">{{ product.reviews }}</div>
+	          </td>
+	          {% endfor %}
+	        </tr>
+	        {% endif %}
+	        <!--<tr class="us-table-compare-weight">
+	          <td>{{ text_weight }}</td>
+	          {% for product in products %}
+	          <td class="text-center">{{ product.weight }}</td>
+	          {% endfor %}
+	        </tr>
+	        <tr class="us-table-compare-proportions">
+	          <td>{{ text_dimension }}</td>
+	          {% for product in products %}
+	          <td class="text-center">{{ product.length }} x {{ product.width }} x {{ product.height }}</td>
+	          {% endfor %}
+	        </tr>-->
+	        
+	        {% for attribute_group in attribute_groups %}
+	          <tr>
+	            <td colspan="{{ products|length + 1 }}"><strong>{{ attribute_group.name }}</strong></td>
+	          </tr>
+	        {% for key, attribute in attribute_group.attribute %}
+	          <tr>
+	            <td class="text-center">{{ attribute.name }}</td>
+	            {% for product in products %}
+	            {% if product.attribute[key] %}
+	            <td class="text-center"> {{ product.attribute[key] }}</td>
+	            {% else %}
+	            <td></td>
+	            {% endif %}
+	            {% endfor %}
+	          </tr>
+	        {% endfor %}
+	        {% endfor %}
+	        <tr class="us-table-compare-btn">
+	          <td></td>
+	          {% for product in products %}
+	          <td class="text-center">
+	          	<div><input type="button" value="{{ button_cart }}" class="us-module-btn us-module-btn-green button-cart" {% if ee_tracking and ee_cart %}data-eet-position="{{ product.ee_position }}" data-eet-type="{{ ee_type}}"{% endif %} onclick="cart.add('{{ product.product_id }}', '{{ product.minimum }}');" /></div>
+<div class="aval-product-quantity hidden">{{ product.avail_product_quantity }}</div><div class="aval-product-id hidden">{{ product.product_id }}</div>
+	            <div><a href="{{ product.remove }}" class="us-module-btn us-module-btn-del">{{ button_remove }}</a></div>
+	          </td>
+			  {% endfor %}
+	         </tr>
+			  </tbody>
+	      </table>
+	      {% else %}
+	      <p>{{ text_empty }}</p>
+	      <div class="buttons">
+	        <a href="{{ continue }}" class="us-module-btn mt-3 d-inline-block">{{ button_continue }}</a>
+	      </div>
+	      {% endif %}
+	      </div>
+	    {{ column_right }}
+	    </div>
+    </div>
+    {{ content_bottom }}
+</div>
+
+		{# // remarketing #}
+		{% if remarketing_code %}{{ remarketing_code }}{% endif %}
+	  
+
+{% if ee_tracking and ee_impression %}
+    <script type="text/javascript"><!--
+        $(document).ready(function() {
+            setIntervalEE(function() {
+                var ee_data = JSON.parse('{{ ee_impression_data }}');
+                ee_data['url'] = window.location.href;
+                ee_data['title'] = document.title;
+                $.ajax({
+                    url: 'index.php?route=extension/module/ee_tracking/listview',
+                    type: 'post',
+                    data: ee_data,
+                    dataType: 'json',
+                    success: function(json) {
+                        if (json) {
+                            console.log(json);
+                        }
+                    },
+                    {% if ee_impression_log %}
+                    error: function(xhr, exc, error) {
+                        $.post('index.php?route=extension/module/ee_tracking/listviewlog', { 'error': error + ' (exc: ' + exc + ' status: ' + xhr.statusText + ')', 'url': window.location.href }, function( logs ) {
+                            console.log(logs);
+                        });
+                    }
+                    {% endif %}
+                });
+            }, {% if ee_ga_callback %}{{ ee_ga_callback }}{% else %}0{% endif %}, {% if ee_generate_cid %}{{ ee_generate_cid }}{% else %}0{% endif %});
+        });
+        //--></script>
+{% endif %}
+{{ footer }}
+			 

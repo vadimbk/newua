@@ -1,0 +1,131 @@
+<modification>
+    <name>Укркредит стикеры fix technics</name>
+	<version>1.0.5</version>
+	<link>https://fringe.com.ua</link>
+	<author>Stealth</author>
+	<code>ukrcredit_stickers_ocmod</code>
+	
+	<!--Контролер модули с переменной $result-->
+	<file path="catalog/controller/{extension/module,module}/{technics_product_tabs}.php">
+		<operation error="skip">
+			<search><![CDATA[$data['products'] = array();]]></search>
+			<add position="before"><![CDATA[				
+			$this->load->model('module/ukrcredits');
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[$data['products'][]]]></search>
+			<add position="before"><![CDATA[				
+				$ukrcredits_stickers = $this->model_module_ukrcredits->checkproduct($result);
+			]]></add>
+		</operation>
+		<operation>
+			<search><![CDATA[$image,]]></search>
+			<add position="after" error="skip"><![CDATA['ukrcredits_stickers' => isset($ukrcredits_stickers)?$ukrcredits_stickers:array(),]]></add>
+		</operation>
+	</file>
+
+	<!--Шаблон Товар-->
+	<file path="catalog/view/theme/*/template/product/product.twig">
+		<operation error="skip">
+				<search><![CDATA[<div class="sku__gallery js-gallery]]></search>
+				<add position="after"><![CDATA[
+<div class="ukrcreditsticker">
+{% for sticker in ukrcredits_stickers %}
+	{% if sticker %}
+	<div class="ukrcredit{{ sticker.type}}" title="{{ sticker.mounthprice_text}}" data-toggle="tooltip"><span>{{ sticker.partsCount}}</span></div>
+	{% endif %}
+{% endfor %}
+</div>
+]]></add>
+		</operation>
+	</file>
+	<!--Шаблон Основные страницы-->
+	<file path="catalog/view/theme/*/template/*/{category,search,manufacturer_info,special,product,article}.twig">
+		<operation error="skip">
+				<search><![CDATA[<div class="products__item-in]]></search>
+				<add position="after"><![CDATA[
+<div class="ukrcreditsticker">
+{% for sticker in product.ukrcredits_stickers %}
+	{% if sticker %}
+	<div class="ukrcredit{{ sticker.type}}" title="{{ sticker.mounthprice_text}}" data-toggle="tooltip"><span>{{ sticker.partsCount}}</span></div>
+	{% endif %}
+{% endfor %}
+</div>
+]]></add>
+		</operation>
+	</file>
+	
+	<file path="catalog/view/theme/*/template/{extension/module,module,product}/{category_grid,technics_product_tabs}.twig">
+		<operation error="skip">
+				<search><![CDATA[<div class="products__item-in]]></search>
+				<add position="after"><![CDATA[
+<div class="ukrcreditsticker">
+{% for sticker in product['ukrcredits_stickers'] %}
+	{% if sticker %}
+	<div class="ukrcredit{{ sticker['type']}}" title="{{ sticker['mounthprice_text']}}" data-toggle="tooltip"><span>{{ sticker['partsCount']}}</span></div>
+	{% endif %}
+{% endfor %}
+</div>
+				]]></add>
+		</operation>
+	</file>
+
+
+	<!--Стили-->
+	<file path="catalog/view/theme/*/template/common/footer.twig">
+		<operation error="skip">
+			<search><![CDATA[</footer>]]></search>
+			<add position="before"><![CDATA[
+		<style>
+		.ukrcreditsticker {
+			position: absolute;
+			text-align: left;
+			color: #000;
+			top: 56px;
+			right: 10px;
+			z-index: 99;
+		}
+		.ukrcreditsticker>div {
+			position: relative;
+			border: 1px solid #8BC34A;
+			border-radius:5px;
+			background:#fff;
+			margin-bottom:5px;
+			height:42px;
+			width:42px
+		}
+		.ukrcreditsticker span {
+			position: absolute;
+			font-size: 14px;
+			font-weight:700;
+			right: 2px;	
+			bottom:2px;
+			text-shadow: -1px -1px 0 #FFF;
+		}
+
+		.ukrcreditsticker .ukrcreditPP {
+			background: #fff url('/catalog/view/theme/default/image/ukrcredits/PP_logo.png') center center no-repeat;
+			background-size: 30px;
+		}
+		.ukrcreditsticker .ukrcreditPB {
+			background: #fff url('/catalog/view/theme/default/image/ukrcredits/PP_logo.png') center center no-repeat;
+			background-size: 30px;
+		}
+		.ukrcreditsticker .ukrcreditII {
+			background: #fff url('/catalog/view/theme/default/image/ukrcredits/II_logo.png') center center no-repeat;
+			background-size: 30px;
+		}
+		.ukrcreditsticker .ukrcreditIA {
+			background: #fff url('/catalog/view/theme/default/image/ukrcredits/II_logo.png') center center no-repeat;
+			background-size: 30px;
+		}
+		.ukrcreditsticker .ukrcreditMB {
+			background: #fff url('/catalog/view/theme/default/image/ukrcredits/MB_logo.png') center center no-repeat;
+			background-size: 30px;
+		}
+		</style>
+			]]></add>
+		</operation>
+	</file>	
+</modification>

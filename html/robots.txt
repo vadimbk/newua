@@ -1,0 +1,73 @@
+User-agent: *
+Disallow: /*?utm_*
+Disallow: /*?gclid=*
+Disallow: /*/cart
+Disallow: /*/shop_rating
+Disallow: /admin/
+Disallow: /price/
+Disallow: /*/simpleregister
+Disallow: /*login
+Disallow: /*/forgotten
+Disallow: /*account
+Disallow: /*/address
+Disallow: /*wishlist
+Disallow: /*/order
+Disallow: /*/download
+Disallow: /*/return
+Disallow: /*/transaction
+Disallow: /*/newsletter
+Disallow: /*/recurring
+Disallow: /*/compare
+Disallow: /*/quickview
+Disallow: /*/checkout
+Disallow: /*register
+
+
+
+User-agent: Googlebot
+Disallow: /*?utm_*
+Disallow: /*?gclid=*
+Disallow: /*/cart
+Disallow: /*/shop_rating
+Disallow: /admin/
+Disallow: /price/
+Disallow: /*/simpleregister
+Disallow: /*login
+Disallow: /*/forgotten
+Disallow: /*account
+Disallow: /*/address
+Disallow: /*wishlist
+Disallow: /*/order
+Disallow: /*/download
+Disallow: /*/return
+Disallow: /*/transaction
+Disallow: /*/newsletter
+Disallow: /*/recurring
+Disallow: /*/compare
+Disallow: /*/quickview
+Disallow: /*/checkout
+Disallow: /*register
+
+
+User-agent: Yandex
+Disallow: /
+
+Host: https://radio-shop.com.ua
+
+User-agent: Googlebot-Image
+Disallow: /
+Allow: /*.jpg
+Allow: /*.gif
+Allow: /*.png
+
+User-agent: YandexImages
+Disallow: /
+Allow: /*.jpg
+Allow: /*.gif
+Allow: /*.png
+
+User-agent: dotbot
+Disallow: /admin/
+
+Sitemap: https://radio-shop.com.ua/sitemap_index.xml
+

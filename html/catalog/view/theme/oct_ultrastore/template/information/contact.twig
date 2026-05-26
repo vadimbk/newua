@@ -1,0 +1,151 @@
+{{ header }}
+<div id="information-contact" class="container">
+	{{ oct_breadcrumbs }}
+	<div class="row">
+		<div class="col-lg-12">
+			<h1 class="us-main-shop-title">{{ heading_title }}</h1>
+		</div>
+	</div>
+	<div class="content-top-box" >{{ content_top }}</div>
+	<div class="row">{{ column_left }}
+	    {% if column_left and column_right %}
+	    {% set class = 'col-sm-6' %}
+	    {% elseif column_left or column_right %}
+	    {% set class = 'col-sm-9' %}
+	    {% else %}
+	    {% set class = 'col-sm-12' %}
+	    {% endif %}
+	    <div id="content" itemscope itemtype="http://schema.org/Organization" class="{{ class }}">
+		    <div class="us-content">
+			<div class="row cont-dash">
+			
+			        <div class="col-sm-6 info-contact">
+
+            <div class="info-store">
+			
+			<!--<div style="margin-bottom:20px;">
+<strong>С Днем Независимости Украины!<br><br>
+В связи с праздником график работы магазина изменен:<br>
+</strong>
+<b style="color:red;">23.08.2021 (понедельник - выходной день)</b><br>
+<strong>28.08.2021 (суббота) - рабочий день</strong>
+</div>-->
+                
+                    <h3 class="cont-h3">КОНТАКТ-ЦЕНТР</h3>
+
+                    <address>
+					
+					{{ text_address_1 }}
+                     {% if fax %}
+                        <div class="fax"><div class="icon"><i class="fa fa-fax"></i></div><div class="text"><?php echo $fax; ?></div></div>
+                    {% endif %}
+
+                        <div style="margin-top:10px;">{{ text_address_2 }}
+                            </div>
+   
+					{{ text_address_3 }}
+                        </address>
+                    
+                </div>
+            </div>
+            <div class="col-sm-6" style="margin-top:-15px;">
+
+                <!--<script id="bx24_form_inline" data-skip-moving="true">
+                    (function(w,d,u,b){w['Bitrix24FormObject']=b;w[b] = w[b] || function(){arguments[0].ref=u;
+                        (w[b].forms=w[b].forms||[]).push(arguments[0])};
+                        if(w[b]['forms']) return;
+                        var s=d.createElement('script');s.async=1;s.src=u+'?'+(1*new Date());
+                        var h=d.getElementsByTagName('script')[0];h.parentNode.insertBefore(s,h);
+                    })(window,document,'https://bitrix.radio-shop.com.ua/bitrix/js/crm/form_loader.js','b24form');
+
+                    b24form({"id":"8","lang":"ru","sec":"a830sc","type":"inline"});
+                </script>-->
+				
+				<script data-b24-form="inline/3/g9ko27" data-skip-moving="true">
+ (function(w,d,u){
+   var s=d.createElement('script');s.async=true;s.src=u+'?'+(Date.now()/180000|0);
+   var h=d.getElementsByTagName('script')[0];h.parentNode.insertBefore(s,h);
+ })(window,document,'https://cdn.bitrix24.ua/b19884337/crm/form/loader_3.js');
+</script>
+
+
+<script data-b24-form="click/3/g9ko27" data-skip-moving="true">
+ (function(w,d,u){
+   var s=d.createElement('script');s.async=true;s.src=u+'?'+(Date.now()/180000|0);
+   var h=d.getElementsByTagName('script')[0];h.parentNode.insertBefore(s,h);
+ })(window,document,'https://cdn.bitrix24.ua/b19884337/crm/form/loader_3.js');
+</script>
+
+
+            </div>
+			
+			</div>
+			
+			
+			<div class="row cont-dash">
+            <div class="col-sm-6 info-contact marg-15">
+                <div class="name-store">
+				
+				{{ text_name_store_3 }}
+				
+				
+                </div>
+                <img src="/image/data/office_new_22.png" width="540" class="respon-contact">
+            </div>
+
+            <div class="col-sm-6">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2541.4900786914795!2d30.446648215943547!3d50.431971596576915!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40d4cea5cdf185d9%3A0xc5358e32048e19a6!2zMTNBLCDRg9C7LiDQo9GI0LjQvdGB0LrQvtCz0L4sIDEz0JAsINCa0LjQtdCyLCAwMjAwMA!5e0!3m2!1sru!2sua!4v1619121261588!5m2!1sru!2sua" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" class="respon-contact"></iframe>
+                <div class="name-store" style="margin-top: 35px;font-size: 14px; color: #ccc;">
+				
+				{{ text_yur_inf }}
+				
+                    
+                </div>
+            </div>
+
+        </div>
+			
+			
+			<!--<div class="row">
+            <div class="col-sm-6 info-contact marg-15">
+                <div class="name-store" >
+				{{ text_name_store_1 }}
+                   
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2541.2836803893006!2d30.447592415730846!3d50.435816479473466!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x6f070bc32ab8e01a!2sRadio%20Shop!5e0!3m2!1sru!2sua!4v1581082912577!5m2!1sru!2sua" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" class="respon-contact"></iframe>
+            </div>
+        </div>-->
+		
+		
+		<!--<div class="row" style="margin-bottom: 40px;padding-bottom: 20px;border-bottom: 1px solid #5f87d1;border-bottom-style: dashed;">
+            <div class="name-store" >
+			
+			{{ text_name_store_2 }}
+			
+                
+                <img style="float:left; width: 48%; margin-top: 30px;" src="/image/data/cxema-1.jpg">
+                <img style="width: 50%;float: right; margin-top: 30px;" src="/image/data/cxema-2.png">
+            </div>	
+
+        </div>-->
+		
+		
+
+			
+			
+		</div>
+	   </div>
+	    {{ column_right }}
+	</div>
+	{{ content_bottom }}
+</div>
+<style>
+.us-main-shop-title
+{
+margin-top:0px;
+}
+</style>
+{{ footer }}	

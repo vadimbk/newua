@@ -1,0 +1,559 @@
+<div class="panel panel-default">
+  <div class="panel-heading"><i class="fa fa-filter" aria-hidden="true"></i> {{ button_filter }}</div>
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-sm-1">
+        <input type="text" class="form-control input-sm" id="filter-order-id" value="{{ filter_order_id }}" placeholder="{{ entry_order_id }}">
+      </div>
+      <div class="col-sm-2">
+        <input type="text" class="form-control input-sm" id="filter-total" value="{{ filter_total }}" placeholder="{{ entry_total }}">
+      </div>
+      <div class="col-sm-2">
+        <select id="filter-order-status-id" class="form-control input-sm">
+          <option value="">{{ entry_order_status }}</option>
+          {% if filter_order_status_id == '0' %}
+            <option value="0" selected="selected">{{ text_missing }}</option>
+          {% else %}
+            <option value="0">{{ text_missing }}</option>
+          {% endif %}
+          {% for order_status in order_statuses %}
+            {% if order_status.order_status_id == filter_order_status_id %}
+              <option value="{{ order_status.order_status_id }}" selected="selected">{{ order_status.name }}</option>
+            {% else %}
+              <option value="{{ order_status.order_status_id }}">{{ order_status.name }}</option>
+            {% endif %}
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-sm-2">
+        <div class="input-group input-group-sm date">
+          <input type="text" value="{{ filter_date_added }}" placeholder="{{ entry_date_added }}" data-date-format="YYYY-MM-DD" id="filter-date-added" class="form-control" />
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+          </span>
+        </div>
+      </div>
+      <div class="col-sm-2">
+        <div class="input-group input-group-sm date">
+          <input type="text" value="{{ filter_date_modified }}" placeholder="{{ entry_date_modified }}" data-date-format="YYYY-MM-DD" id="filter-date-modified" class="form-control" />
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button>
+          </span>
+        </div>
+      </div>
+      <div class="col-sm-3 text-center">
+        <button type="button" class="btn btn-default btn-sm" id="button-filter"><i class="fa fa-filter" aria-hidden="true"></i> {{ button_filter }}</button>
+        <button type="button" class="btn btn-default btn-sm" id="button-clean-filter"><i class="fa fa-eraser" aria-hidden="true"></i> {{ button_clean_filter }}</button>
+        <button type="button" class="btn btn-default btn-sm" onclick="$('#button-filter').click()"><i class="fa fa-refresh" aria-hidden="true"></i> {{ tooltip_refresh_btn }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="table-responsive">
+  <table class="table table-bordered">
+    <thead>
+    <tr>
+      <td class="text-center sort-col"><a href="{{ sort_order }}" {% if sort == 'o.order_id' %}class="{{ order|lower }}"{% endif %}>{{ column_order_id }}</a></td>
+      <td class="text-left sort-col"><a href="{{ sort_purchase_status }}" {% if sort == 'oe.purchase_status' %}class="{{ order|lower }}"{% endif %}>{{ column_tracking_status }}</a></td>
+      <td class="text-left sort-col"><a href="{{ sort_order_status }}" {% if sort == 'order_status' %}class="{{ order|lower }}"{% endif %}>{{ column_order_status }}</a></td>
+      <td class="text-right sort-col"><a href="{{ sort_total }}" {% if sort == 'o.total' %}class="{{ order|lower }}"{% endif %}>{{ column_total }}</a></td>
+      <td class="text-right">{{ column_order_info }}</td>
+      <td class="text-right sort-col"><a href="{{ sort_date_added }}" {% if sort == 'o.date_added' %}class="{{ order|lower }}"{% endif %}>{{ column_date_added }}</a></td>
+      <td class="text-right sort-col"><a href="{{ sort_date_modified }}" {% if sort == 'o.date_modified' %}class="{{ order|lower }}"{% endif %}>{{ column_date_modified }}</a></td>
+      <td class="text-right">{{ column_tracking_dates }}</td>
+      <td>{{ column_action }}</td>
+    </tr>
+    </thead>
+    <tbody id="order-list">
+    {% if orders %}
+    {% set order_row = 0 %}
+    {% for order in orders %}
+      <tr>
+        <td class="text-center">
+          <a href="{{ order.href }}">{{ order.order_id }}</a>
+        </td>
+        <td class="text-left">{{ order.tracking_status }}</td>
+        <td class="text-left">{{ order.order_status }}</td>
+        <td class="text-right">{{ order.default_total }}{% if order.default_total != order.total %} <i data-toggle="tooltip" title="{{ order.total }}" class="fa fa-exchange"></i>{% endif %}</td>
+        <td class="text-right">
+          <span style="font-size: 10px;">
+            {{ text_customer }}: {{ order.customer }}<br />
+            {{ text_store }}: {{ order.store_name }}
+          </span>
+        </td>
+        <td class="text-right">{{ order.date_added }}</td>
+        <td class="text-right">{{ order.date_modified }}</td>
+        <td class="text-right">
+          <span style="font-size: 10px;">
+            {% if order.date_registration %}
+            {{ text_registration }}: {{ order.date_registration }}<br />
+            {% endif %}
+            {% if order.date_tracking %}
+              {{ text_tracking }}: {{ order.date_tracking }}<br />
+            {% endif %}
+            {% if order.date_refund %}
+              {{ text_refund }}: {{ order.date_refund }}
+            {% endif %}
+          </span>
+        </td>
+        <td class="text-center">
+          {% if order.action == 0 %}
+            <button type="button" onclick="trackOrder($(this), {{ order.order_id }})" class="btn btn-success" data-toggle="tooltip" title="{{ tooltip_track_btn }}"><i class="fa fa-crosshairs" aria-hidden="true"></i></button>
+          {% elseif order.action == 1 and order.refund_status != 2 %}
+            {% if order.product_count > 1 %}
+              <button type="button" onclick="modalRefund($(this), {{ order.order_id }})" class="btn btn-default" data-toggle="tooltip" title="{{ tooltip_refund_btn }}"><i class="fa fa-undo" aria-hidden="true"></i></button>
+            {% else %}
+              <button type="button" onclick="trackOrder($(this), {{ order.order_id }}, 1)" class="btn btn-default" data-toggle="tooltip" title="{{ tooltip_refund_btn }}"><i class="fa fa-undo" aria-hidden="true"></i></button>
+            {% endif %}
+          {% elseif order.action == 2 %}
+            <button type="button" onclick="modalAddEOrder($(this), {{ order.order_id }})" class="btn btn-primary" data-toggle="tooltip" title="{{ tooltip_add_and_track_btn }}"><i class="fa fa-crosshairs" aria-hidden="true"></i></button>
+          {% elseif order.action == 3 %}
+            <button type="button" onclick="modalEditEOrder($(this), {{ order.order_id }})" class="btn btn-primary" data-toggle="tooltip" title="{{ tooltip_edit_and_track_btn }}"><i class="fa fa-crosshairs" aria-hidden="true"></i></button>
+          {% endif %}
+        </td>
+      </tr>
+      {% set order_row = order_row + 1 %}
+    {% endfor %}
+    <tr>
+      <td colspan="8"></td>
+      <td class="text-center">
+        <button type="button" class="btn btn-default" onclick="$('#button-filter').click()" data-toggle="tooltip" title="{{ tooltip_refresh_btn }}"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+      </td>
+    </tr>
+    {% else %}
+    <tr>
+      <td class="text-center" colspan="9">{{ text_no_results }}</td>
+    </tr>
+    </tbody>
+    {% endif %}
+  </table>
+</div>
+<div class="row">
+  <div class="col-sm-6 text-left">{{ pagination }}</div>
+  <div class="col-sm-6 text-right">{{ results }}</div>
+</div>
+<div class="modal fade" id="modal-additional" tabindex="0" role="dialog" style="z-index: 9999" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header"><b></b>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body"></div>
+    </div>
+  </div>
+</div>
+<script src="view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
+<link href="view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.css" type="text/css" rel="stylesheet" media="screen" />
+<script type="text/javascript"><!--
+    $('.date').datetimepicker({
+        pickTime: false
+    });
+
+    $('button.btn').on('click', function() {
+        $(this).tooltip('hide');
+    });
+
+    $('#button-filter').on('click', function() {
+        url = '';
+
+        var filter_order_id = $('input[id=\'filter-order-id\']').val();
+        if (filter_order_id) {
+            url += '&filter_order_id=' + encodeURIComponent(filter_order_id);
+        }
+
+        var filter_order_status_id = $('select[id=\'filter-order-status-id\']').val();
+        if (filter_order_status_id !== '') {
+            url += '&filter_order_status_id=' + encodeURIComponent(filter_order_status_id);
+        }
+
+        var filter_total = $('input[id=\'filter-total\']').val();
+        if (filter_total) {
+            url += '&filter_total=' + encodeURIComponent(filter_total);
+        }
+
+        var filter_date_added = $('input[id=\'filter-date-added\']').val();
+        if (filter_date_added) {
+            url += '&filter_date_added=' + encodeURIComponent(filter_date_added);
+        }
+
+        var filter_date_modified = $('input[id=\'filter-date-modified\']').val();
+        if (filter_date_modified) {
+            url += '&filter_date_modified=' + encodeURIComponent(filter_date_modified);
+        }
+
+        if ({{ multi_store }}) {
+            url += '&filter_store_id={{ filter_store_id }}';
+        }
+
+        reloadOrderList('{{ filter_action }}' + url);
+    });
+
+    $('#button-clean-filter').on('click', function() {
+        reloadOrderList('{{ filter_action }}');
+    });
+
+    function reloadOrderList(action = '') {
+        if (!action) {
+            action = '{{ action }}';
+        }
+        $.ajax({
+            url: action,
+            type: 'post',
+            dataType: 'html',
+            beforeSend: function() {
+                $('.loading-wrapper').fadeIn();
+            },
+            complete: function() {
+                $('.loading-wrapper').fadeOut();
+            },
+            success: function(html) {
+                if (html.toString().indexOf('index.php?route=common/forgotten') !== -1 && html.toString().indexOf('indexOf(\'index.php?route=common/forgotten\')') === -1) {
+                    alertEMessage($('button[onclick^=\'submitForm\']').data('session'));
+                } else {
+                    $('#orders').html(html);
+                }
+            },
+        });
+    }
+
+    function modalRefundProduct(btn, order_id, order_product_id = 0) {
+        var quantity = parseInt($('#item-refund-' + order_product_id).find('td.product-quantity').text()) - parseInt($('#item-refund-' + order_product_id).find('td.product-refund').text());
+        var note_refund_quantity = '{{ note_refund_quantity }}';
+
+        var html = '<form class="form-horizontal">';
+        html += '<div class="form-group">';
+        html += '<label class="col-sm-3 control-label">{{ column_product }}</label>';
+        html += '<div class="col-sm-9"><p class="form-control-static">' + btn.closest('tr').find('.product-name').html() + '</p></div>';
+        html += '</div>';
+        html += '<div class="form-group">';
+        html += '<label class="col-sm-3 control-label">{{ column_model }}</label>';
+        html += '<div class="col-sm-9"><p class="form-control-static">' + btn.closest('tr').find('.product-model').html() + '</p></div>';
+        html += '</div>';
+        html += '<div class="form-group">';
+        html += '<label class="col-sm-3 control-label">{{ column_order_quantity|striptags }}</label>';
+        html += '<div class="col-sm-9"><p class="form-control-static">' + btn.closest('tr').find('.product-quantity').html() + '</p></div>';
+        html += '</div>';
+        html += '<div class="form-group">';
+        html += '<label class="col-sm-3 control-label">{{ column_price }}</label>';
+        html += '<div class="col-sm-9"><p class="form-control-static">' + btn.closest('tr').find('.product-price').html() + '</p></div>';
+        html += '</div>';
+        html += '<div class="form-group">';
+        html += '<label class="col-sm-3 control-label"><span data-toggle="tooltip" title="{{ tooltip_refunded_quantity }}">{{ column_refund_quantity }}</span></label>';
+        html += '<div class="col-sm-9"><p class="form-control-static">' + btn.closest('tr').find('.product-refund').html() + '</p></div>';
+        html += '</div>';
+        html += '<div class="form-group">';
+        html += '<label class="col-sm-3 control-label" for="input-refund-quantity">{{ entry_quantity }}</label>';
+        html += '<div class="col-sm-9">';
+        html += '<div class="input-group">';
+        html += '<span class="input-group-btn">';
+        html += '<button class="btn btn-default" onclick="minusInput($(this))" type="button"><i class="fa fa-minus" aria-hidden="true"></i></button>';
+        html += '</span>'
+        html += '<input type="quantity" class="form-control" id="input-refund-quantity" value="' + quantity + '" placeholder="{{ entry_quantity }}">';
+        html += '<span class="input-group-btn">';
+        html += '<button class="btn btn-default" onclick="plusInput($(this))" data-max="' + quantity + '" type="button"><i class="fa fa-plus" aria-hidden="true"></i></button>';
+        html += '</span>';
+        html += '</div>';
+        html += '<p class="text-info">' + note_refund_quantity.replace(/%s/g, quantity)  + '</p>';
+        html += '</div>';
+        html += '</div>';
+        html += '<div class="text-center">';
+        html += '<button type="button" data-modal="2" onclick="trackOrder($(this), ' + order_id + ', 1, ' + order_product_id +', $(\'input[id=input-refund-quantity]\').val())" class="btn btn-default">';
+        html += '<i class="fa fa-undo" aria-hidden="true"></i> {{ button_refund_product }}';
+        html += '</button>';
+        html += '</div>';
+        html += '</form>';
+
+        $('#modal-additional').find('.modal-header b:first-child').html(btn.data('original-title'));
+        $('#modal-additional').find('.modal-body').html(html);
+        $('#modal-additional').modal('show');
+
+        $('[data-toggle=\'tooltip\']').tooltip();
+    }
+
+    function plusInput(btn) {
+        var current_value = parseInt(btn.closest('.input-group').find('input').val());
+
+        if (current_value < btn.data('max'))
+            btn.closest('.input-group').find('input').val(current_value + 1);
+    }
+
+    function minusInput(btn) {
+        var current_value = parseInt(btn.closest('.input-group').find('input').val());
+
+        if (current_value > 1)
+            btn.closest('.input-group').find('input').val(current_value - 1);
+    }
+
+    function trackOrder(btn, order_id, refund = 0, order_product_id = 0, quantity = 0) {
+        $.ajax({
+            url: '{{ track_order_action }}',
+            type: 'post',
+            data: 'order_id=' + order_id + '&refund=' + refund + '&order_product_id=' + order_product_id + '&quantity=' + quantity,
+            crossDomain: true,
+            beforeSend: function() {
+                btn.prop('disabled', true);
+            },
+            success: function(json) {
+                btn.prop('disabled', false);
+
+                if (btn.data('modal') == 1) {
+                    var refund_quantity = parseInt($('#item-refund-' + order_product_id).find('td.product-quantity').text());
+
+                    $('#item-refund-' + order_product_id).find('td.product-refund').text(refund_quantity);
+
+                    $('#item-refund-' + order_product_id).find('button.btn-default').prop('disabled', true).tooltip('hide');
+
+                    if ($('tr[id^=\'item-refund-\']').find('button.btn-default').is(':enabled') == false) {
+                        $('#modal-general').find('button.close').click();
+                    }
+                } else if (btn.data('modal') == 2) {
+                    btn.closest('.modal').find('button.close').click();
+
+                    var refund_quantity = parseInt($('#item-refund-' + order_product_id).find('td.product-refund').text()) + parseInt(quantity);
+
+                    $('#item-refund-' + order_product_id).find('td.product-refund').text(refund_quantity);
+
+                    if (refund_quantity >= parseInt($('#item-refund-' + order_product_id).find('td.product-quantity').text())) {
+                        $('#item-refund-' + order_product_id).find('button.btn-default').prop('disabled', true);
+
+                        if ($('tr[id^=\'item-refund-\']').find('button.btn-default').is(':enabled') == false) {
+                            $('#modal-general').find('button.close').click();
+                        }
+                    }
+                } else {
+                    btn.closest('.modal').find('button.close').click();
+                }
+
+                reloadOrderList();
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                btn.prop('disabled', false);
+
+                if (xhr.responseText.toString().indexOf('index.php?route=common/forgotten') !== -1) {
+                    alertEMessage($('button[onclick^=\'submitForm\']').data('session'));
+                }
+            }
+        });
+    }
+
+    function modalRefund(btn, order_id) {
+        $.ajax({
+            url: '{{ refund_action }}',
+            type: 'post',
+            data: 'order_id=' + order_id,
+            dataType: 'json',
+            crossDomain: true,
+            beforeSend: function() {
+                btn.button('loading');
+            },
+            complete: function() {
+                btn.button('reset');
+            },
+            success: function(json) {
+                btn.button('reset');
+
+                var html = '';
+                html += '<table class="table table-bordered">';
+                html += '<thead><tr>';
+                html += '<td class="text-left">{{ column_product }}</td>';
+                html += '<td class="text-left">{{ column_model }}</td>';
+                html += '<td class="text-right">{{ column_order_quantity }}</td>';
+                html += '<td class="text-right">{{ column_price }}</td>';
+                html += '<td class="text-right">{{ column_total }}</td>';
+                html += '<td class="text-right">{{ column_refund_quantity }}</td>';
+                html += '<td class="text-right">{{ column_action }}</td>';
+                html += '</tr></thead>';
+                html += '<tbody>';
+
+                $.each(json.order_products, function(index_p, product) {
+                    html += '<tr id="item-refund-' + product.order_product_id + '">';
+                    html += '<td class="text-left product-name">' + product.name;
+
+                    $.each(product.options, function(index_o, option) {
+                        html += '<br/>';
+                        html += '<small> - ' + option.name + ': ' + option.value + '</small>';
+                    });
+
+                    html += '</td>';
+                    html += '<td class="text-left product-model">' + product.model + '</td>';
+                    html += '<td class="text-right product-quantity">' + product.quantity + '</td>';
+                    html += '<td class="text-right product-price">' + product.price + '</td>';
+                    html += '<td class="text-right product-total">' + product.total + '</td>';
+                    html += '<td class="text-right product-refund">' + product.refund + '</td>';
+                    html += '<td class="text-right">';
+
+                    if (product.quantity == 1) {
+                        html += '<button data-modal="1" class="btn btn-default btn-sm" ' + (product.quantity == product.refund ? 'disabled="disabled"' : '') + ' onclick="trackOrder($(this), ' + order_id + ', 1, ' + product.order_product_id + ')" data-toggle="tooltip" title="{{ tooltip_refund_product_btn }}">';
+                    } else {
+                        html += '<button class="btn btn-default btn-sm" ' + (product.quantity == product.refund ? 'disabled="disabled"' : '') + ' onclick="modalRefundProduct($(this), ' + order_id + ', ' + product.order_product_id + ', ' + (product.quantity - product.refund) + ')" data-toggle="tooltip" title="{{ tooltip_refund_product_btn }}">';
+                    }
+
+                    html += '<i class="fa fa-undo" aria-hidden="true"></i>';
+                    html += '</button>';
+                    html += '</td>';
+                    html += '</tr>';
+                });
+
+                html += '</tbody>';
+                html += '</table>';
+                html += '<button type="button" onclick="trackOrder($(this),' + order_id + ', 1)" class="btn btn-primary"><i class="fa fa-undo" aria-hidden="true"></i> {{ button_full_refund }}</button>';
+                html += ' <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times" aria-hidden="true"></i> {{ button_cancel }}</button>';
+
+                $('#modal-general').find('.modal-header b:first-child').html(btn.data('original-title'));
+                $('#modal-general').find('.modal-body').html(html);
+                $('#modal-general').modal('show');
+
+                $('[data-toggle=\'tooltip\']').tooltip({container: 'body'});
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                if (xhr.responseText.toString().indexOf('index.php?route=common/forgotten') !== -1) {
+                    alertEMessage($('button[onclick^=\'submitForm\']').data('session'));
+                }
+            }
+        });
+    }
+
+    function modalAddEOrder(btn, order_id) {
+        var html = '<form class="form-horizontal">';
+        html += '<input type="hidden" name="order_id" value="' + order_id + '"/>';
+        html += '<input type="hidden" name="tracking_type" value="' + $('input[name=\'type\']').val() + '"/>';
+        html += '<div class="form-group">';
+        html += '<label class="col-sm-3 control-label" for="client_id"><span data-toggle="tooltip" title="{{ tooltip_client_id }}">{{ entry_client_id }}</span></label>';
+        html += '<div class="col-sm-9">';
+      {% if default_client_id %}
+        html += '<div class="input-group">';
+      {% endif %}
+        html += '<input type="text" name="client_id" class="form-control" id="client_id" placeholder="{{ entry_client_id }}">';
+      {% if default_client_id %}
+        html += '<span class="input-group-btn">';
+        html += '<button class="btn btn-default" onclick="$(this).closest(\'.input-group\').find(\'input[name=client_id]\').val(\'{{ default_client_id }}\')" data-toggle="tooltip" title="{{ tooltip_get_client_id }}" type="button"><i class="fa fa-refresh" aria-hidden="true"></i></button>';
+        html += '</span>';
+        html += '</div>';
+      {% endif %}
+        html += '</div>';
+        html += '</div>';
+        html += '<button type="button" onclick="addEOrder($(this))" class="btn btn-primary"><i class="fa fa-crosshairs" aria-hidden="true"></i> {{ button_track }}</button>';
+        html += ' <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times" aria-hidden="true"></i> {{ button_cancel }}</button>';
+        html += '</form>';
+
+        $('#modal-general').find('.modal-header b:first-child').html(btn.data('original-title'));
+        $('#modal-general').find('.modal-body').html(html);
+        $('#modal-general').modal('show');
+
+        $('[data-toggle=\'tooltip\']').tooltip({container: 'body'});
+    }
+
+    function modalEditEOrder(btn, order_id) {
+        var html = '<form class="form-horizontal">';
+        html += '<input type="hidden" name="order_id" value="' + order_id + '"/>';
+        html += '<input type="hidden" name="tracking_type" value="' + $('input[name=\'type\']').val() + '"/>';
+        html += '<div class="form-group">';
+        html += '<label class="col-sm-3 control-label" for="client_id"><span data-toggle="tooltip" title="{{ tooltip_client_id }}">{{ entry_client_id }}</span></label>';
+        html += '<div class="col-sm-9">';
+      {% if default_client_id %}
+        html += '<div class="input-group">';
+      {% endif %}
+        html += '<input type="text" name="client_id" class="form-control" id="client_id" placeholder="{{ entry_client_id }}">';
+      {% if default_client_id %}
+        html += '<span class="input-group-btn">';
+        html += '<button class="btn btn-default" onclick="$(this).closest(\'.input-group\').find(\'input[name=client_id]\').val(\'{{ default_client_id }}\')" data-toggle="tooltip" title="{{ tooltip_get_client_id }}" type="button"><i class="fa fa-refresh" aria-hidden="true"></i></button>';
+        html += '</span>';
+        html += '</div>';
+      {% endif %}
+        html += '</div>';
+        html += '</div>';
+        html += '<button type="button" onclick="editEOrder($(this))" class="btn btn-primary"><i class="fa fa-crosshairs" aria-hidden="true"></i> {{ button_track }}</button>';
+        html += ' <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times" aria-hidden="true"></i> {{ button_cancel }}</button>';
+        html += '</form>';
+
+        $('#modal-general').find('.modal-header b:first-child').html(btn.data('original-title'));
+        $('#modal-general').find('.modal-body').html(html);
+        $('#modal-general').modal('show');
+
+        $('[data-toggle=\'tooltip\']').tooltip({container: 'body'});
+    }
+
+    function addEOrder(btn) {
+        $.ajax({
+            url: '{{ add_e_order_action }}',
+            type: 'post',
+            data: btn.closest('form').serialize(),
+            dataType: 'json',
+            beforeSend: function() {
+                btn.button('loading');
+                $('.loading-wrapper').fadeIn();
+            },
+            complete: function() {
+                btn.button('reset');
+                $('.loading-wrapper').fadeOut();
+            },
+            success: function(json) {
+                btn.button('reset');
+                $('.loading-wrapper').fadeOut();
+                $('.alert').remove();
+
+                if (json.error) {
+                    var html = '<div class="alert alert-danger alert-dismissible" role="alert">';
+                    html += '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+                    html += '<i class="fa fa-exclamation-circle" aria-hidden="true"></i> ' + json.error;
+                    html += '</div>';
+
+                    $('.modal-body').prepend(html);
+                }
+
+                if (json.success) {
+                    $('#modal-general').modal('hide');
+
+                    reloadOrderList();
+                }
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                if (xhr.responseText.toString().indexOf('index.php?route=common/forgotten') !== -1) {
+                    alertEMessage($('button[onclick^=\'submitForm\']').data('session'));
+                }
+            }
+        });
+    }
+
+    function editEOrder(btn) {
+        $.ajax({
+            url: '{{ edit_e_order_action }}',
+            type: 'post',
+            data: btn.closest('form').serialize(),
+            dataType: 'json',
+            beforeSend: function() {
+                btn.button('loading');
+                $('.loading-wrapper').fadeIn();
+            },
+            complete: function() {
+                btn.button('reset');
+                $('.loading-wrapper').fadeOut();
+            },
+            success: function(json) {
+                btn.button('reset');
+                $('.loading-wrapper').fadeOut();
+                $('.alert').remove();
+
+                if (json.error) {
+                    var html = '<div class="alert alert-danger alert-dismissible" role="alert">';
+                    html += '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+                    html += '<i class="fa fa-exclamation-circle" aria-hidden="true"></i> ' + json.error;
+                    html += '</div>';
+
+                    $('.modal-body').prepend(html);
+                }
+
+                if (json.success) {
+                    $('#modal-general').modal('hide');
+
+                    reloadOrderList();
+                }
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                if (xhr.responseText.toString().indexOf('index.php?route=common/forgotten') !== -1) {
+                    alertEMessage($('button[onclick^=\'submitForm\']').data('session'));
+                }
+            }
+        });
+    }
+    //--></script>

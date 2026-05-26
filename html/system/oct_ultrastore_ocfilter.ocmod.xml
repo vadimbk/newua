@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>oct_ultrastore_ocfilter</code>
+	<name>Octemplates - For OCFilter UltraStore Theme</name>
+	<version>1.0.0</version>
+	<author>Octemplates</author>
+	<link>https://octemplates.net/</link>
+	<file path="catalog/view/theme/*/template/extension/module/ocfilter/module.twig">
+		<operation error="skip">
+			<search><![CDATA[<div class="ocf-offcanvas ocfilter-mobile hidden-sm hidden-md hidden-lg">]]></search>
+			<add position="replace"><![CDATA[
+			<div class="ocf-offcanvas ocfilter-mobile d-lg-none">
+			]]></add>
+    	</operation>
+    	<operation error="skip">
+			<search><![CDATA[<button type="button" class="btn btn-primary" data-toggle="offcanvas"><i class="fa fa-filter"></i></button>]]></search>
+			<add position="replace"><![CDATA[
+			<button type="button" class="us-module-btn us-module-btn-green" data-toggle="offcanvas"><i class="fa fa-filter"></i></button>
+			]]></add>
+    	</operation>
+    	<operation error="skip">
+			<search><![CDATA[<div class="hidden" id="ocfilter-button">]]></search>
+			<add position="replace"><![CDATA[
+			<div class="d-none" id="ocfilter-button">
+			]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/view/theme/*/template/extension/module/ocfilter/value_item.twig">
+		<operation error="skip">
+			<search><![CDATA[{{ value.name }}]]></search>
+			<add position="replace"><![CDATA[
+			<span>{{ value.name }}</span>
+			]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/view/theme/*/template/extension/module/ocfilter/selected_filter.twig">
+		<operation error="skip">
+			<search><![CDATA[<button type="button" onclick="location = '{{ value.href }}';" class="btn btn-xs btn-danger" style="padding: 1px 4px;"><i class="fa fa-times"></i> {{ value.name }}</button>]]></search>
+			<add position="replace"><![CDATA[
+			<button type="button" onclick="location = '{{ value.href }}';" class="btn btn-sm btn-danger" style="padding: 1px 4px;"><i class="fa fa-times"></i> {{ value.name }}</button>
+			]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/language/ru-ru/extension/module/ocfilter.php">
+		<operation error="skip">
+			<search><![CDATA[$_['heading_title']                   = 'Параметры';]]></search>
+			<add position="replace"><![CDATA[
+			$_['heading_title']                   = 'Фильтр товаров';
+			]]></add>
+    	</operation>
+	</file>
+</modification>

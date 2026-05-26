@@ -1,0 +1,189 @@
+{% if option.color %}
+    <div class="ocf-color" style="background-color: #{{ value.color }};"></div>
+{% endif %}
+
+{% if option.image %}
+    <div class="ocf-image" style="background-image: url({{ value.image }});"></div>
+{% endif %}
+
+{% if value.selected %}
+    <label id="v-{{ value.id }}" class="ocf-selected" data-option-id="{{ option.option_id }}">
+
+        <a {% if value.nofollow %}rel="noindex,nofollow"{% endif %} {% if value.count %}href="{{ value.href }}"{% endif %} class="filter-custom">
+            <div class="{{ option.type }}-input active">
+                <span {% if value.selected %}class="checked"{% endif %}></span>
+            </div>
+            <div class="filter-custom-value">
+                <span>
+                    {{ value.name }}
+                </span>
+                {% if show_counter %}
+                    <small class="badge">{{ value.count }}</small>
+                {% endif %}
+            </div>
+        </a>
+      
+{#
+        <input type="{{ option.type }}" name="ocf[{{ option.option_id }}]" value="{{ value.params }}" checked="checked" class="ocf-target" autocomplete="off" />
+        
+			<span>{{ value.name }}</span>
+			
+        {% if show_counter %}
+            <small class="badge 1"></small>
+        {% endif %}
+#}
+    </label>
+{% elseif value.count %}
+    <label id="v-{{ value.id }}" data-option-id="{{ option.option_id }}">
+
+        <a {% if value.nofollow or value.manufacturer_nofollow %}rel="noindex,nofollow"{% endif %} {% if value.count %}href="{{ value.href }}"{% endif %} class="filter-custom">
+            <div class="{{ option.type }}-input">
+                <span {% if value.selected %}class="checked"{% endif %}></span>
+            </div>
+            <div class="filter-custom-value">
+                <span>
+                    {{ value.name }}
+                </span>
+                {% if show_counter %}
+                    <small class="badge">{{ value.count }}</small>
+                {% endif %}
+            </div>
+        </a>
+      
+{#
+        <input type="{{ option.type }}" name="ocf[{{ option.option_id }}]" value="{{ value.params }}" class="ocf-target" autocomplete="off" />
+        
+			<span>{{ value.name }}</span>
+			
+        {% if show_counter %}
+            <small class="badge 2">{{ value.count }}</small>
+        {% endif %}
+#}
+    </label>
+{% else %}
+    <label id="v-{{ value.id }}" class="disabled" data-option-id="{{ option.option_id }}">
+
+        <a {% if value.nofollow or value.manufacturer_nofollow %}rel="noindex,nofollow"{% endif %} {% if value.count %}href="{{ value.href }}"{% endif %} class="filter-custom" style="pointer-events: none">
+            <div class="{{ option.type }}-input no-count">
+                <span {% if value.selected %}class="checked"{% endif %}></span>
+            </div>
+            <div class="filter-custom-value">
+                <span>
+                    {{ value.name }}
+                </span>
+                {% if show_counter %}
+                    <small class="badge no-count">{{ value.count }}</small>
+                {% endif %}
+            </div>
+        </a>
+      
+{#
+        <input type="{{ option.type }}" name="ocf[{{ option.option_id }}]" value="" disabled="disabled" class="ocf-target" autocomplete="off" />
+        
+			<span>{{ value.name }}</span>
+			
+        {% if show_counter %}
+            <small class="badge 3">0</small>
+        {% endif %}
+#}
+    </label>
+{% endif %}
+<style>
+    .filter-custom {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+    }
+    .filter-custom .no-count {
+        opacity: 0.5;
+    }
+    .filter-custom-value {
+        width: 100%;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+    }
+    .filter-custom .checkbox-input {
+        position: relative;
+        display: block;
+        width: 15px;
+        height: 13.17px;
+        border: 1px solid #757575;
+        border-radius: 2px;
+        margin-right: 8px;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    .filter-custom .radio-input {
+        position: relative;
+        display: block;
+        width: 15px;
+        height: 13px;
+        border: 1px solid #757575;
+        border-radius: 50%;
+        margin-right: 8px;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    .filter-custom .checkbox-input.active {
+        background: #0475fe;
+        border: 1px solid #0475fe;
+    }
+
+    .filter-custom .radio-input.active {
+        position: relative;
+        background: #fff;
+        border: 1px solid #0475fe;
+    }
+
+    .filter-custom .radio-input.active .checked{
+        position: absolute;
+        width: 9px;
+        height: 9px;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        border-radius: 50%;
+        display: inline-block;
+        top: 1px;
+        left: 1px;
+        background: #0475fe;
+    }
+
+    .filter-custom .checkbox-input.active:after {
+        content: "";
+        position: absolute;
+    }
+
+    .filter-custom .checkbox-input.active:after {
+        left: 3px;
+        top: 0px;
+        width: 5px;
+        height: 9px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        -webkit-transform: rotate(43deg);
+        -ms-transform: rotate(43deg);
+        transform: rotate(43deg);
+    }
+    .filter-custom .badge {
+        display: block;
+        padding: 3px 6px;
+        border-radius: 3px;
+        background-color: #d6ebfd;
+        color: #2e6196;
+        font-size: 11px;
+        line-height: 11px;
+        font-weight: 400;
+    }
+</style>

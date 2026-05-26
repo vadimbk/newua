@@ -1,0 +1,35 @@
+{% if (child) %}
+	{% if (child_item_class is defined) %}
+		{% set class = child_item_class %}
+	{% else %}
+		{% set class = '' %}
+	{% endif %}
+
+	{% if (child.active) %}
+		<div class="for-link-wrap active-item"><div class="list-group-item list-group-item-warning {{ class }}">- {{ child.name }} 
+		{% if child.children|length > 0 %}
+			<i class="fa fa-plus" data-catid="{{ child.category_id }}"></i>
+		{% endif %}
+		</div>
+		</div>
+	{% else %}
+		<div class="for-link-wrap">
+			<a href="{{ child.href }}" class="list-group-item {{ class }} level_2">
+			  - {{ child.name }}
+			  {% if (child.total) %}
+				<small>({{ child.total }})</small>
+			  {% endif %}
+			</a>
+			{% if child.children|length > 0 %}
+				<i class="fa fa-plus" data-catid="{{ child.category_id }}"></i>
+			{% endif %}
+		</div>
+	{% endif %}
+	{% if child.children|length > 0 %}
+		<div class="wrap-sub-cat3 toggle-cat-{{ child.category_id }}{% if (child.active) %} active{% endif %}">
+		{% for child2 in child.children %}
+			{% include 'default/template/extension/module/ocdepartment/category_child_item_sub.twig' %}
+		{% endfor %}
+		</div>
+	{% endif %}
+{% endif %}

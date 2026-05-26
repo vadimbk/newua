@@ -1,0 +1,257 @@
+<footer>
+  <div class="container">
+    <div class="row">
+      {% if informations %}
+      <div class="col-sm-3">
+        <h5>{{ text_information }}</h5>
+        <ul class="list-unstyled">
+         {% for information in informations %}
+          <li><a href="{{ information.href }}">{{ information.title }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+      <div class="col-sm-3">
+        <h5>{{ text_service }}</h5>
+        <ul class="list-unstyled">
+          <li><a href="{{ contact }}">{{ text_contact }}</a></li>
+          <li><a href="{{ return }}">{{ text_return }}</a></li>
+          <li><a href="{{ sitemap }}">{{ text_sitemap }}</a></li>
+        </ul>
+      </div>
+      <div class="col-sm-3">
+        <h5>{{ text_extra }}</h5>
+        <ul class="list-unstyled">
+          <li><a href="{{ manufacturer }}">{{ text_manufacturer }}</a></li>
+          <li><a href="{{ voucher }}">{{ text_voucher }}</a></li>
+          <li><a href="{{ affiliate }}">{{ text_affiliate }}</a></li>
+          <li><a href="{{ special }}">{{ text_special }}</a></li>
+        </ul>
+      </div>
+      <div class="col-sm-3">
+        <h5>{{ text_account }}</h5>
+        <ul class="list-unstyled">
+          <li><a href="{{ account }}">{{ text_account }}</a></li>
+          <li><a href="{{ order }}">{{ text_order }}</a></li>
+          <li><a href="{{ wishlist }}">{{ text_wishlist }}</a></li>
+          <li><a href="{{ newsletter }}">{{ text_newsletter }}</a></li>
+        </ul>
+      </div>
+    </div>
+    <hr>
+    <p>{{ powered }}</p>
+  </div>
+
+		<style>
+		.ukrcreditsticker {
+			position: absolute;
+			text-align: left;
+			color: #000;
+			top: 56px;
+			right: 10px;
+			z-index: 99;
+		}
+		.ukrcreditsticker>div {
+			position: relative;
+			border: 1px solid #8BC34A;
+			border-radius:5px;
+			background:#fff;
+			margin-bottom:5px;
+			height:42px;
+			width:42px
+		}
+		.ukrcreditsticker span {
+			position: absolute;
+			font-size: 14px;
+			font-weight:700;
+			right: 2px;	
+			bottom:2px;
+			text-shadow: -1px -1px 0 #FFF;
+		}
+
+		.ukrcreditsticker .ukrcreditPP {
+			background: #fff url('/catalog/view/theme/default/image/ukrcredits/PP_logo.png') center center no-repeat;
+			background-size: 30px;
+		}
+		.ukrcreditsticker .ukrcreditPB {
+			background: #fff url('/catalog/view/theme/default/image/ukrcredits/PP_logo.png') center center no-repeat;
+			background-size: 30px;
+		}
+		.ukrcreditsticker .ukrcreditII {
+			background: #fff url('/catalog/view/theme/default/image/ukrcredits/II_logo.png') center center no-repeat;
+			background-size: 30px;
+		}
+		.ukrcreditsticker .ukrcreditIA {
+			background: #fff url('/catalog/view/theme/default/image/ukrcredits/II_logo.png') center center no-repeat;
+			background-size: 30px;
+		}
+		.ukrcreditsticker .ukrcreditMB {
+			background: #fff url('/catalog/view/theme/default/image/ukrcredits/MB_logo.png') center center no-repeat;
+			background-size: 30px;
+		}
+		</style>
+			
+</footer>
+
+		<script src="catalog/view/javascript/jquery/jquery.cookie.js" type="text/javascript"></script>
+		<script type="text/javascript">
+		    $(document).ready(function() { 
+		      var referermarker = $.cookie("referer_marker");
+		      if(referermarker != true){
+		        var url = "index.php?route=extension/module/order_source/ajaxOrderSource"; 
+		        if(document.referrer){
+		          var referer = extractHostname(document.referrer);
+		        } else {
+		          var referer = "missing";
+		        }
+		        var utm_source = getUrlParameter('utm_source');
+		        var utm_medium = getUrlParameter('utm_medium');
+		        var utm_campaign = getUrlParameter('utm_campaign');
+		        var utm_content = getUrlParameter('utm_content');
+		        var utm_term = getUrlParameter('utm_term');
+		        $.ajax({
+		            type: "POST",
+		            url: url,
+		            data:{
+		              referer : referer,
+		              utm_source : utm_source,
+		              utm_medium : utm_medium,
+		              utm_campaign : utm_campaign,
+		              utm_content : utm_content,
+		              utm_term : utm_term,
+		            },
+		            dataType: "json"
+		        });
+		      }
+		    });
+		    var getUrlParameter = function getUrlParameter(sParam) {
+		      var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+		          sURLVariables = sPageURL.split('&'),
+		          sParameterName,
+		          i;
+		      for (i = 0; i < sURLVariables.length; i++) {
+		          sParameterName = sURLVariables[i].split('=');
+
+		          if (sParameterName[0] === sParam) {
+		              return sParameterName[1] === undefined ? true : sParameterName[1];
+		          }
+		      }
+		    }; 
+
+        function extractHostname(url) {
+          var hostname;
+          //find & remove protocol (http, ftp, etc.) and get hostname
+
+          if (url.indexOf("//") > -1) {
+              hostname = url.split('/')[2];
+          }
+          else {
+              hostname = url.split('/')[0];
+          }
+
+          //find & remove port number
+          hostname = hostname.split(':')[0];
+          //find & remove "?"
+          hostname = hostname.split('?')[0];
+
+          return hostname;
+        }
+
+		</script> 
+      
+{% if ee_js_position == 2 %}
+<script src="catalog/view/javascript/ee_tracking.min.js?eetv=2.2.1{% if ee_js_version %}.{{ ee_js_version }}{% endif %}" type="text/javascript"></script>
+{% endif %}
+{% for script in scripts %}
+
+		<style>
+		.ukrcreditsticker {
+			position:absolute;
+			text-align: left;
+			color: #000;
+    top: 70px;
+    right: 5px;
+		}
+		.ukrcreditsticker>div {
+			position: relative;
+			border: 1px solid #8BC34A;
+			border-radius:5px;
+			background:#fff;
+			margin-bottom:5px;
+			height:42px;
+			width:42px
+		}
+		.ukrcreditsticker span {
+			position: absolute;
+			font-size: 14px;
+			font-weight:700;
+			right: 2px;	
+			bottom:2px;
+			text-shadow: -1px -1px 0 #FFF;
+		}
+
+		.ukrcreditsticker .ukrcreditPP {
+			background: #fff url('/catalog/view/theme/default/image/ukrcredits/PP_logo.png') center center no-repeat;
+			background-size: 30px;
+		}
+		.ukrcreditsticker .ukrcreditPB {
+			background: #fff url('/catalog/view/theme/default/image/ukrcredits/PP_logo.png') center center no-repeat;
+			background-size: 30px;
+		}
+		.ukrcreditsticker .ukrcreditII {
+			background: #fff url('/catalog/view/theme/default/image/ukrcredits/II_logo.png') center center no-repeat;
+			background-size: 30px;
+		}
+		.ukrcreditsticker .ukrcreditIA {
+			background: #fff url('/catalog/view/theme/default/image/ukrcredits/II_logo.png') center center no-repeat;
+			background-size: 30px;
+		}
+		.ukrcreditsticker .ukrcreditMB {
+			background: #fff url('/catalog/view/theme/default/image/ukrcredits/MB_logo.png') center center no-repeat;
+			background-size: 30px;
+		}
+		</style>
+			
+
+		{# // remarketing #}
+		{% if remarketing_status %}
+		{% if remarketing_footer %}
+		{{ remarketing_footer }}
+		{% endif %}
+		{% endif %}
+		
+<div id="edit-modal-avail" class="modal fade avanoti" role="dialog">
+			<form id="notify">
+			<div class="modal-dialog">
+            <div class="modal-content">
+
+							<div class="before-captcha"></div>
+							{% if avail_config_google_captcha_status == '1' %}
+							<div class="block-with-avail-captcha col-sm-12">
+
+								<div class="form-group hidden center">
+															<input type="text" name="captcha_status" class="form-control " value="{{ avail_config_google_captcha_status }}">
+													</div>
+													<div id="capcha" class="form-group center">
+															<div id="avail-captcha" class="g-recaptcha"   data-sitekey="{{ google_captcha_key }}"></div>
+													</div>
+								<div class="form-group hidden center">
+															<input type="text" name="avail_config_google_captcha_public" class="form-control " value="{{ google_captcha_key }}">
+													</div>
+								<div class="form-group hidden center">
+															<input type="text" name="avail_config_google_captcha_secret" class="form-control " value="{{ google_captcha_secret }}">
+													</div>
+
+							</div>
+
+							{% endif %}
+							<div class="after-captcha"></div>
+
+			    </div>
+        </div>
+        </form>
+		</div>
+{% if ee_js_position == 3 %}
+<script src="catalog/view/javascript/ee_tracking.min.js?eetv=2.2.1{% if ee_js_version %}.{{ ee_js_version }}{% endif %}" type="text/javascript"></script>
+{% endif %}
+</body></html>

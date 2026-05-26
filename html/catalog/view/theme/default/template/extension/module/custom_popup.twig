@@ -1,0 +1,38 @@
+{% if custom_css %}
+<style type="text/css">
+{{ custom_css }} 
+</style>
+{% endif %} 
+
+<div id="modal-custom-popup" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+	<div class="modal-header">
+				
+				<button type="button" class="us-close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true" class="us-modal-close-icon us-modal-close-left"></span>
+				<span aria-hidden="true" class="us-modal-close-icon us-modal-close-right"></span>
+				</button>
+			</div>
+      <div class="modal-body">{{ html }}</div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript"><!--
+$(document).ready(function() {
+	$('#modal-custom-popup').modal('show');
+	
+	{% if seconds_to_close %} 
+	setTimeout(function() {
+        $('#modal-custom-popup').modal('hide');
+	}, {{ seconds_to_close }});
+	{% endif %} 
+});
+--></script>
+<style>
+button.us-close{background:#fff;}
+.us-modal-close-icon{border: 1px solid #ccc;}
+button.us-close{height:34px;}
+.modal-header{    background: #fff;}
+</style>

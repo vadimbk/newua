@@ -1,0 +1,980 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="loading-wrapper">
+    <div class="loading-spinner"><i class="fa fa-spinner fa-pulse fa-2x"></i></div>
+  </div>
+  <div class="message-wrapper"></div>
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right form-inline">
+        {% if translator is defined and translator %}
+          <div id="google-translate"></div>
+          <script type="text/javascript">
+              function googleTranslateElementInit() {
+                  new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.VERTICAL, autoDisplay: false, multilanguagePage: true}, 'google-translate');
+              }
+          </script>
+          <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+        {% endif %}
+        {% if stores|length > 1 %}
+          <div class="form-group multi-store" {% if (multi_store is null or multi_store == 0) and store_id == 0 %}style="display: none;"{% endif %}>
+            <label>{{ entry_store }}</label>
+            <select name="store_id" class="form-control store" data-store_id="{{ store_id }}" data-confirm="{{ text_page_refresh }}">
+              {% for store in stores %}
+                <option value="{{ store.store_id }}" {% if store.store_id == store_id %}selected="selected"{% endif %}>{{ store.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        {% endif %}
+        <button type="button" onclick="changeTranslator('{{ text_page_refresh }}')" data-toggle="tooltip" title="{{ tooltip_translator }}" class="btn btn-default {% if translator is defined and translator %}active{% endif %}"><i class="fa fa-language"></i></button>
+        <button type="button" onclick="submitForm($(this))" data-session="{{ text_session_expired }}"  data-loading-text="<i class='fa fa-spinner fa-pulse'></i>" data-toggle="tooltip" title="{{ tooltip_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <button type="button" onclick="window.location.href = $('.breadcrumb li').eq(-2).children('a').attr('href')" data-toggle="tooltip" title="{{ tooltip_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></button>
+      </div>
+      <h1><i class="fa fa-line-chart"></i> {{ text_title }}
+        <div class="e-version">{{ e_version }}</div>
+        <div class="e-author"><a href="{{ author_link }}" target="_blank">by {{ author_name }}</a></div>
+      </h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+          <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="gmp-group">
+          <div class="alert alert-warning alert-validation-mode" role="alert" style="display: {% if type == 0 and validation_mode %}block{% else %}none{% endif %};"><i class="fa fa-exclamation-triangle"></i> {{ text_validation_enabled }}</div>
+        </div>
+        {% if multi_store_disabled %}
+          <div class="alert alert-warning alert-multistore-disabled" role="alert"><i class="fa fa-exclamation-triangle"></i> {{ text_multi_store_disabled }}</div>
+        {% endif %}
+        <form id="form-general" action="{{ action }}" class="form-horizontal">
+          <div class="col-xs-2">
+            <ul class="nav nav-tabs tabs-left">
+              <li class="active"><a href="#tab-general" data-toggle="tab"><i class="fa fa-home tab-icon"></i> {{ tab_general }}*</a></li>
+              <li><a href="#tab-advanced" data-toggle="tab"><i class="fa fa-expand tab-icon"></i> {{ tab_advanced }}</a></li>
+              <li><a href="#tab-view" data-toggle="tab"><i class="fa fa-eye tab-icon"></i> {{ tab_view }}</a></li>
+              <li><a href="#tab-select" data-toggle="tab"><i class="fa fa-mouse-pointer tab-icon"></i> {{ tab_select }}</a></li>
+              <li><a href="#tab-wish" data-toggle="tab"><i class="fa fa-heart tab-icon"></i> {{ tab_wish }}</a></li>
+              <li><a href="#tab-cart" data-toggle="tab"><i class="fa fa-shopping-cart tab-icon"></i> {{ tab_cart }}</a></li>
+              <li><a href="#tab-checkout" data-toggle="tab"><i class="fa fa-truck tab-icon"></i> {{ tab_checkout }}</a></li>
+              <li><a href="#tab-purchase" data-toggle="tab" class="{% if warning_purchase_tracking_status %}bg-warning{% endif %}"><i class="fa fa-money tab-icon"></i> {{ tab_purchase }}*</a></li>
+              <li><a href="#tab-refund" data-toggle="tab"><i class="fa fa-reply tab-icon"></i> {{ tab_refund }}*</a></li>
+              <li><a href="#tab-promotion" data-toggle="tab"><i class="fa fa-bullhorn tab-icon"></i> {{ tab_promotion }}</a></li>
+              <li><a href="#tab-custom-definition" data-toggle="tab"><i class="fa fa-arrows-alt tab-icon"></i> {{ tab_custom_definition }}</a></li>
+              <li><a href="#tab-filter" data-toggle="tab"><i class="fa fa-filter tab-icon"></i> {{ tab_filter }}</a></li>
+              <li><a href="#tab-log" data-toggle="tab"><i class="fa fa-bars tab-icon"></i> {{ tab_log }}</a></li>
+              <li><a href="#tab-help" data-toggle="tab"><i class="fa fa-life-ring tab-icon"></i> {{ tab_help }}{% if store_id == 0 %}*{% endif %}</a></li>
+            </ul>
+            <small>{{ text_tab_required }}</small>
+            <div onclick="$('.dev-mode').slideToggle(500)" style="width: 10px; height: 10px"></div>
+          </div>
+          <div class="col-xs-10">
+            <div class="tab-content">
+              <div class="tab-pane tab-left fade in active" id="tab-general">
+                <fieldset>
+                  <legend>{{ legend_general }}</legend>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-status"><span data-toggle="tooltip" title="{{ tooltip_status }}">{{ entry_status }}</span></label>
+                    <div class="col-sm-4">
+                      <input type="hidden" name="status" id="input-status" value="{{ status }}" />
+                      <i onclick="changeToggleSwitch($(this), '{{ text_enabled }}', '{{ text_disabled }}');" data-fade=".general-group" data-opacity=".general-opacity-group" class="fa {% if status %} fa-toggle-on{% else %} fa-toggle-off{% endif %} fa-3x btn-status" data-toggle="tooltip" title="{{ status ? text_enabled : text_disabled }}"></i>
+                    </div>
+                    <label class="col-sm-2 control-label" for="input-bulk-status-change">
+                      <span data-toggle="tooltip" title="{{ tooltip_bulk_status }}">{{ entry_bulk_status }}</span>
+                      <p>({{ text_optional }})</p>
+                    </label>
+                    <div class="col-sm-4">
+                      <input type="hidden" id="input-bulk-status-change" value="0" />
+                      <i onclick="changeToggleSwitch($(this));bulkStatusChange($(this));" class="fa fa-toggle-off blue fa-3x" data-toggle="tooltip" title="{{ text_disabled }}"></i>
+                    </div>
+                  </div>
+                  <fieldset class="general-group" {{ (status == false) ? 'style="display: none;"' }}>
+                    {% if stores|length > 1 and store_id == 0 %}
+                      <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-multi-store"><span data-toggle="tooltip" title="{{ tooltip_multi_store }}">{{ entry_multi_store }}</span></label>
+                        <div class="col-sm-10">
+                          <input type="hidden" name="multi_store" id="input-multi-store" value="{{ multi_store }}" />
+                          <i onclick="changeToggleSwitch($(this), '{{ text_enabled }}', '{{ text_disabled }}');" data-fade=".multi-store" class="fa {% if multi_store %} fa-toggle-on{% else %} fa-toggle-off{% endif %} fa-3x" data-toggle="tooltip" title="{{ multi_store ? text_enabled : text_disabled }}"></i>
+                        </div>
+                      </div>
+                    {% endif %}
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label" for="input-type"><span data-toggle="tooltip" title="{{ tooltip_type }}">{{ entry_type }}</span></label>
+                      <div class="col-sm-10">
+                        <input type="hidden" name="type" id="input-type" value="{{ type }}" />
+                        <div class="btn-group btn-group-justified" role="group">
+                          <div class="btn-group" role="group">
+                            <button type="button" onclick="changeTrackingType($(this), 0)" data-note="{{ note_mp|e }}" class="btn btn-group-type {% if type == 0 %}active{% endif %}">{{ button_mp }}</button>
+                          </div>
+                          <div class="btn-group" role="group">
+                            <button type="button" onclick="changeTrackingType($(this), 1)" data-note="{{ note_gtag|e }}" class="btn btn-group-type {% if type == 1 %}active{% endif %}">{{ button_gtag }}</button>
+                          </div>
+                          <div class="btn-group" role="group">
+                            <button type="button" onclick="changeTrackingType($(this), 2)" data-note="{{ note_gtm|e }}" class="btn btn-group-type {% if type == 2 %}active{% endif %}">{{ button_gtm }}</button>
+                          </div>
+                        </div>
+                        <p class="text-info">{% if type == 0 %}{{ note_mp }}{% elseif type == 1 %}{{ note_gtag }}{% elseif type == 2 %}{{ note_gtm }}{% endif %}</p>
+                      </div>
+                    </div>
+                    <div class="form-group required">
+                      <label class="col-sm-2 control-label" for="input-measurement-id"><span data-toggle="tooltip" title="{{ tooltip_measurement_id }}">{{ entry_measurement_id }}</span></label>
+                      <div class="col-sm-10">
+                        <div class="input-group">
+                          <input type="text" name="measurement_id" id="input-measurement-id" value="{{ measurement_id }}" placeholder="G-XXXXXXXXXX" class="form-control notranslate" />
+                          <span class="input-group-btn">
+                            {% if found_measurement_id %}
+                              <button class="btn btn-default" type="button" onclick="$(this).closest('.input-group').find('input').val('{{ found_measurement_id }}')" data-toggle="tooltip" title="{{ tooltip_found_measurement_id }}"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+                            {% endif %}
+                            <button type="button" class="btn btn-default" onclick="showModalImg('{{ redirect_link }}image&name=measurement-id.jpg')" data-toggle="tooltip" title="{{ tooltip_show_demo }}"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                          </span>
+                        </div>
+                        <small class="help-block error-measurement_id"></small>
+                        <p class="text-info">{{ note_measurement_id }}</p>
+                      </div>
+                    </div>
+                    <div class="form-group required">
+                      <label class="col-sm-2 control-label" for="input-measurement-secret"><span data-toggle="tooltip" title="{{ tooltip_measurement_secret }}">{{ entry_measurement_secret }}</span><p>({{ text_gmp_only }})</p></label>
+                      <div class="col-sm-10 gmp-group" style="display: {% if type == 0 %}block{% else %}none{% endif %};">
+                        <div class="input-group">
+                          <input type="text" name="measurement_secret" id="input-measurement-secret" value="{{ measurement_secret }}" placeholder="Secret API Key" class="form-control notranslate" />
+                          <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" onclick="showModalImg('{{ redirect_link }}image&name=measurement-api-secrets.jpg')" data-toggle="tooltip" title="{{ tooltip_show_demo }}"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                          </span>
+                        </div>
+                        <small class="help-block error-measurement_secret"></small>
+                        <p class="text-info">{{ note_measurement_secret }}</p>
+                      </div>
+                      <div class="col-sm-10 not-gmp-group" style="display: {% if type == 0 %}none{% else %}block{% endif %};">
+                        <p class="form-control-static">{{ text_option_not_available }}</p>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label" for="input-validation"><span data-toggle="tooltip" title="{{ tooltip_validation }}">{{ entry_validation }}</span><p>({{ text_gmp_only }})</p></label>
+                      <div class="col-sm-9 gmp-group" style="display: {% if type == 0 %}block{% else %}none{% endif %};">
+                        <input type="hidden" name="validation_mode" id="input-validation" value="{{ validation_mode }}" />
+                        <i onclick="changeToggleSwitch($(this), '{{ text_enabled }}', '{{ text_disabled }}');changeValidationMode($(this));" data-fadein=".validation-mode-group" class="fa {% if validation_mode %} fa-toggle-on{% else %} fa-toggle-off{% endif %} fa-3x" data-toggle="tooltip" title="{{ validation_mode ? text_enabled : text_disabled }}"></i>
+                        <p class="text-info">{{ note_validation_mode }}</p>
+                      </div>
+                      <div class="col-sm-9 not-gmp-group" style="display: {% if type == 0 %}none{% else %}block{% endif %};">
+                        <p class="form-control-static">{{ text_option_not_available }}</p>
+                      </div>
+                      <div class="col-sm-1">
+                        <button type="button" class="btn btn-default pull-right" onclick="showModalImg('{{ redirect_link }}image&name=validation-mode-logs.jpg')" data-toggle="tooltip" title="{{ tooltip_show_demo }}"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                      </div>
+                    </div>
+                    <div class="form-group debug-view-mode" style="opacity: {% if validation_mode and type == 0 %}0.4{% else %}1{% endif %};">
+                      <label class="col-sm-2 control-label" for="input-debug-mode"><span data-toggle="tooltip" title="{{ tooltip_debug }}">{{ entry_debug }}</span></label>
+                      <div class="col-sm-9">
+                        <input type="hidden" name="debug_mode" id="input-debug-mode" value="{{ debug_mode }}" />
+                        <i onclick="changeToggleSwitch($(this), '{{ text_enabled }}', '{{ text_disabled }}');" class="fa {% if debug_mode %} fa-toggle-on{% else %} fa-toggle-off{% endif %} fa-3x" data-toggle="tooltip" title="{{ debug_mode ? text_enabled : text_disabled }}"></i>
+                        <p class="text-info not-gtm-group" style="display: {% if type == 2 %}none{% else %}block{% endif %};">{{ note_debug_mode }}</p>
+                        <p class="text-info gtm-group" style="display: {% if type == 2 %}block{% else %}none{% endif %};">{{ note_debug_mode_gtm }}</p>
+                      </div>
+                      <div class="col-sm-1">
+                        <button type="button" class="btn btn-default pull-right" onclick="showModalImg('{{ redirect_link }}image&name=ga-debugview.jpg')" data-toggle="tooltip" title="{{ tooltip_show_demo }}"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                      </div>
+                    </div>
+                    <div class="form-group dev-mode" style="display: none;">
+                      <label class="col-sm-2 control-label" for="input-dev-mode">Developer Mode</label>
+                      <div class="col-sm-10">
+                        <input type="hidden" name="dev_mode" id="input-dev-mode" value="{{ dev_mode }}" />
+                        <i onclick="changeToggleSwitch($(this), '{{ text_enabled }}', '{{ text_disabled }}')" class="fa {% if dev_mode %} fa-toggle-on{% else %} fa-toggle-off{% endif %} fa-3x" data-toggle="tooltip" title="{{ dev_mode ? text_enabled : text_disabled }}"></i>
+                      </div>
+                    </div>
+                  </fieldset>
+                </fieldset>
+              </div>
+              <div class="tab-pane tab-left fade general-opacity-group {% if status == false %}opacity-on{% endif %}" id="tab-advanced">
+                <fieldset>
+                  <legend>{{ legend_advanced }}</legend>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-js_position"><span data-toggle="tooltip" title="{{ tooltip_js_position }}">{{ entry_js_position }}</span></label>
+                    <div class="col-sm-9">
+                      <select name="js_position" id="input-js_position" class="form-control">
+                        <option value="0" {% if js_position == 0 %}selected="selected"{% endif %}>{{ text_js_position_0 }}</option>
+                        <option value="1" {% if js_position == 1 %}selected="selected"{% endif %}>{{ text_js_position_1 }}</option>
+                        <option value="2" {% if js_position == 2 %}selected="selected"{% endif %}>{{ text_js_position_2 }}</option>
+                        <option value="3" {% if js_position == 3 %}selected="selected"{% endif %}>{{ text_js_position_3 }}</option>
+                      </select>
+                    </div>
+                  </div>
+                  {% if themes %}
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-theme"><span data-toggle="tooltip" title="{{ tooltip_theme }}">{{ entry_theme }}</span></label>
+                    <div class="col-sm-9">
+                      <select name="theme" id="input-theme" class="form-control">
+                        <option value="0" {% if theme is null or theme == '0' %}selected="selected"{% endif %}>{{ text_default }}</option>
+                        {% for theme_item in themes %}
+                          <option value="{{ theme_item }}" {% if theme == theme_item %}selected="selected"{% endif %}>{{ theme_item|capitalize }}</option>
+                        {% endfor %}
+                      </select>
+                      <p class="text-info">{{ note_theme }}</p>
+                    </div>
+                  </div>
+                  {% endif %}
+                  {% if currencies|length > 2 %}
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label" for="input-currency"><span data-toggle="tooltip" title="{{ tooltip_currency }}">{{ entry_currency }}</span></label>
+                      <div class="col-sm-9">
+                        <select name="currency" id="input-currency" class="form-control">
+                          {% for currency_item in currencies %}
+                            <option value="{{ currency_item.code }}" {% if currency == currency_item.code %}selected="selected"{% endif %}>
+                              {{ currency_item.title }} {{ currency_item.code ? '(' ~ currency_item.code ~ ')' }}
+                            </option>
+                          {% endfor %}
+                        </select>
+                        <div class="error-wrapper error_currency"></div>
+                      </div>
+                      <div class="col-sm-1">
+                        <button type="button" class="btn btn-default pull-right" onclick="showModalImg('{{ redirect_link }}image&name=currency-option.jpg')" data-toggle="tooltip" title="{{ tooltip_show_demo }}"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                      </div>
+                    </div>
+                  {% endif %}
+                  {% if languages|length > 2 %}
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label" for="input-language"><span data-toggle="tooltip" title="{{ tooltip_language }}">{{ entry_language }}</span></label>
+                      <div class="col-sm-9">
+                        <select name="language_id" id="input-language" class="form-control">
+                          {% for language in languages %}
+                            <option value="{{ language.language_id }}" {% if language_id == language.language_id %}selected="selected"{% endif %}>
+                              {{ language.name }} {{ language.code ? '(' ~ language.code ~ ')' }}
+                            </option>
+                          {% endfor %}
+                        </select>
+                        <p class="text-info"></p>
+                      </div>
+                      <div class="col-sm-1">
+                        <button type="button" class="btn btn-default pull-right" onclick="showModalImg('{{ redirect_link }}image&name=language-option.jpg')" data-toggle="tooltip" title="{{ tooltip_show_demo }}"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                      </div>
+                    </div>
+                  {% endif %}
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-affiliation"><span data-toggle="tooltip" title="{{ tooltip_affiliation }}">{{ entry_affiliation }}</span></label>
+                    <div class="col-sm-9">
+                      <input type="text" name="affiliation" value="{{ affiliation }}" placeholder="{{ config_name }}" id="input-affiliation" class="form-control notranslate" />
+                    </div>
+                    <div class="col-sm-1">
+                      <button type="button" class="btn btn-default pull-right" onclick="showModalImg('{{ redirect_link }}image&name=affiliation-option.jpg')" data-toggle="tooltip" title="{{ tooltip_show_demo }}"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-client-id"><span data-toggle="tooltip" title="{{ tooltip_client_id }}">{{ entry_client_id }}</span></label>
+                    <div class="col-sm-9">
+                      {% if default_client_id %}
+                      <div class="input-group">
+                        {% endif %}
+                        <input type="text" name="client_id" value="{{ client_id }}" placeholder="{{ client_id }}" id="input-client-id" class="form-control notranslate" />
+                        {% if default_client_id %}
+                        <span class="input-group-btn">
+                          <button class="btn btn-default" type="button" onclick="$(this).closest('.input-group').find('input').val('{{ default_client_id }}')" data-toggle="tooltip" title="{{ tooltip_default_client_id }}"><i class="fa fa-refresh" aria-hidden="true"></i></button>
+                        </span>
+                      </div>
+                      {% endif %}
+                      <p class="text-info">{{ note_client_id }}</p>
+                    </div>
+                    <div class="col-sm-1">
+                      <button type="button" class="btn btn-default pull-right" onclick="showModalImg('{{ redirect_link }}image&name=ga-client-id.jpg')" data-toggle="tooltip" title="{{ tooltip_show_demo }}"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-extended-list"><span data-toggle="tooltip" title="{{ tooltip_extended_list }}">{{ entry_extended_list }}</span></label>
+                    <div class="col-sm-9">
+                      <input type="hidden" name="extended_list" id="input-extended-list" value="{{ extended_list }}" />
+                      <i onclick="changeToggleSwitch($(this), '{{ text_enabled }}', '{{ text_disabled }}');" class="fa {% if extended_list %} fa-toggle-on{% else %} fa-toggle-off{% endif %} fa-3x" data-toggle="tooltip" title="{{ extended_list ? text_enabled : text_disabled }}"></i>
+                    </div>
+                    <div class="col-sm-1">
+                      <button type="button" class="btn btn-default pull-right" onclick="showModalImg('{{ redirect_link }}image&name=extended-list-parameters.jpg')" data-toggle="tooltip" title="{{ tooltip_show_demo }}"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-list-limit"><span data-toggle="tooltip" title="{{ tooltip_list_limit }}">{{ entry_list_limit }}</span><p>({{ text_gmp_only }})</p></label>
+                    <div class="col-sm-9 gmp-group" style="display: {% if type == 0 %}block{% else %}none{% endif %};">
+                      <div class="input-group">
+                        <input type="text" name="list_limit" id="input-list-limit" value="{{ list_limit }}" placeholder="26" class="form-control notranslate" />
+                        <div class="input-group-btn">
+                          <input type="hidden" name="list_limit_skip" value="{{ list_limit_skip }}">
+                          <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{% if list_limit_skip %}{{ text_list_limit_skip }}{% else %}{{ text_list_limit_multi_event }}{% endif %} <span class="caret"></span></button>
+                          <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a onclick="$('input[name=list_limit_skip]').val(1);$(this).closest('.input-group-btn').find('button').html($(this).html() + ' <span class=\'caret\'></span>');">{{ text_list_limit_skip }}</a></li>
+                            <li><a onclick="$('input[name=list_limit_skip]').val(0);$(this).closest('.input-group-btn').find('button').html($(this).html() + ' <span class=\'caret\'></span>');">{{ text_list_limit_multi_event }}</a></li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-9 not-gmp-group" style="display: {% if type == 0 %}none{% else %}block{% endif %};">
+                      <p class="form-control-static">{{ text_option_not_available }}</p>
+                    </div>
+                    <div class="col-sm-1">
+                      <button type="button" class="btn btn-default pull-right" onclick="showModalImg('{{ redirect_link }}image&name=items-per-list.jpg')" data-toggle="tooltip" title="{{ tooltip_show_demo }}"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                    </div>
+                  </div>
+                  <legend class="sub-legend">{{ sub_legend_item }}</legend>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-product-id">
+                      <span data-toggle="tooltip" title="{{ tooltip_product_id }}">{{ entry_product_id }}</span>
+                    </label>
+                    <div class="col-sm-9">
+                      <select name="product_id" id="input-product-id" class="form-control">
+                        <option value="" {% if product_id is null or product_id == '' %}selected="selected"{% endif %}>{{ text_product_id }}</option>
+                        {% for identifier in identifiers %}
+                          <option value="{{ identifier }}" {% if product_id is defined and product_id == identifier %}selected="selected"{% endif %}>{{ identifier }}</option>
+                        {%  endfor %}
+                      </select>
+                    </div>
+                    <div class="col-sm-1">
+                      <button type="button" class="btn btn-default pull-right" onclick="showModalImg('{{ redirect_link }}image&name=item-id-option.jpg')" data-toggle="tooltip" title="{{ tooltip_show_demo }}"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-product-category"><span data-toggle="tooltip" title="{{ tooltip_product_category }}">{{ entry_product_category }}</span></label>
+                    <div class="col-sm-9">
+                      <select name="product_category" id="input-product-category" class="form-control">
+                        <option value="0" {% if product_category is null or product_category == 0 %}selected="selected"{% endif %}>{{ text_product_category_0 }}</option>
+                        <option value="1" {% if product_category is defined and product_category == 1 %}selected="selected"{% endif %}>{{ text_product_category_1 }}</option>
+                        <option value="2" {% if product_category is defined and product_category == 2 %}selected="selected"{% endif %}>{{ text_product_category_2 }}</option>
+                        <option value="3" {% if product_category is defined and product_category == 3 %}selected="selected"{% endif %}>{{ text_product_category_3 }}</option>
+                      </select>
+                    </div>
+                    <div class="col-sm-1">
+                      <button type="button" class="btn btn-default pull-right" onclick="showModalImg('{{ redirect_link }}image&name=item-category-types.jpg')" data-toggle="tooltip" title="{{ tooltip_show_demo }}"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-tax"><span data-toggle="tooltip" title="{{ tooltip_tax }}">{{ entry_tax }}</span></label>
+                    <div class="col-sm-9">
+                      <input type="hidden" name="tax" id="input-tax" value="{{ tax }}" />
+                      <i onclick="changeToggleSwitch($(this), '{{ text_enabled }}', '{{ text_disabled }}');" class="fa {% if tax %} fa-toggle-on{% else %} fa-toggle-off{% endif %} fa-3x" data-toggle="tooltip" title="{{ tax ? text_enabled : text_disabled }}"></i>
+                    </div>
+                    <div class="col-sm-1">
+                      <button type="button" class="btn btn-default pull-right" onclick="showModalImg('{{ redirect_link }}image&name=item-price-taxes.jpg')" data-toggle="tooltip" title="{{ tooltip_show_demo }}"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                    </div>
+                  </div>
+                  <legend class="sub-legend">{{ sub_legend_purchase }}</legend>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-total-shipping"><span data-toggle="tooltip" title="{{ tooltip_total_shipping }}">{{ entry_total_shipping }}</span></label>
+                    <div class="col-sm-9">
+                      <input type="hidden" name="total_shipping" id="input-total-shipping" value="{{ total_shipping }}" />
+                      <i onclick="changeToggleSwitch($(this), '{{ text_enabled }}', '{{ text_disabled }}');" class="fa {% if total_shipping %} fa-toggle-on{% else %} fa-toggle-off{% endif %} fa-3x" data-toggle="tooltip" title="{{ total_shipping ? text_enabled : text_disabled }}"></i>
+                    </div>
+                    <div class="col-sm-1">
+                      <button type="button" class="btn btn-default pull-right" onclick="showModalImg('{{ redirect_link }}image&name=shipping-total.jpg')" data-toggle="tooltip" title="{{ tooltip_show_demo }}"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-total-tax"><span data-toggle="tooltip" title="{{ tooltip_total_tax }}">{{ entry_total_tax }}</span></label>
+                    <div class="col-sm-9">
+                      <input type="hidden" name="total_tax" id="input-total-tax" value="{{ total_tax }}" />
+                      <i onclick="changeToggleSwitch($(this), '{{ text_enabled }}', '{{ text_disabled }}');" class="fa {% if total_tax %} fa-toggle-on{% else %} fa-toggle-off{% endif %} fa-3x" data-toggle="tooltip" title="{{ total_tax ? text_enabled : text_disabled }}"></i>
+                    </div>
+                    <div class="col-sm-1">
+                      <button type="button" class="btn btn-default pull-right" onclick="showModalImg('{{ redirect_link }}image&name=taxes-total.jpg')" data-toggle="tooltip" title="{{ tooltip_show_demo }}"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                    </div>
+                  </div>
+                  <legend class="sub-legend">{{ sub_legend_additional_params }}</legend>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-user-id"><span data-toggle="tooltip" title="{{ tooltip_user_id }}">{{ entry_user_id }}</span></label>
+                    <div class="col-sm-9">
+                      <select name="user_id" id="input-user-id" class="form-control">
+                        <option value="0" {% if user_id == 0 %}selected="selected"{% endif %}>--- {{ text_disabled }} ---</option>
+                        {% for customer_column in customer_columns %}
+                          <option value="{{ customer_column }}" {% if user_id == customer_column %}selected="selected"{% endif %}>
+                            {{ customer_column }}
+                          </option>
+                        {% endfor %}
+                      </select>
+                      <p class="text-info">{{ note_user_id }}</p>
+                    </div>
+                    <div class="col-sm-1">
+                      <button type="button" class="btn btn-default pull-right" onclick="showModalImg('{{ redirect_link }}image&name=user-id.jpg')" data-toggle="tooltip" title="{{ tooltip_show_demo }}"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-non-personalized-ads"><span data-toggle="tooltip" title="{{ tooltip_non_personalized_ads }}">{{ entry_non_personalized_ads }}</span></label>
+                    <div class="col-sm-9">
+                      <input type="hidden" name="non_personalized_ads" id="input-non-personalized-ads" value="{{ non_personalized_ads }}" />
+                      <i onclick="changeToggleSwitch($(this), '{{ text_enabled }}', '{{ text_disabled }}');" class="fa {% if non_personalized_ads %} fa-toggle-on{% else %} fa-toggle-off{% endif %} fa-3x" data-toggle="tooltip" title="{{ non_personalized_ads ? text_enabled : text_disabled }}"></i>
+                      <p class="text-info">{{ note_non_personalized_ads }}</p>
+                    </div>
+                    <div class="col-sm-1">
+                      <button type="button" class="btn btn-default pull-right" onclick="showModalImg('{{ redirect_link }}image&name=non-personalized-ads.jpg')" data-toggle="tooltip" title="{{ tooltip_show_demo }}"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                    </div>
+                  </div>
+                </fieldset>
+              </div>
+              <div class="tab-pane tab-left fade general-opacity-group {% if status == false %}opacity-on{% endif %}" id="tab-view">
+                <fieldset>
+                  <legend>{{ legend_view }}</legend>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-view-status"><span data-toggle="tooltip" title="{{ tooltip_view_status }}">{{ entry_status }}</span></label>
+                    <div class="col-sm-10">
+                      <input type="hidden" name="view_status" id="input-view-status" value="{{ view_status }}" />
+                      <i onclick="changeToggleSwitch($(this), '{{ text_enabled }}', '{{ text_disabled }}');" data-fade=".view-group" class="fa {% if view_status %} fa-toggle-on{% else %} fa-toggle-off{% endif %} fa-3x btn-status" data-toggle="tooltip" title="{{ view_status ? text_enabled : text_disabled }}"></i>
+                    </div>
+                  </div>
+                  <fieldset class="view-group" style="display: {% if view_status %}block{% else %}none{% endif %};">
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label" for="input-view-simple"><span data-toggle="tooltip" title="{{ tooltip_view_simple }}">{{ entry_view_simple }}</span></label>
+                      <div class="col-sm-9">
+                        <input type="hidden" name="view_simple" id="input-view-simple" value="{{ view_simple }}" />
+                        <i onclick="changeToggleSwitch($(this), '{{ text_enabled }}', '{{ text_disabled }}');" data-fade=".view-simple" class="fa {% if view_simple %} fa-toggle-on{% else %} fa-toggle-off{% endif %} fa-3x" data-toggle="tooltip" title="{{ view_simple ? text_enabled : text_disabled }}"></i>
+                        <p class="text-info"></p>
+                        <div class="alert alert-info view-simple" role="alert" style="display: {% if view_simple %}block{% else %}none{% endif %};">{{ note_view_simple }}</div>
+                      </div>
+                      <div class="col-sm-1">
+                        <button type="button" class="btn btn-default pull-right" onclick="showModalImg('{{ redirect_link }}image&name=simple-mode-option.jpg')" data-toggle="tooltip" title="{{ tooltip_show_demo }}"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                      </div>
+                    </div>
+                  </fieldset>
+                </fieldset>
+              </div>
+              <div class="tab-pane tab-left fade general-opacity-group {% if status == false %}opacity-on{% endif %}" id="tab-select">
+                <fieldset>
+                  <legend>{{ legend_select }}</legend>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-select-status"><span data-toggle="tooltip" title="{{ tooltip_select_status }}">{{ entry_status }}</span></label>
+                    <div class="col-sm-10">
+                      <input type="hidden" name="select_status" id="input-select-status" value="{{ select_status }}" />
+                      <i onclick="changeToggleSwitch($(this), '{{ text_enabled }}', '{{ text_disabled }}');" class="fa {% if select_status %} fa-toggle-on{% else %} fa-toggle-off{% endif %} fa-3x btn-status" data-toggle="tooltip" title="{{ select_status ? text_enabled : text_disabled }}"></i>
+                    </div>
+                  </div>
+                </fieldset>
+              </div>
+              <div class="tab-pane tab-left fade general-opacity-group {% if status == false %}opacity-on{% endif %}" id="tab-wish">
+                <fieldset>
+                  <legend>{{ legend_wish }}</legend>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-wish-status"><span data-toggle="tooltip" title="{{ tooltip_wish_status }}">{{ entry_status }}</span></label>
+                    <div class="col-sm-10">
+                      <input type="hidden" name="wish_status" id="input-wish-status" value="{{ wish_status }}" />
+                      <i onclick="changeToggleSwitch($(this), '{{ text_enabled }}', '{{ text_disabled }}');" data-fade=".wish-group" class="fa {% if wish_status %} fa-toggle-on{% else %} fa-toggle-off{% endif %} fa-3x btn-status" data-toggle="tooltip" title="{{ wish_status ? text_enabled : text_disabled }}"></i>
+                    </div>
+                  </div>
+                  <fieldset class="wish-group" style="display: {% if wish_status %}block{% else %}none{% endif %};">
+                    <br>
+                    <fieldset class="gmp-group" style="display: {% if type == 0 %}block{% else %}none{% endif %};">
+                      <legend class="sub-legend">{{ legend_wish_alternative }}</legend>
+                      <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-wish-add">{{ entry_wish_add }}<p>({{ text_optional }})</p></label>
+                        <div class="col-sm-10">
+                          <input type="hidden" name="wish_add" id="input-wish-add" value="{{ wish_add }}" />
+                          <i onclick="changeToggleSwitch($(this), '{{ text_enabled }}', '{{ text_disabled }}');" class="fa {% if wish_add %} fa-toggle-on{% else %} fa-toggle-off{% endif %} fa-3x" data-toggle="tooltip" title="{{ wish_add ? text_enabled : text_disabled }}"></i>
+                        </div>
+                      </div>
+                    </fieldset>
+                  </fieldset>
+                </fieldset>
+              </div>
+              <div class="tab-pane tab-left fade general-opacity-group {% if status == false %}opacity-on{% endif %}" id="tab-cart">
+                <fieldset>
+                  <legend>{{ legend_cart }}</legend>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-cart-status"><span data-toggle="tooltip" title="{{ tooltip_cart_status }}">{{ entry_status }}</span></label>
+                    <div class="col-sm-10">
+                      <input type="hidden" name="cart_status" id="input-cart-status" value="{{ cart_status }}" />
+                      <i onclick="changeToggleSwitch($(this), '{{ text_enabled }}', '{{ text_disabled }}');" data-fade=".cart-group" class="fa {% if cart_status %} fa-toggle-on{% else %} fa-toggle-off{% endif %} fa-3x btn-status" data-toggle="tooltip" title="{{ cart_status ? text_enabled : text_disabled }}"></i>
+                    </div>
+                  </div>
+                  <fieldset class="cart-group" style="display: {% if cart_status %}block{% else %}none{% endif %};">
+                    <br>
+                    <fieldset class="gmp-group" style="display: {% if type == 0 %}block{% else %}none{% endif %};">
+                      <legend class="sub-legend">{{ legend_cart_alternative }}</legend>
+                      <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-cart-add">{{ entry_cart_add }}<p>({{ text_optional }})</p></label>
+                        <div class="col-sm-2">
+                          <input type="hidden" name="cart_add" id="input-cart-add" value="{{ cart_add }}" />
+                          <i onclick="changeToggleSwitch($(this), '{{ text_enabled }}', '{{ text_disabled }}');" class="fa {% if cart_add %} fa-toggle-on{% else %} fa-toggle-off{% endif %} fa-3x" data-toggle="tooltip" title="{{ cart_add ? text_enabled : text_disabled }}"></i>
+                        </div>
+                        <label class="col-sm-2 control-label" for="input-cart-edit">{{ entry_cart_edit }}<p>({{ text_optional }})</p></label>
+                        <div class="col-sm-2">
+                          <input type="hidden" name="cart_edit" id="input-cart-edit" value="{{ cart_edit }}" />
+                          <i onclick="changeToggleSwitch($(this), '{{ text_enabled }}', '{{ text_disabled }}');" class="fa {% if cart_edit %} fa-toggle-on{% else %} fa-toggle-off{% endif %} fa-3x" data-toggle="tooltip" title="{{ cart_edit ? text_enabled : text_disabled }}"></i>
+                        </div>
+                        <label class="col-sm-2 control-label" for="input-cart-remove">{{ entry_cart_remove }}<p>({{ text_optional }})</p></label>
+                        <div class="col-sm-2">
+                          <input type="hidden" name="cart_remove" id="input-cart-remove" value="{{ cart_remove }}" />
+                          <i onclick="changeToggleSwitch($(this), '{{ text_enabled }}', '{{ text_disabled }}');" class="fa {% if cart_remove %} fa-toggle-on{% else %} fa-toggle-off{% endif %} fa-3x" data-toggle="tooltip" title="{{ cart_remove ? text_enabled : text_disabled }}"></i>
+                        </div>
+                      </div>
+                    </fieldset>
+                  </fieldset>
+                </fieldset>
+              </div>
+              <div class="tab-pane tab-left fade general-opacity-group {% if status == false %}opacity-on{% endif %}" id="tab-checkout">
+                <fieldset>
+                  <legend>{{ legend_checkout }}</legend>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-checkout-status"><span data-toggle="tooltip" title="{{ tooltip_checkout_status }}">{{ entry_status }}</span></label>
+                    <div class="col-sm-10">
+                      <input type="hidden" name="checkout_status" id="input-checkout-status" value="{{ checkout_status }}" />
+                      <i onclick="changeToggleSwitch($(this), '{{ text_enabled }}', '{{ text_disabled }}');" data-fade=".checkout-group" class="fa {% if checkout_status %} fa-toggle-on{% else %} fa-toggle-off{% endif %} fa-3x btn-status" data-toggle="tooltip" title="{{ checkout_status ? text_enabled : text_disabled }}"></i>
+                    </div>
+                  </div>
+                  <fieldset class="checkout-group" style="display: {% if checkout_status %}block{% else %}none{% endif %};">
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label" for="input-checkout-extension"><span data-toggle="tooltip" title="{{ tooltip_checkout_extension }}">{{ entry_checkout_extension }}</span></label>
+                      <div class="col-sm-9">
+                        <select name="checkout_extension" id="input-checkout-extension" class="form-control">
+                          <option value="0" {% if checkout_extension is null or checkout_extension == '0' %}selected="selected"{% endif %}>{{ text_default }}</option>
+                          {% for checkout_extension_item in checkout_extensions %}
+                            <option value="{{ checkout_extension_item.value }}" {% if checkout_extension == checkout_extension_item.value %}selected="selected"{% endif %}>{{ checkout_extension_item.name }}</option>
+                          {% endfor %}
+                        </select>
+                        <p class="text-info">{{ note_checkout_extension }}</p>
+                      </div>
+                    </div>
+                    <fieldset>
+                      <legend class="sub-legend">{{ legend_checkout_custom  }}</legend>
+                      <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-checkout-custom"><span data-toggle="tooltip" title="{{ tooltip_checkout_custom }}">{{ entry_checkout_custom }}</span></label>
+                        <div class="col-sm-9">
+                          <input type="text" name="checkout_custom" id="input-checkout-custom" value="{{ checkout_custom }}" placeholder="" class="form-control notranslate" />
+                        </div>
+                        <div class="col-sm-1">
+                          <button type="button" class="btn btn-default pull-right" onclick="showModalImg('{{ redirect_link }}image&name=checkout-custom.jpg')" data-toggle="tooltip" title="{{ tooltip_show_demo }}"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-checkout-shipping"><span data-toggle="tooltip" title="{{ tooltip_checkout_shipping }}">{{ entry_checkout_shipping }}</span></label>
+                        <div class="col-sm-9">
+                          <div class="input-group">
+                            <input type="text" name="checkout_shipping" id="input-checkout-shipping" value="{{ checkout_shipping }}" placeholder="" class="form-control notranslate" />
+                            <span class="input-group-addon">
+                              <label>
+                                <input type="checkbox" name="checkout_shipping_ajax" {% if checkout_shipping_ajax %}checked{% endif %}> <span data-toggle="tooltip" title="{{ tooltip_ajax_load }}">{{ entry_ajax_load }}</span>
+                              </label>
+                            </span>
+                          </div>
+                        </div>
+                        <div class="col-sm-1">
+                          <button type="button" class="btn btn-default pull-right" onclick="showModalImg('{{ redirect_link }}image&name=checkout-shipping.jpg')" data-toggle="tooltip" title="{{ tooltip_show_demo }}"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-checkout-payment"><span data-toggle="tooltip" title="{{ tooltip_checkout_payment }}">{{ entry_checkout_payment }}</span><p></p></label>
+                        <div class="col-sm-9">
+                          <div class="input-group">
+                            <input type="text" name="checkout_payment" id="input-checkout-payment" value="{{ checkout_payment }}" placeholder="" class="form-control notranslate" />
+                            <span class="input-group-addon">
+                              <label>
+                                <input type="checkbox" name="checkout_payment_ajax" {% if checkout_payment_ajax %}checked{% endif %}> <span data-toggle="tooltip" title="{{ tooltip_ajax_load }}">{{ entry_ajax_load }}</span>
+                              </label>
+                            </span>
+                          </div>
+                        </div>
+                        <div class="col-sm-1">
+                          <button type="button" class="btn btn-default pull-right" onclick="showModalImg('{{ redirect_link }}image&name=checkout-payment.jpg')" data-toggle="tooltip" title="{{ tooltip_show_demo }}"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                        </div>
+                      </div>
+                    </fieldset>
+                  </fieldset>
+                </fieldset>
+              </div>
+              <div class="tab-pane tab-left fade general-opacity-group {% if status == false %}opacity-on{% endif %}" id="tab-purchase">
+                <fieldset>
+                  <legend>{{ legend_purchase }}</legend>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-purchase-status"><span data-toggle="tooltip" title="{{ tooltip_purchase_status }}">{{ entry_status }}</span></label>
+                    <div class="col-sm-10">
+                      <input type="hidden" name="purchase_status" id="input-purchase-status" value="{{ purchase_status }}" />
+                      <i onclick="changeToggleSwitch($(this), '{{ text_enabled }}', '{{ text_disabled }}');" data-fade=".purchase-group" class="fa {% if purchase_status %} fa-toggle-on{% else %} fa-toggle-off{% endif %} fa-3x btn-status" data-toggle="tooltip" title="{{ purchase_status ? text_enabled : text_disabled }}"></i>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-purchase-simple"><span data-toggle="tooltip" title="{{ tooltip_purchase_simple }}">{{ entry_purchase_simple }}</span></label>
+                    <div class="col-sm-9">
+                      <input type="hidden" name="purchase_simple" id="input-purchase-simple" value="{{ purchase_simple }}" />
+                      <i onclick="changeToggleSwitch($(this), '{{ text_enabled }}', '{{ text_disabled }}')" class="fa {% if purchase_simple %} fa-toggle-on{% else %} fa-toggle-off{% endif %} fa-3x" data-opacity=".purchase-simple-opacity-group" data-toggle="tooltip" title="{{ purchase_simple ? text_enabled : text_disabled }}"></i>
+                    </div>
+                    <div class="col-sm-1">
+                      <button type="button" class="btn btn-default pull-right" onclick="showModalImg('{{ redirect_link }}image&name=purchase-simple-mode.jpg')" data-toggle="tooltip" title="{{ tooltip_show_demo }}"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                    </div>
+                  </div>
+                  <fieldset class="purchase-group" style="display: {% if purchase_status %}block{% else %}none{% endif %};">
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label" for="input-timestamp"><span data-toggle="tooltip" title="{{ tooltip_timestamp }}">{{ entry_timestamp }}</span></label>
+                      <div class="col-sm-10">
+                        <input type="hidden" name="timestamp" id="input-timestamp" value="{{ timestamp }}" />
+                        <i onclick="changeToggleSwitch($(this), '{{ text_enabled }}', '{{ text_disabled }}');" class="fa {% if timestamp %} fa-toggle-on{% else %} fa-toggle-off{% endif %} fa-3x" data-toggle="tooltip" title="{{ timestamp ? text_enabled : text_disabled }}"></i>
+                      </div>
+                    </div>
+                    <div class="form-group required {% if warning_purchase_tracking_status %}has-warning{% endif %} purchase-simple-opacity-group {% if purchase_simple == true %}opacity-on{% endif %}">
+                      <label class="col-sm-2 control-label" for="input-purchase-tracking-status"><span data-toggle="tooltip" title="{{ tooltip_purchase_tracking_status }}">{{ entry_purchase_tracking_status }}</span></label>
+                      <div class="col-sm-10">
+                        <div class="well well-sm">
+                          {% for item in order_statuses %}
+                            <div class="checkbox" {% if refund_tracking_status is defined and item.order_status_id in refund_tracking_status %}style="display: none;"{% endif %}>
+                              <label>
+                                <input type="checkbox" name="purchase_tracking_status[]" value="{{ item.order_status_id }}" {% if purchase_tracking_status is defined and item.order_status_id in purchase_tracking_status %}checked="checked"{% endif %} />
+                                {{ item.name }}
+                              </label>
+                            </div>
+                          {% endfor %}
+                        </div>
+                        <small class="help-block error-purchase_tracking_status">{{ warning_purchase_tracking_status }}</small>
+                        <p class="text-info">{{ note_tracking_status }}</p>
+                      </div>
+                    </div>
+                    <div id="orders">
+                      <div class="loading-spinner opacity-on">
+                        <i class="fa fa-spinner fa-pulse fa-2x"></i>
+                      </div>
+                    </div>
+                  </fieldset>
+                </fieldset>
+              </div>
+              <div class="tab-pane tab-left fade general-opacity-group {% if status == false %}opacity-on{% endif %}" id="tab-refund">
+                <fieldset>
+                  <legend>{{ legend_refund }}</legend>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-refund-status"><span data-toggle="tooltip" title="{{ tooltip_refund_status }}">{{ entry_status }}</span></label>
+                    <div class="col-sm-10">
+                      <input type="hidden" name="refund_status" id="input-refund-status" value="{{ refund_status }}" />
+                      <i onclick="changeToggleSwitch($(this), '{{ text_enabled }}', '{{ text_disabled }}');" data-fade=".refund-group" class="fa {% if refund_status %} fa-toggle-on{% else %} fa-toggle-off{% endif %} fa-3x btn-status" data-toggle="tooltip" title="{{ refund_status ? text_enabled : text_disabled }}"></i>
+                    </div>
+                  </div>
+                  <fieldset class="refund-group" style="display: {% if refund_status %}block{% else %}none{% endif %};">
+                    <div class="form-group required">
+                      <label class="col-sm-2 control-label" for="input-order-refund-status"><span data-toggle="tooltip" title="{{ tooltip_refund_tracking_status }}">{{ entry_refund_tracking_status }}</span></label>
+                      <div class="col-sm-10">
+                        <div class="well well-sm">
+                          {% for item in order_statuses %}
+                            <div class="checkbox" {% if purchase_tracking_status is defined and item.order_status_id in purchase_tracking_status %}style="display: none;"{% endif %}>
+                              <label>
+                                <input type="checkbox" name="refund_tracking_status[]" value="{{ item.order_status_id }}" {% if refund_tracking_status is defined and item.order_status_id in refund_tracking_status %}checked="checked"{% endif %} />
+                                {{ item.name }}
+                              </label>
+                            </div>
+                          {% endfor %}
+                        </div>
+                        <small class="help-block error-refund_tracking_status"></small>
+                        <p class="text-info">{{ note_tracking_status }}</p>
+                      </div>
+                    </div>
+                  </fieldset>
+                </fieldset>
+              </div>
+              <div class="tab-pane tab-left fade general-opacity-group {% if status == false %}opacity-on{% endif %}" id="tab-promotion">
+                <fieldset>
+                  <legend>{{ legend_promotion }}</legend>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-promotion-status"><span data-toggle="tooltip" title="{{ tooltip_promotion_status }}">{{ entry_status }}</span></label>
+                    <div class="col-sm-10">
+                      <input type="hidden" name="promotion_status" id="input-promotion-status" value="{{ promotion_status }}" />
+                      <i onclick="changeToggleSwitch($(this), '{{ text_enabled }}', '{{ text_disabled }}');" data-fade=".promotion-group" class="fa {% if promotion_status %} fa-toggle-on{% else %} fa-toggle-off{% endif %} fa-3x btn-status" data-toggle="tooltip" title="{{ promotion_status ? text_enabled : text_disabled }}"></i>
+                    </div>
+                  </div>
+                  <fieldset class="promotion-group" style="display: {% if promotion_status %}block{% else %}none{% endif %};">
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label" for="input-promotion-simple"><span data-toggle="tooltip" title="{{ tooltip_promotion_simple }}">{{ entry_promotion_simple }}</span></label>
+                      <div class="col-sm-10">
+                        <input type="hidden" name="promotion_simple" id="input-promotion-simple" value="{{ promotion_simple }}" />
+                        <i onclick="changeToggleSwitch($(this), '{{ text_enabled }}', '{{ text_disabled }}');" class="fa {% if promotion_simple %} fa-toggle-on{% else %} fa-toggle-off{% endif %} fa-3x" data-toggle="tooltip" title="{{ promotion_simple ? text_enabled : text_disabled }}"></i>
+                        <p class="text-info"></p>
+                      </div>
+                    </div>
+                  </fieldset>
+                </fieldset>
+              </div>
+              <div class="tab-pane tab-left fade general-opacity-group {% if status == false %}opacity-on{% endif %}" id="tab-custom-definition">
+                <fieldset>
+                  <legend>{{ legend_custom_definition }}</legend>
+                  <div class="alert alert-info" role="alert"><i class="fa fa-exclamation-triangle"></i> {{ text_alert_custom_definition }}</div>
+                  <table id="custom-definition" class="table table-striped table-bordered table-hover">
+                    <thead>
+                    <tr>
+                      <td class="text-left">{{ entry_object }}</td>
+                      <td class="text-left">{{ entry_parameter_value }}</td>
+                      <td class="text-left">{{ entry_parameter_name }}</td>
+                      <td></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% set definition_row = 1 %}
+                    {% if custom_definition %}
+                      {% set definition_count = 125 - custom_definition|length %}
+                    {% else %}
+                      {% set definition_count = 125 %}
+                    {% endif %}
+                    {% for definition in custom_definition %}
+                      <tr id="definition-row{{ definition_row }}">
+                        <td class="text-left" style="width: 20%;">
+                          <select name="custom_definition[{{ definition_row }}][object]" onchange="changeCdObject({{ definition_row }})" id="select-object{{ definition_row }}" class="form-control">
+                            <option value="0" {% if definition.object is null or definition.object == 0 %}selected="selected"{% endif %}>{{ text_user_scope_customer }}</option>
+                            <option value="1" {% if definition.object == 1 %}selected="selected"{% endif %}>{{ text_event_scope_order }}</option>
+                            <!--<option value="2" {% if definition.object == 2 %}selected="selected"{% endif %}>{{ text_event_scope_product }}</option>-->
+                          </select>
+                        </td>
+                        <td class="text-right" style="width: 30%;">
+                          <select name="custom_definition[{{ definition_row }}][value]" onchange="changeCdValue({{ definition_row }})" id="select-value{{ definition_row }}" class="form-control">
+                            {% if definition.object is null or definition.object == 0 %}
+                              {% set table_columns = customer_columns %}
+                            {% elseif definition.object == 1 %}
+                              {% set table_columns = order_columns %}
+                            {% elseif definition.object == 2 %}
+                              {% set table_columns = product_columns %}
+                            {% endif %}
+                            {% for table_column in table_columns %}
+                              <option value="{{ table_column }}" {% if definition.value == table_column %}selected="selected"{% endif %}>{{ table_column }}</option>
+                            {% endfor %}
+                          </select>
+                        </td>
+                        <td class="text-left">
+                          <input type="text" name="custom_definition[{{ definition_row }}][name]" value="{{ definition.name }}" placeholder="{{ entry_parameter_name }}" id="input-name{{ definition_row }}" class="form-control" />
+                        </td>
+                        <td class="text-right"><button type="button" onclick="$('#definition-row{{ definition_row }}').remove();$('#definition-count').html(parseInt($('#definition-count').html())+1);increaseDefinitionCount();" data-toggle="tooltip" title="{{ button_delete }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>
+                      </tr>
+                      {% set definition_row = definition_row + 1 %}
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                      <td colspan="3"><span id="definition-count">{{ definition_count }}</span> {{ text_definition_left }} <i class="fa fa-info-circle" data-toggle="tooltip" title="{{ tooltip_custom_definition_quota }}"></i></td>
+                      <td class="text-right"><button type="button" onclick="addDefinitionRow();" data-toggle="tooltip" title="{{ button_add }}" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+                    </tr>
+                    </tfoot>
+                  </table>
+                </fieldset>
+              </div>
+              <div class="tab-pane tab-left fade general-opacity-group {% if status == false %}opacity-on{% endif %}" id="tab-filter">
+                <fieldset>
+                  <legend>{{ legend_data_filters }}</legend>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-exclude-u-agent"><span data-toggle="tooltip" title="{{ tooltip_exclude_u_agent }}">{{ entry_exclude_u_agent }}</span></label>
+                    <div class="col-sm-10">
+                      <textarea wrap="off" rows="1" name="exclude_u_agent" id="input-exclude-u-agent" class="form-control notranslate">{{ exclude_u_agent }}</textarea>
+                      <p class="text-info">{{ text_example }}: <span style="color: #FFA500;">bot|crawl|slurp|spider|mediapartners|google</span>
+                        <a onclick="addFilterValue('exclude_u_agent', 'bot|crawl|slurp|spider|mediapartners|google', '|');" style="cursor: pointer;">
+                          <i class="fa fa-plus-circle fa-btn" aria-hidden="true" data-toggle="tooltip" title="{{ button_add_this }}"></i>
+                        </a>
+                        <a class="pull-right" onclick="$(this).closest('.form-group').find('textarea').val('')">
+                          <i class="fa fa-trash-o fa-btn" aria-hidden="true" data-toggle="tooltip" title="{{ button_clear }}"></i>
+                        </a>
+                      </p>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-ip-filter"><span data-toggle="tooltip" title="{{ tooltip_exclude_ip }}">{{ entry_exclude_ip }}</span></label>
+                    <div class="col-sm-10">
+                      <textarea name="exclude_ip" id="input-ip-filter" class="form-control notranslate" rows="1" wrap="off">{{ exclude_ip }}</textarea>
+                      <p class="text-info">{{ text_example }} {{ text_your_ip }}:
+                        <span style="color: #FFA500;">{{ current_ip }}</span>
+                        <a onclick="addFilterValue('exclude_ip', '{{ current_ip }}', '\n');"><i class="fa fa-plus-circle fa-btn" aria-hidden="true" data-toggle="tooltip" title="{{ button_add_this }}"></i></a>
+                        <a class="pull-right" onclick="$(this).closest('.form-group').find('textarea').val('')">
+                          <i class="fa fa-trash-o fa-btn" aria-hidden="true" data-toggle="tooltip" title="{{ button_clear }}"></i>
+                        </a>
+                      </p>
+                    </div>
+                  </div>
+                  {% if store_id == 0 %}
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label" for="input-exclude-admin"><span data-toggle="tooltip" title="{{ tooltip_exclude_admin }}">{{ entry_exclude_admin }}</span></label>
+                      <div class="col-sm-10">
+                        <input type="hidden" name="exclude_admin" id="input-exclude-admin" value="{{ exclude_admin }}" />
+                        <i onclick="changeToggleSwitch($(this), '{{ text_enabled }}', '{{ text_disabled }}');" class="fa {% if exclude_admin %} fa-toggle-on{% else %} fa-toggle-off{% endif %} fa-3x" data-toggle="tooltip" title="{{ exclude_admin ? text_enabled : text_disabled }}"></i>
+                        <p class="text-info">{{ note_exclude_admin }}</p>
+                      </div>
+                    </div>
+                  {% endif %}
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-traffic-type"><span data-toggle="tooltip" title="{{ tooltip_traffic_type }}">{{ entry_traffic_type }}</span></label>
+                    <div class="col-sm-10">
+                      <div class="input-group">
+                        <input type="text" name="traffic_type" id="input-traffic-type" value="{{ traffic_type }}" placeholder="" id="input-traffic_type" class="form-control notranslate" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" onclick="showModalImg('{{ redirect_link }}image&name=traffic-type.jpg')" data-toggle="tooltip" title="{{ tooltip_show_demo }}"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                          </span>
+                      </div>
+                      <small class="help-block error-traffic_type"></small>
+                      <p class="text-info">{{ note_traffic_type }}</p>
+                    </div>
+                  </div>
+                </fieldset>
+              </div>
+              <div class="tab-pane tab-left fade general-opacity-group {% if status == false %}opacity-on{% endif %}" id="tab-log">
+                <fieldset>
+                  <legend>{{ legend_log }}</legend>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-log"><span data-toggle="tooltip" title="{{ tooltip_log_status }}">{{ entry_status }}</span></label>
+                    <div class="col-sm-9">
+                      <input type="hidden" name="log" id="input-log" value="{{ log }}" />
+                      <i onclick="changeToggleSwitch($(this), '{{ text_enabled }}', '{{ text_disabled }}');" data-fade=".log-group" class="fa {% if log %} fa-toggle-on{% else %} fa-toggle-off{% endif %} fa-3x" data-toggle="tooltip" title="{{ log ? text_enabled : text_disabled }}"></i>
+                    </div>
+                    <div class="col-sm-1">
+                      <button type="button" class="btn btn-default pull-right" onclick="showModalImg('{{ redirect_link }}image&name=logs.jpg')" data-toggle="tooltip" title="{{ tooltip_show_demo }}"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                    </div>
+                  </div>
+                  <fieldset class="log-group" style="display: {% if log %}block{% else %}none{% endif %};">
+                    <div class="form-group">
+                      <label class="col-sm-2 control-label" for="input-extended-log"><span data-toggle="tooltip" title="{{ tooltip_extended_log }}">{{ entry_extended_log }}</span></label>
+                      <div class="col-sm-9">
+                        <input type="hidden" name="extended_log" id="input-extended-log" value="{{ extended_log }}" />
+                        <i onclick="changeToggleSwitch($(this), '{{ text_enabled }}', '{{ text_disabled }}');" class="fa {% if extended_log %} fa-toggle-on{% else %} fa-toggle-off{% endif %} fa-3x" data-toggle="tooltip" title="{{ extended_log ? text_enabled : text_disabled }}"></i>
+                      </div>
+                      <div class="col-sm-1">
+                        <button type="button" class="btn btn-default pull-right" onclick="showModalImg('{{ redirect_link }}image&name=extended-logs.jpg')" data-toggle="tooltip" title="{{ tooltip_show_demo }}"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-sm-12">
+                        <textarea wrap="off" rows="18" id="logs" class="form-control notranslate">{{ logs }}</textarea>
+                        <br>
+                        <div class="text-center">
+                          <button type="button" class="btn btn-sm btn-info" onclick="refreshELog($(this), '{{ refresh_log_action }}');" data-loading-text="<i class='fa fa-spinner fa-pulse'></i> {{ button_refresh }}"><i class="fa fa-refresh"></i> {{ button_refresh }}</button>
+                          <button type="button" class="btn btn-sm btn-warning" onclick="clearELog($(this), '{{ clear_log_action }}');" data-loading-text="<i class='fa fa-spinner fa-pulse'></i> {{ button_clear }}"><i class="fa fa-trash-o"></i> {{ button_clear }}</button>
+                        </div>
+                      </div>
+                    </div>
+                  </fieldset>
+                </fieldset>
+              </div>
+              <div class="tab-pane tab-left fade" id="tab-help">
+                <div class="btn-group btn-group-justified" data-toggle="buttons">
+                  {% if store_id == 0 %}
+                    <a href="#tab-license" class="btn btn-default active" data-toggle="tab"><input type="radio" /><i class="fa fa-lock"></i> {{ button_license }}</a>
+                  {% endif %}
+                  <a href="#tab-info" class="btn btn-default{% if store_id != 0 %} active{% endif %}" data-toggle="tab"><input type="radio" /><i class="fa fa-info-circle"></i> {{ button_info }}</a>
+                  <a href="#tab-support" class="btn btn-default" data-toggle="tab"><input type="radio" /><i class="fa fa-ticket"></i> {{ button_support }}</a>
+                </div>
+                <div class="tab-content">
+                  {% if store_id == 0 %}
+                    <div class="tab-pane fade in active" id="tab-license">
+                      <br/>
+                      <div class="alert alert-info" role="alert"><i class="fa fa-info-circle" aria-hidden="true"></i> {{ text_license_alert }}</div>
+                      <div class="col-lg-4 col-lg-offset-4 text-center">
+                        <div class="form-group required">
+                          <label class="control-label" for="input-license-id"><span data-toggle="tooltip" title="{{ tooltip_license_id }}">{{ entry_license_id }}</span></label>
+                          <div class="input-group">
+                            <input type="text" name="license_id" id="input-license-id" value="{{ license_id }}" placeholder="" class="form-control notranslate text-center" />
+                            <span class="input-group-btn">
+                                <button onclick="showModalImg('{{ redirect_link }}image&name=opencart-oirder-id.jpg');" class="btn btn-default" type="button" data-toggle="tooltip" title="{{ tooltip_show_demo }}"><i class="fa fa-eye" aria-hidden="true"></i></button>
+                              </span>
+                          </div>
+                          <small class="help-block error-license_id"></small>
+                        </div>
+                      </div>
+                    </div>
+                  {% endif %}
+                  <div class="tab-pane fade{% if store_id != 0 %} in active{% endif %}" id="tab-info">
+                    <br/>
+                    <ul class="col-sm-4 list-group list-group-flush">
+                      <li class="list-group-item">{{ text_ext }} : <a href="{{ redirect_link }}page" target="_blank">{{ text_title }}</a></li>
+                      <li class="list-group-item">{{ text_version }} : {{ e_version }}</li>
+                      <li class="list-group-item">{{ text_author }} : <a href="{{ author_link }}" target="_blank">{{ author_name }}</a></li>
+                      <li class="list-group-item">{{ text_installation_date }} : {{ installation_date }}</li>
+                    </ul>
+                    <div class="col-sm-4">
+                      <a href="{{ redirect_link }}page" target="_blank" class="btn btn-info btn-block">{{ button_official_page }}</a>
+                      <a href="{{ redirect_link }}more" target="_blank" class="btn btn-success btn-block">{{ button_more_extensions }}</a>
+                      <a href="{{ redirect_link }}faq&opencart={{ oc_version }}" target="_blank" class="btn btn-warning btn-block">{{ button_faq }}</a>
+                    </div>
+                    <div class="col-sm-4">
+                      <a href="{{ redirect_link }}changelog" target="_blank" class="btn btn-primary btn-block">{{ button_changelog }}</a>
+                      <a href="{{ redirect_link }}demo" target="_blank" class="btn btn-default btn-block">{{ button_demo_site }}</a>
+                      <a href="{{ redirect_link }}admin-demo" target="_blank" class="btn btn-default btn-block">{{ button_demo_admin }}</a>
+                    </div>
+                  </div>
+                  <div class="tab-pane fade" id="tab-support">
+                    <br/>
+                    <div class="alert alert-info" role="alert"><i class="fa fa-info-circle" aria-hidden="true"></i> {{ text_support_alert }}</div>
+                    <div class="col-md-4 col-md-offset-4 text-center">
+                      <div class="form-group">
+                        <a href="{{ support }}" target="_blank" id="btn-support" class="btn btn-default btn-lg"><i class="fa fa-paper-plane-o"></i> {{ button_create_request }}</a>
+                      </div>
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" id="support-data" value="{{ support_data }}" checked>
+                          &nbsp;<span data-toggle="tooltip" title="{{ tooltip_support_data }}">{{ entry_support_data }} <i class="fa fa-question-circle" aria-hidden="true"></i></span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="modal-general" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header"><b></b>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+      </div>
+      <div class="modal-body text-center">
+        <img src="../image/no_image.png" />
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript"><!--
+    $('#orders').load('{{ order_list_action }}');
+
+    var definition_row = {{ definition_row }};
+    var definition_count = {{ definition_count }};
+
+    function increaseDefinitionCount() {
+        definition_count++;
+        definition_row--;
+    }
+
+    function addDefinitionRow() {
+        if (definition_count) {
+            html  = '<tr id="definition-row' + definition_row + '">';
+            html += '  <td class="text-left" style="width: 20%;">';
+            html += '  <select name="custom_definition[' + definition_row + '][object]" onchange="changeCdObject(' + definition_row + ');" id="select-object' + definition_row + '" class="form-control">';
+            html += '  <option value="0" selected="selected">{{ text_user_scope_customer }}</option>';
+            html += '  <option value="1">{{ text_event_scope_order }}</option>';
+            /** html += '  <option value="2">{{ text_event_scope_product }}</option>'; **/
+            html += '  </select>';
+            html += '  </td>';
+            html += '  <td class="text-right" style="width: 30%;">';
+            html += '  <select name="custom_definition[' + definition_row + '][value]" onchange="changeCdValue(' + definition_row + ');" id="select-value' + definition_row + '" class="form-control">';
+
+          {% for customer_column in customer_columns %}
+            html += '  <option value="{{ customer_column }}">{{ customer_column }}</option>';
+          {% endfor %}
+
+            html += '  </select>';
+            html += '  </td>';
+            html += '  <td class="text-left">';
+            html += '   <input type="text" name="custom_definition[' + definition_row + '][name]" value="customer_id" placeholder="{{ entry_parameter_name }}" id="input-name' + definition_row + '" class="form-control" />';
+            html += '  </td>';
+            html += '  <td class="text-right"><button type="button" onclick="$(\'#definition-row' + definition_row + '\').remove();definition_row--;$(\'#definition-count\').html(++definition_count);" data-toggle="tooltip" title="{{ button_delete }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+            html += '</tr>';
+
+            $('#custom-definition tbody').append(html);
+            $('#definition-count').html(--definition_count);
+
+            definition_row++;
+        }
+    }
+
+    function changeCdObject(definition_row) {
+        $('#select-value' + definition_row).find('option').remove();
+
+        if ($('#select-object' + definition_row).val() == 1) {
+            var value_columns = {{ order_columns|json_encode() }};
+        } else if ($('#select-object' + definition_row).val() == 2) {
+            var value_columns = {{ product_columns|json_encode() }};
+        } else {
+            var value_columns = {{ customer_columns|json_encode() }};
+        }
+
+        $.each(value_columns, function(key, value) {
+            $('#select-value' + definition_row).append($('<option></option>').attr('value',value).text(value));
+        });
+
+        $('#input-name' + definition_row).val($('#select-value' + definition_row).find(':selected').text());
+    }
+
+    function changeCdValue(definition_row) {
+        $('#input-name' + definition_row).val($('#select-value' + definition_row).find(':selected').text());
+    }
+    //--></script>
+{{ footer }}

@@ -1,0 +1,706 @@
+{{ header }}{{ column_left }} 
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right">
+				<button type="submit" form="form-module" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+				<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+			</div>
+			<h1>{{ heading_title }}</h1>
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+				<li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+		{% if error_warning %}
+		<script>
+			usNotify('warning', '{{ error_warning }}');
+		</script>
+		{% endif %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+			</div>
+			<div class="panel-body">
+				<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-module" class="form-horizontal">
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+						<div class="col-sm-10">
+							<div class="toggle-group">
+								<input type="checkbox" name="status" {% if status %}checked="checked"{% endif %} id="input-status" tabindex="1">
+								<label for="input-status"></label>
+								<div class="onoffswitch pull-left" aria-hidden="true">
+									<div class="onoffswitch-label">
+										<div class="onoffswitch-inner"></div>
+										<div class="onoffswitch-switch"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-name">{{ entry_name }}</label>
+						<div class="col-sm-10">
+							<input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control" />
+							{% if (error_name) %} 
+							<div class="text-danger">
+								<script>
+									usNotify('warning', '{{ error_name }}');
+								</script>
+							</div>
+							{% endif %} 
+						</div>
+					</div>
+					<ul class="nav nav-tabs">
+						<li class="active"><a href="#block1-tab" data-toggle="tab">{{ text_block_1 }}</a></li>
+						<li><a href="#block2-tab" data-toggle="tab">{{ text_block_2 }}</a></li>
+						<li><a href="#block3-tab" data-toggle="tab">{{ text_block_3 }}</a></li>
+						<li><a href="#block4-tab" data-toggle="tab">{{ text_block_4 }}</a></li>
+					</ul>
+					<div class="tab-content">
+						<div class="tab-pane active" id="block1-tab">
+							{% for language in languages %} 
+							{% if (error_heading[language.code] is defined) %} 
+							<div style="margin-bottom: 0px;margin-top: 10px;" class="alert alert-danger text-danger">{{ error_heading[language.code] }}</div>
+							{% endif %} 
+							{% endfor %} 
+							<legend>{{ entry_icon }}</legend>
+							<div class="form-group required">
+								<label class="col-sm-2 control-label" for="input-tab_icon_block1">{{ entry_icon }}</label>
+								<div class="col-sm-10">
+									<span data-toggle="tooltip" title="{{ entry_icon_title }}" class="btn btn-default" onclick="fontIcons('tab_icon_block1', 'tab_icon_input_block1');"><i class="{{ tab_icon_block1 }}" id="tab_icon_block1"></i></span>
+									<input id="tab_icon_input_block1" type="hidden" name="tab_icon_block1" value="{{ tab_icon_block1 }}" />
+									{% if (error_icon_block1) %} 
+									<div class="text-danger">{{ error_icon_block1 }}</div>
+									{% endif %} 
+								</div>
+							</div>
+							<div class="form-group required">
+								<label class="col-sm-2 control-label" for="input-color_icon_block1">{{ entry_color_icon }}</label>
+								<div class="col-sm-10">
+									<input type="text" name="color_icon_block1" value="{{ color_icon_block1 }}" placeholder="{{ entry_color_icon }}" id="input-color_icon_block1" class="form-control spectrum" />
+									{% if (error_color_icon_block1) %} 
+									<div class="text-danger">
+										<script>
+											usNotify('warning', '{{ error_color_icon_block1 }}');
+										</script>
+									</div>
+									{% endif %} 
+								</div>
+							</div>
+							<legend>{{ entry_heading }}</legend>
+							<div class="form-group required">
+								<label class="col-sm-2 control-label">{{ entry_text_heading }}</label>
+								<div class="col-sm-10">
+									<ul class="nav nav-tabs" id="heading_block1">
+										{% for language in languages %} 
+										<li>
+											<a href="#tab-heading_block1-language-{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a>
+										</li>
+										{% endfor %} 
+									</ul>
+									<div class="tab-content">
+										{% for language in languages %} 
+										<div class="tab-pane" id="tab-heading_block1-language-{{ language.language_id }}">
+											<input
+												type="text"
+												name="heading_block1[{{ language.code }}]"
+												value="{{ heading_block1[language.code] is not empty ? heading_block1[language.code] : '' }}"
+												class="form-control"
+												/>
+											{% if (error_heading_block1[language.code] is defined) %} 
+											<div class="text-danger">
+												<script>
+													usNotify('warning', '{{ error_heading_block1[language.code] }}');
+												</script>
+											</div>
+											{% endif %} 
+										</div>
+										{% endfor %} 
+									</div>
+								</div>
+							</div>
+							<div class="form-group required">
+								<label class="col-sm-2 control-label" for="input-color_heading_block1">{{ entry_color_heading }}</label>
+								<div class="col-sm-10">
+									<input type="text" name="color_heading_block1" value="{{ color_heading_block1 }}" placeholder="{{ entry_color_heading }}" id="input-color_heading_block1" class="form-control spectrum" />
+									{% if (error_color_heading_block1) %} 
+									<div class="text-danger">
+										<script>
+											usNotify('warning', '{{ error_color_heading_block1 }}');
+										</script>
+									</div>
+									{% endif %} 
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="select-heading_indormation_id_block1">{{ entry_link_heading }}</label>
+								<div class="col-sm-10">
+									<select id="select-heading_indormation_id_block1" name="select-heading_indormation_id_block1" class="form-control">
+										<option value=""> -- </option>
+										{% for information in informations %}
+										<option value="{{ information.information_id }}" {% if indormation_id_block1 == information.information_id %}selected="selected"{% endif %}>{{ information.title }}</option>
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+							<legend>{{ entry_text }}</legend>
+							<div class="form-group required">
+								<label class="col-sm-2 control-label">{{ entry_text }}</label>
+								<div class="col-sm-10">
+									<ul class="nav nav-tabs" id="text_block1">
+										{% for language in languages %} 
+										<li>
+											<a href="#tab-text_block1-language-{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a>
+										</li>
+										{% endfor %} 
+									</ul>
+									<div class="tab-content">
+										{% for language in languages %} 
+										<div class="tab-pane" id="tab-text_block1-language-{{ language.language_id }}">
+											<input
+												type="text"
+												name="text_block1[{{ language.code }}]"
+												value="{{ text_block1[language.code] is not empty ? text_block1[language.code] : '' }}"
+												class="form-control"
+												/>
+											{% if (error_text_block1[language.code] is defined) %} 
+											<div style="margin-bottom: 0px;margin-top: 10px;" class="alert alert-danger text-danger">{{ error_text_block1[language.code] }}</div>
+											{% endif %} 
+										</div>
+										{% endfor %} 
+									</div>
+								</div>
+							</div>
+							<div class="form-group required">
+								<label class="col-sm-2 control-label" for="input-color_text_block1">{{ entry_color_text }}</label>
+								<div class="col-sm-10">
+									<input type="text" name="color_text_block1" value="{{ color_text_block1 }}" placeholder="{{ entry_color_text }}" id="input-color_text_block1" class="form-control spectrum" />
+									{% if (error_color_text_block1) %} 
+									<div class="text-danger">
+										<script>
+											usNotify('warning', '{{ error_color_text_block1 }}');
+										</script>
+									</div>
+									{% endif %} 
+								</div>
+							</div>
+							<legend>{{ entry_background_block }}</legend>
+							<div class="form-group required">
+								<label class="col-sm-2 control-label" for="input-background_block_hover_block1">{{ entry_background_block_hover }}</label>
+								<div class="col-sm-10">
+									<input type="text" name="background_block_hover_block1" value="{{ background_block_hover_block1 }}" placeholder="{{ entry_background_block_hover }}" id="input-background_block_hover_block1" class="form-control spectrum" />
+									{% if (error_background_block_hover_block1) %} 
+									<div class="text-danger">
+										<script>
+											usNotify('warning', '{{ error_background_block_hover_block1 }}');
+										</script>
+									</div>
+									{% endif %} 
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="block2-tab">
+							{% for language in languages %} 
+							{% if (error_heading[language.code] is defined) %} 
+								<div class="text-danger">
+									<script>
+										usNotify('warning', '{{ error_heading[language.code] }}');
+									</script>
+								</div>
+							{% endif %} 
+							{% endfor %} 
+							<legend>{{ entry_icon }}</legend>
+							<div class="form-group required">
+								<label class="col-sm-2 control-label" for="input-tab_icon_block2">{{ entry_icon }}</label>
+								<div class="col-sm-10">
+									<span data-toggle="tooltip" title="{{ entry_icon_title }}" class="btn btn-default" onclick="fontIcons('tab_icon_block2', 'tab_icon_input_block2');"><i class="{{ tab_icon_block2 }}" id="tab_icon_block2"></i></span>
+									<input id="tab_icon_input_block2" type="hidden" name="tab_icon_block2" value="{{ tab_icon_block2 }}" />
+									{% if (error_icon_block2) %} 
+									<div class="text-danger">{{ error_icon_block2 }}</div>
+									{% endif %} 
+								</div>
+							</div>
+							<div class="form-group required">
+								<label class="col-sm-2 control-label" for="input-color_icon_block2">{{ entry_color_icon }}</label>
+								<div class="col-sm-10">
+									<input type="text" name="color_icon_block2" value="{{ color_icon_block2 }}" placeholder="{{ entry_color_icon }}" id="input-color_icon_block2" class="form-control spectrum" />
+									{% if (error_color_icon_block2) %} 
+									<div class="text-danger">
+										<script>
+											usNotify('warning', '{{ error_color_icon_block2 }}');
+										</script>
+									</div>
+									{% endif %} 
+								</div>
+							</div>
+							<legend>{{ entry_heading }}</legend>
+							<div class="form-group required">
+								<label class="col-sm-2 control-label">{{ entry_text_heading }}</label>
+								<div class="col-sm-10">
+									<ul class="nav nav-tabs" id="heading_block2">
+										{% for language in languages %} 
+										<li>
+											<a href="#tab-heading_block2-language-{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a>
+										</li>
+										{% endfor %} 
+									</ul>
+									<div class="tab-content">
+										{% for language in languages %} 
+										<div class="tab-pane" id="tab-heading_block2-language-{{ language.language_id }}">
+											<input
+												type="text"
+												name="heading_block2[{{ language.code }}]"
+												value="{{ heading_block2[language.code] is not empty ? heading_block2[language.code] : '' }}"
+												class="form-control"
+												/>
+											{% if (error_heading_block2[language.code] is defined) %} 
+											<div class="text-danger">
+												<script>
+													usNotify('warning', '{{ error_heading_block2[language.code] }}');
+												</script>
+											</div>
+											{% endif %} 
+										</div>
+										{% endfor %} 
+									</div>
+								</div>
+							</div>
+							<div class="form-group required">
+								<label class="col-sm-2 control-label" for="input-color_heading_block2">{{ entry_color_heading }}</label>
+								<div class="col-sm-10">
+									<input type="text" name="color_heading_block2" value="{{ color_heading_block2 }}" placeholder="{{ entry_color_heading }}" id="input-color_heading_block2" class="form-control spectrum" />
+									{% if (error_color_heading_block2) %} 
+									<div class="text-danger">
+										<script>
+											usNotify('warning', '{{ error_color_heading_block2 }}');
+										</script>
+									</div>
+									{% endif %} 
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="select-heading_indormation_id_block2">{{ entry_link_heading }}</label>
+								<div class="col-sm-10">
+									<select id="select-heading_indormation_id_block2" name="select-heading_indormation_id_block2" class="form-control">
+										<option value=""> -- </option>
+										{% for information in informations %}
+										<option value="{{ information.information_id }}" {% if indormation_id_block2 == information.information_id %}selected="selected"{% endif %}>{{ information.title }}</option>
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+							<legend>{{ entry_text }}</legend>
+							<div class="form-group required">
+								<label class="col-sm-2 control-label">{{ entry_text }}</label>
+								<div class="col-sm-10">
+									<ul class="nav nav-tabs" id="text_block2">
+										{% for language in languages %} 
+										<li>
+											<a href="#tab-text_block2-language-{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a>
+										</li>
+										{% endfor %} 
+									</ul>
+									<div class="tab-content">
+										{% for language in languages %} 
+										<div class="tab-pane" id="tab-text_block2-language-{{ language.language_id }}">
+											<input
+												type="text"
+												name="text_block2[{{ language.code }}]"
+												value="{{ text_block2[language.code] is not empty ? text_block2[language.code] : '' }}"
+												class="form-control"
+												/>
+											{% if (error_text_block2[language.code] is defined) %} 
+											<div class="text-danger">
+												<script>
+													usNotify('warning', '{{ error_text_block2[language.code] }}');
+												</script>
+											</div>
+											{% endif %} 
+										</div>
+										{% endfor %} 
+									</div>
+								</div>
+							</div>
+							<div class="form-group required">
+								<label class="col-sm-2 control-label" for="input-color_text_block2">{{ entry_color_text }}</label>
+								<div class="col-sm-10">
+									<input type="text" name="color_text_block2" value="{{ color_text_block2 }}" placeholder="{{ entry_color_text }}" id="input-color_text_block2" class="form-control spectrum" />
+									{% if (error_color_text_block2) %} 
+									<div class="text-danger">
+										<script>
+											usNotify('warning', '{{ error_color_text_block2 }}');
+										</script>
+									</div>
+									{% endif %} 
+								</div>
+							</div>
+							<legend>{{ entry_background_block }}</legend>
+							<div class="form-group required">
+								<label class="col-sm-2 control-label" for="input-background_block_hover_block2">{{ entry_background_block_hover }}</label>
+								<div class="col-sm-10">
+									<input type="text" name="background_block_hover_block2" value="{{ background_block_hover_block2 }}" placeholder="{{ entry_background_block_hover }}" id="input-background_block_hover_block2" class="form-control spectrum" />
+									{% if (error_background_block_hover_block2) %} 
+									<div class="text-danger">
+										<script>
+											usNotify('warning', '{{ error_background_block_hover_block2 }}');
+										</script>
+									</div>
+									{% endif %} 
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="block3-tab">
+							{% for language in languages %} 
+							{% if (error_heading[language.code] is defined) %} 
+							<div style="margin-bottom: 0px;margin-top: 10px;" class="alert alert-danger text-danger">{{ error_heading[language.code] }}</div>
+							{% endif %} 
+							{% endfor %} 
+							<legend>{{ entry_icon }}</legend>
+							<div class="form-group required">
+								<label class="col-sm-2 control-label" for="input-tab_icon_block3">{{ entry_icon }}</label>
+								<div class="col-sm-10">
+									<span data-toggle="tooltip" title="{{ entry_icon_title }}" class="btn btn-default" onclick="fontIcons('tab_icon_block3', 'tab_icon_input_block3');"><i class="{{ tab_icon_block3 }}" id="tab_icon_block3"></i></span>
+									<input id="tab_icon_input_block3" type="hidden" name="tab_icon_block3" value="{{ tab_icon_block3 }}" />
+									{% if (error_icon_block3) %} 
+									<div class="text-danger">
+										<script>
+											usNotify('warning', '{{ error_icon_block3 }}');
+										</script>
+									</div>
+									{% endif %} 
+								</div>
+							</div>
+							<div class="form-group required">
+								<label class="col-sm-2 control-label" for="input-color_icon_block3">{{ entry_color_icon }}</label>
+								<div class="col-sm-10">
+									<input type="text" name="color_icon_block3" value="{{ color_icon_block3 }}" placeholder="{{ entry_color_icon }}" id="input-color_icon_block3" class="form-control spectrum" />
+									{% if (error_color_icon_block3) %} 
+									<div class="text-danger">
+										<script>
+											usNotify('warning', '{{ error_color_icon_block3 }}');
+										</script>
+									</div>
+									{% endif %} 
+								</div>
+							</div>
+							<legend>{{ entry_heading }}</legend>
+							<div class="form-group required">
+								<label class="col-sm-2 control-label">{{ entry_text_heading }}</label>
+								<div class="col-sm-10">
+									<ul class="nav nav-tabs" id="heading_block3">
+										{% for language in languages %} 
+										<li>
+											<a href="#tab-heading_block3-language-{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a>
+										</li>
+										{% endfor %} 
+									</ul>
+									<div class="tab-content">
+										{% for language in languages %} 
+										<div class="tab-pane" id="tab-heading_block3-language-{{ language.language_id }}">
+											<input
+												type="text"
+												name="heading_block3[{{ language.code }}]"
+												value="{{ heading_block3[language.code] is not empty ? heading_block3[language.code] : '' }}"
+												class="form-control"
+												/>
+											{% if (error_heading_block3[language.code] is defined) %} 
+											<div class="text-danger">
+												<script>
+													usNotify('warning', '{{ error_heading_block3[language.code] }}');
+												</script>
+											</div>
+											{% endif %} 
+										</div>
+										{% endfor %} 
+									</div>
+								</div>
+							</div>
+							<div class="form-group required">
+								<label class="col-sm-2 control-label" for="input-color_heading_block3">{{ entry_color_heading }}</label>
+								<div class="col-sm-10">
+									<input type="text" name="color_heading_block3" value="{{ color_heading_block3 }}" placeholder="{{ entry_color_heading }}" id="input-color_heading_block3" class="form-control spectrum" />
+									{% if (error_color_heading_block3) %} 
+									<div class="text-danger">
+										<script>
+											usNotify('warning', '{{ error_color_heading_block3 }}');
+										</script>
+									</div>
+									{% endif %} 
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="select-heading_indormation_id_block3">{{ entry_link_heading }}</label>
+								<div class="col-sm-10">
+									<select id="select-heading_indormation_id_block3" name="select-heading_indormation_id_block3" class="form-control">
+										<option value=""> -- </option>
+										{% for information in informations %}
+										<option value="{{ information.information_id }}" {% if indormation_id_block3 == information.information_id %}selected="selected"{% endif %}>{{ information.title }}</option>
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+							<legend>{{ entry_text }}</legend>
+							<div class="form-group required">
+								<label class="col-sm-2 control-label">{{ entry_text }}</label>
+								<div class="col-sm-10">
+									<ul class="nav nav-tabs" id="text_block3">
+										{% for language in languages %} 
+										<li>
+											<a href="#tab-text_block3-language-{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a>
+										</li>
+										{% endfor %} 
+									</ul>
+									<div class="tab-content">
+										{% for language in languages %} 
+										<div class="tab-pane" id="tab-text_block3-language-{{ language.language_id }}">
+											<input
+												type="text"
+												name="text_block3[{{ language.code }}]"
+												value="{{ text_block3[language.code] is not empty ? text_block3[language.code] : '' }}"
+												class="form-control"
+												/>
+											{% if (error_text_block3[language.code] is defined) %} 
+											<div class="text-danger">
+												<script>
+													usNotify('warning', '{{ error_text_block3[language.code] }}');
+												</script>
+											</div>
+											{% endif %} 
+										</div>
+										{% endfor %} 
+									</div>
+								</div>
+							</div>
+							<div class="form-group required">
+								<label class="col-sm-2 control-label" for="input-color_text_block3">{{ entry_color_text }}</label>
+								<div class="col-sm-10">
+									<input type="text" name="color_text_block3" value="{{ color_text_block3 }}" placeholder="{{ entry_color_text }}" id="input-color_text_block3" class="form-control spectrum" />
+									{% if (error_color_text_block3) %} 
+									<div class="text-danger">
+										<script>
+											usNotify('warning', '{{ error_color_text_block3 }}');
+										</script>
+									</div>
+									{% endif %} 
+								</div>
+							</div>
+							<legend>{{ entry_background_block }}</legend>
+							<div class="form-group required">
+								<label class="col-sm-2 control-label" for="input-background_block_hover_block3">{{ entry_background_block_hover }}</label>
+								<div class="col-sm-10">
+									<input type="text" name="background_block_hover_block3" value="{{ background_block_hover_block3 }}" placeholder="{{ entry_background_block_hover }}" id="input-background_block_hover_block3" class="form-control spectrum" />
+									{% if (error_background_block_hover_block3) %} 
+									<div class="text-danger">
+										<script>
+											usNotify('warning', '{{ error_background_block_hover_block3 }}');
+										</script>
+									</div>
+									{% endif %} 
+								</div>
+							</div>
+						</div>
+						<div class="tab-pane" id="block4-tab">
+							{% for language in languages %} 
+							{% if (error_heading[language.code] is defined) %} 
+							<div class="text-danger">
+								<script>
+									usNotify('warning', '{{ error_heading[language.code] }}');
+								</script>
+							</div>
+							{% endif %} 
+							{% endfor %} 
+							<legend>{{ entry_icon }}</legend>
+							<div class="form-group required">
+								<label class="col-sm-2 control-label" for="input-tab_icon_block4">{{ entry_icon }}</label>
+								<div class="col-sm-10">
+									<span data-toggle="tooltip" title="{{ entry_icon_title }}" class="btn btn-default" onclick="fontIcons('tab_icon_block4', 'tab_icon_input_block4');"><i class="{{ tab_icon_block4 }}" id="tab_icon_block4"></i></span>
+									<input id="tab_icon_input_block4" type="hidden" name="tab_icon_block4" value="{{ tab_icon_block4 }}" />
+									{% if (error_icon_block4) %} 
+									<div class="text-danger">
+										<script>
+											usNotify('warning', '{{ error_icon_block4 }}');
+										</script>
+									</div>
+									{% endif %} 
+								</div>
+							</div>
+							<div class="form-group required">
+								<label class="col-sm-2 control-label" for="input-color_icon_block4">{{ entry_color_icon }}</label>
+								<div class="col-sm-10">
+									<input type="text" name="color_icon_block4" value="{{ color_icon_block4 }}" placeholder="{{ entry_color_icon }}" id="input-color_icon_block4" class="form-control spectrum" />
+									{% if (error_color_icon_block4) %} 
+									<div class="text-danger">
+										<script>
+											usNotify('warning', '{{ error_color_icon_block4 }}');
+										</script>
+									</div>
+									{% endif %} 
+								</div>
+							</div>
+							<legend>{{ entry_heading }}</legend>
+							<div class="form-group required">
+								<label class="col-sm-2 control-label">{{ entry_text_heading }}</label>
+								<div class="col-sm-10">
+									<ul class="nav nav-tabs" id="heading_block4">
+										{% for language in languages %} 
+										<li>
+											<a href="#tab-heading_block4-language-{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a>
+										</li>
+										{% endfor %} 
+									</ul>
+									<div class="tab-content">
+										{% for language in languages %} 
+										<div class="tab-pane" id="tab-heading_block4-language-{{ language.language_id }}">
+											<input
+												type="text"
+												name="heading_block4[{{ language.code }}]"
+												value="{{ heading_block4[language.code] is not empty ? heading_block4[language.code] : '' }}"
+												class="form-control"
+												/>
+											{% if (error_heading_block4[language.code] is defined) %} 
+											<div class="text-danger">
+												<script>
+													usNotify('warning', '{{ error_heading_block4[language.code] }}');
+												</script>
+											</div>
+											{% endif %} 
+										</div>
+										{% endfor %} 
+									</div>
+								</div>
+							</div>
+							<div class="form-group required">
+								<label class="col-sm-2 control-label" for="input-color_heading_block4">{{ entry_color_heading }}</label>
+								<div class="col-sm-10">
+									<input type="text" name="color_heading_block4" value="{{ color_heading_block4 }}" placeholder="{{ entry_color_heading }}" id="input-color_heading_block4" class="form-control spectrum" />
+									{% if (error_color_heading_block4) %} 
+									<div class="text-danger">
+										<script>
+											usNotify('warning', '{{ error_color_heading_block4 }}');
+										</script>
+									</div>
+									{% endif %} 
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="select-heading_indormation_id_block4">{{ entry_link_heading }}</label>
+								<div class="col-sm-10">
+									<select id="select-heading_indormation_id_block4" name="select-heading_indormation_id_block4" class="form-control">
+										<option value=""> -- </option>
+										{% for information in informations %}
+										<option value="{{ information.information_id }}" {% if indormation_id_block4 == information.information_id %}selected="selected"{% endif %}>{{ information.title }}</option>
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+							<legend>{{ entry_text }}</legend>
+							<div class="form-group required">
+								<label class="col-sm-2 control-label">{{ entry_text }}</label>
+								<div class="col-sm-10">
+									<ul class="nav nav-tabs" id="text_block4">
+										{% for language in languages %} 
+										<li>
+											<a href="#tab-text_block4-language-{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a>
+										</li>
+										{% endfor %} 
+									</ul>
+									<div class="tab-content">
+										{% for language in languages %} 
+										<div class="tab-pane" id="tab-text_block4-language-{{ language.language_id }}">
+											<input
+												type="text"
+												name="text_block4[{{ language.code }}]"
+												value="{{ text_block4[language.code] is not empty ? text_block4[language.code] : '' }}"
+												class="form-control"
+												/>
+											{% if (error_text_block4[language.code] is defined) %} 
+											<div class="text-danger">
+												<script>
+													usNotify('warning', '{{ error_text_block4[language.code] }}');
+												</script>
+											</div>
+											{% endif %} 
+										</div>
+										{% endfor %} 
+									</div>
+								</div>
+							</div>
+							<div class="form-group required">
+								<label class="col-sm-2 control-label" for="input-color_text_block4">{{ entry_color_text }}</label>
+								<div class="col-sm-10">
+									<input type="text" name="color_text_block4" value="{{ color_text_block4 }}" placeholder="{{ entry_color_text }}" id="input-color_text_block4" class="form-control spectrum" />
+									{% if (error_color_text_block4) %} 
+									<div class="text-danger">
+										<script>
+											usNotify('warning', '{{ error_color_text_block4 }}');
+										</script>
+									</div>
+									{% endif %} 
+								</div>
+							</div>
+							<legend>{{ entry_background_block }}</legend>
+							<div class="form-group required">
+								<label class="col-sm-2 control-label" for="input-background_block_hover_block4">{{ entry_background_block_hover }}</label>
+								<div class="col-sm-10">
+									<input type="text" name="background_block_hover_block4" value="{{ background_block_hover_block4 }}" placeholder="{{ entry_background_block_hover }}" id="input-background_block_hover_block4" class="form-control spectrum" />
+									{% if (error_background_block_hover_block4) %} 
+									<div class="text-danger">
+										<script>
+											usNotify('warning', '{{ error_background_block_hover_block4 }}');
+										</script>
+									</div>
+									{% endif %} 
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+function fontIcons(icone_id, input_id) {
+	$.ajax({
+		url: 'index.php?route=extension/theme/oct_ultrastore/getIcons&user_token={{ user_token }}&icone_id=' + icone_id + '&input_id=' + input_id,
+		type: 'get',
+		dataType: 'html',
+		cache: false,
+		success: function(data) {
+			html  = '<div id="modal-icons" class="modal">';
+			html += '  <div class="modal-dialog" style="width:55%;">';
+			html += '    <div class="modal-content">';
+			html += '      <div class="modal-header">';
+			html += '        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>';
+			html += '        <h4 class="modal-title">Font Awesome Icons</h4>';
+			html += '      </div>';
+			html += '      <div class="modal-body">' + data + '</div>';
+			html += '    </div>';
+			html += '  </div>';
+			html += '</div>';
+			
+			$('body').append(html);
+			
+			$('#modal-icons').modal('show');
+		}
+	});
+}
+</script>
+<script>
+$('#heading_block1 a:first, #text_block1 a:first, #heading_block2 a:first, #text_block2 a:first, #heading_block3 a:first, #text_block3 a:first, #heading_block4 a:first, #text_block4 a:first').tab('show');
+</script>
+<script>
+$(".spectrum").spectrum({
+	preferredFormat: "rgb",
+	showInitial: true,
+	showInput: true,
+	showAlpha: true,
+	showPalette: true,
+	palette: [["red", "rgba(0, 255, 0, .5)", "rgb(0, 0, 255)"]]
+});
+</script>
+{{ footer }}

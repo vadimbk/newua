@@ -1,0 +1,77 @@
+{% if reviews %}
+<div class="reviews-category">
+{% if module_header %}
+<h3 class="reviews-header">{{ module_header }}: {{ category_name }}</h3>
+{% endif %}
+<div id="bannerreviews" class="owl-carousel">
+    {% for review in reviews %}
+    <div class="item col-lg-12 col-md-12 col-xs-12">
+        <div class="transition">
+		
+		
+		    <a href="{{ review['prod_href'] }}"><div class="caption-rev">
+			<div class="image-rev"><img src="{{ review['prod_thumb'] }}" alt="{{ review['prod_name'] }}" title="{{ review['prod_name'] }}" class="img-responsive" /></div>
+            <div class="title-rev"><h4>{{ review['prod_name'] }}</h4></div>
+			</div></a>
+		
+		
+
+				
+								
+                <div class="reviews-sign">
+                    <div class="reviews-author">{{ review['author'] }}</div>
+					<div class="reviews-date">{{ review['date_added'] }}</div>
+							{% if review['rating'] %}
+                <div class="rating"> {% for i in 1..5 %}
+                  {% if review['rating'] < i %} <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span> {% else %} <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span>{% endif %}
+                  {% endfor %} 	</div>
+                {% endif %}
+                    
+                </div>
+				
+				
+		
+
+			
+			<div class="reviews-caption">               
+                <p class="reviews-description">{{ review['description'] }}</p>
+            </div>
+        </div>
+
+    </div>
+  {% endfor %}
+  
+         <!--{% if show_all_button %}
+        <div class="button-group">
+            <button type="button" class="reviews-btn" onclick="window.location.href='{{ link_all_reviews }}'">{{ text_all_reviews }}</button>
+        </div>
+        {% endif %}-->
+</div>
+<hr>
+</div>
+<script type="text/javascript"><!--
+$('#bannerreviews').owlCarousel({
+	autoplay: true,
+	autoplayTimeout: 3000,
+	nav:true,
+	navText: ['<i class="fa fa-angle-left"></i>','<i class="fa fa-angle-right"></i>'],
+	dots:false,
+	responsiveClass:true,
+    responsive:{
+        0:{
+            items:1,
+            nav:true
+        },
+        600:{
+            items:2,
+            nav:true
+        },
+        1000:{
+            items:4,
+            nav:true,
+            loop:false
+        }
+    }
+});
+--></script>
+{% endif %}

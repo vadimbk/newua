@@ -1,0 +1,35 @@
+{% set values = option.values %}
+{% for value in values %}
+{% if value.count > 4 %}
+<style>
+.option-{{ option.option_id }}
+{display:block;}
+
+</style>
+{% else %}
+<style>
+.option-{{ option.option_id }}
+{display:none;}
+</style>
+</style>
+{% endif %}
+{% endfor %}
+
+<style>
+.option-m
+{display:block;}
+</style>
+
+
+<div class="option-{{ option.option_id }} posad-block" id="option-{{ option.option_id }}">
+  <div class="posad-option-name">
+    {{ option.name }}
+ </div>
+  <div class="posad-option-values">
+   {% include 'default/template/extension/module/ocfilter/value_list_posad.twig' %}  
+  </div>
+</div>
+
+
+
+

@@ -1,0 +1,318 @@
+{{ header }}
+<style type="text/css">
+.form-group-popover {
+	position: relative;
+}
+
+.form-group-popover > .popover {
+	border-bottom: none;
+	border-radius: 0;
+	border-right: none;
+	border-top: none;
+	box-shadow: none;
+	height: calc(100% - 30px);
+	margin-left: 20px;
+	max-width: 10000px;
+	width: auto;
+}
+</style>
+{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form-latest" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+      </div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if (error_warning) %}
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
+      </div>
+      <div class="panel-body">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-latest" class="form-horizontal">
+          <div class="form-group">
+            <label class="col-sm-3 control-label" for="input-name">{{ entry_name }}</label>
+            <div class="col-sm-9">
+              <input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control" />
+              {% if (error_name) %}
+              <div class="text-danger">{{ error_name }}</div>
+              {% endif %}
+            </div>
+          </div>
+          <div class="form-group form-group-popover">
+            <label class="col-xs-12 col-sm-3 control-label">{{ entry_link_to }}</label>
+            <div class="col-xs-6 col-sm-5 col-md-3">
+              <div class="btn-group-vertical btn-block" data-toggle="buttons">
+                {% if (link_to == 'auto') %}
+                <label class="btn btn-default active" data-content="{{ help_link_to_auto }}">
+                  <input type="radio" name="link_to" value="auto" checked="checked" /> {{ text_link_to_auto }}
+                </label>
+                {% else %}
+                <label class="btn btn-default" data-content="{{ help_link_to_auto }}">
+                  <input type="radio" name="link_to" value="auto" /> {{ text_link_to_auto }}
+                </label>
+                {% endif %}
+
+                {% if (link_to == 'self') %}
+                <label class="btn btn-default active" data-content="{{ help_link_to_self }}">
+                  <input type="radio" name="link_to" value="self" checked="checked" /> {{ text_link_to_self }}
+                </label>
+                {% else %}
+                <label class="btn btn-default" data-content="{{ help_link_to_self }}">
+                  <input type="radio" name="link_to" value="self" /> {{ text_link_to_self }}
+                </label>
+                {% endif %}
+
+                {% if (link_to == 'category') %}
+                <label class="btn btn-default active" data-content="{{ help_link_to_category }}">
+                  <input type="radio" name="link_to" value="category" checked="checked" /> {{ text_link_to_category }}
+                </label>
+                {% else %}
+                <label class="btn btn-default" data-content="{{ help_link_to_category }}">
+                  <input type="radio" name="link_to" value="category" /> {{ text_link_to_category }}
+                </label>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label">{{ entry_collapse_parent }}</label>
+            <div class="col-sm-9 col-md-4">
+              <div class="input-group">
+                <span class="input-group-btn" data-toggle="buttons">
+                  {% if (collapse_parent) %}
+                  <label class="btn btn-default active">
+                    <input type="radio" name="collapse_parent" value="1" checked="checked" /> {{ text_yes }}
+                  </label>
+                  <label class="btn btn-default">
+                    <input type="radio" name="collapse_parent" value="0" /> {{ text_no }}
+                  </label>
+                  {% else %}
+                  <label class="btn btn-default">
+                    <input type="radio" name="collapse_parent" value="1" /> {{ text_yes }}
+                  </label>
+                  <label class="btn btn-default active">
+                    <input type="radio" name="collapse_parent" value="0" checked="checked" /> {{ text_no }}
+                  </label>
+                  {% endif %}
+                </span>
+                <input type="hidden" name="collapse_parent_limit" value="{{ collapse_parent_limit }}" />
+                <input type="number" min="0" max="255" name="collapse_parent_limit" value="{{ collapse_parent_limit }}" placeholder="{{ entry_collapse_parent_limit }}" id="input-parent-collapse-limit" class="form-control" data-toggle="popover" data-trigger="focus" data-placement="right" data-content="{{ help_collapse_parent_limit }}" title="{{ entry_collapse_parent_limit }}" />
+              </div><!-- /.input-group -->
+            </div>
+            <span class="col-sm-offset-3 col-sm-9 help-block"><i class="fa fa-info-circle"></i> {{ help_collapse_parent }}</span>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label">{{ entry_collapse_child }}</label>
+            <div class="col-sm-9 col-md-4">
+              <div class="input-group">
+                <span class="input-group-btn" data-toggle="buttons">
+                  {% if (collapse_child) %}
+                  <label class="btn btn-default active">
+                    <input type="radio" name="collapse_child" value="1" checked="checked" /> {{ text_yes }}
+                  </label>
+                  <label class="btn btn-default">
+                    <input type="radio" name="collapse_child" value="0" /> {{ text_no }}
+                  </label>
+                  {% else %}
+                  <label class="btn btn-default">
+                    <input type="radio" name="collapse_child" value="1" /> {{ text_yes }}
+                  </label>
+                  <label class="btn btn-default active">
+                    <input type="radio" name="collapse_child" value="0" checked="checked" /> {{ text_no }}
+                  </label>
+                  {% endif %}
+                </span>
+                <input type="hidden" name="collapse_child_limit" value="{{ collapse_child_limit }}" />
+                <input type="number" min="0" max="255" name="collapse_child_limit" value="{{ collapse_child_limit }}" placeholder="{{ entry_collapse_child_limit }}" id="input-child-collapse-limit" class="form-control" data-toggle="popover" data-trigger="focus" data-placement="right" data-content="{{ help_collapse_child_limit }}" title="{{ entry_collapse_child_limit }}" />
+              </div><!-- /.input-group -->
+            </div>
+            <span class="col-sm-offset-3 col-sm-9 help-block"><i class="fa fa-info-circle"></i> {{ help_collapse_child }}</span>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label">{{ entry_show_total }}</label>
+            <div class="col-sm-9">
+              <div class="btn-group btn-group-block" data-toggle="buttons">
+                {% if (show_total) %}
+                <label class="btn btn-default active">
+                  <input type="radio" name="show_total" value="1" checked="checked" /> {{ text_yes }}
+                </label>
+                <label class="btn btn-default">
+                  <input type="radio" name="show_total" value="0" /> {{ text_no }}
+                </label>
+                {% else %}
+                <label class="btn btn-default">
+                  <input type="radio" name="show_total" value="1" /> {{ text_yes }}
+                </label>
+                <label class="btn btn-default active">
+                  <input type="radio" name="show_total" value="0" checked="checked" /> {{ text_no }}
+                </label>
+                {% endif %}
+              </div>
+              <span class="help-block"><i class="fa fa-info-circle"></i> {{ help_show_total }}</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-3 control-label">{{ entry_status }}</label>
+            <div class="col-sm-9">
+              <div class="btn-group btn-group-block" data-toggle="buttons">
+                {% if (status) %}
+                <label class="btn btn-default active">
+                  <input type="radio" name="status" value="1" checked="checked" /> {{ text_enabled }}
+                </label>
+                <label class="btn btn-default">
+                  <input type="radio" name="status" value="0" /> {{ text_disabled }}
+                </label>
+                {% else %}
+                <label class="btn btn-default">
+                  <input type="radio" name="status" value="1" /> {{ text_enabled }}
+                </label>
+                <label class="btn btn-default active">
+                  <input type="radio" name="status" value="0" checked="checked" /> {{ text_disabled }}
+                </label>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript"><!--
+$(function() {
+  var TOOLTIP = { container: 'body', html: true, delay: { 'show': 500, 'hide': 0 } };
+  var POPOVER = { container: 'body', html: true, delay: { 'show': 500, 'hide': 200 } };
+
+  $('[data-toggle="popover"]').each(function(i) {
+    $(this).popover($.extend({}, POPOVER, $(this).data()));
+  });
+
+  $('[data-toggle="tooltip"]').each(function(i) {
+    $(this).tooltip($.extend({}, TOOLTIP, $(this).data()));
+  });
+
+  // Get #column-left transition-duration
+  var
+    $columnLeft = $('#column-left'),
+    columnWidth = $columnLeft.width(),
+    cssDuration = $columnLeft.css('transition-duration'),
+    transitionDuration = parseFloat(cssDuration.replace(/[^0-9\.]+/g, ''));
+
+  if (/[0-9\.]+?s$/.test(cssDuration)) {
+    transitionDuration *= 1000;
+  }
+
+  if (transitionDuration) {
+    $columnLeft.data('transition-duration', transitionDuration);
+  } else {
+    function checkColumnLeft() {
+      if (columnWidth != $columnLeft.width()) {
+        columnWidth = $columnLeft.width();
+
+        $columnLeft.trigger('resize');
+      }
+
+      setTimeout(checkColumnLeft, 1000);
+    }
+
+    checkColumnLeft();
+  }
+
+  // Categories limit collapse input visible
+  $('input[name="collapse_parent"], input[name="collapse_child"]').on('change', function(e, isTrigger) {
+    isTrigger = !!isTrigger;
+
+    if ($(this).val() > 0) {
+      if (!isTrigger) {
+        $(this).closest('.input-group').find('input[type="number"]').removeAttr('disabled').removeClass('disabled').trigger('focus', [true]);
+      } else {
+        $(this).closest('.input-group').find('input[type="number"]').removeAttr('disabled').removeClass('disabled');
+      }
+    } else {
+      $(this).closest('.input-group').find('input[type="number"]').attr('disabled', 'disabled').addClass('disabled');
+    }
+  }).filter(':checked').trigger('change', [true]);
+
+  // Collapse
+  $(document).on('click.oc-collapse', '[data-toggle="oc-collapse"]', function(e) {
+    e.preventDefault();
+
+    var $element = $(this), $target = $($element.data().target), $parent = $element.data().parent;
+
+    if ($target.length < 1) {
+      return;
+    }
+
+    $target.collapse({
+      'parent': $parent
+    });
+
+    if (false === $target.data().toggle) {
+      if ($element.attr('aria-expanded') == 'true') {
+        $target.collapse('show');
+      } else {
+        $target.collapse('hide');
+      }
+    } else {
+      $target.collapse('toggle');
+    }
+  });
+
+  // BTN & Popover
+  $('.form-group-popover input').on('change', function(e, isTrigger) {
+    var
+      $btn = $(this).parent(),
+      $nav = $(this).closest('.form-group-popover');
+
+    $nav.find('.popover').popover('hide');
+
+    $btn.popover({
+      animation: false,
+      content: function() {
+        return $btn.data().content
+      },
+      container: $nav,
+      viewport: { selector: $nav, padding: 15 },
+      html: true,
+      placement: 'right',
+      trigger: 'manual'
+    }).popover('show');
+  });
+
+  var checkNavPopover = function() {
+    $('.form-group-popover:visible input:checked').trigger('change', [true]);
+  };
+
+  $('.collapse').on('shown.bs.collapse', function() {
+    if ($(this).find('.form-group-popover').length > 0) {
+      checkNavPopover();
+    }
+  });
+
+  $('.nav-tabs a').on('shown.bs.tab', checkNavPopover);
+
+  if ($('#column-left').data('transition-duration')) {
+    $('#column-left').on('bsTransitionEnd', checkNavPopover).emulateTransitionEnd($('#column-left').data('transition-duration'));
+  } else {
+    $('#column-left').on('resize', checkNavPopover);
+  }
+
+  checkNavPopover();
+});
+//--></script>
+{{ footer }}

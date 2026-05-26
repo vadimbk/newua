@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>oct_subscribe</code>
+	<name>Octemplates - Subscribe</name>
+	<version>1.0.0</version>
+	<author>Octemplates</author>
+	<link>http://octemplates.net/</link>
+	<file path="catalog/controller/common/footer.php">
+		<operation error="skip">
+			<search><![CDATA[$this->load->language('common/footer');]]></search>
+			<add position="after"><![CDATA[
+			$data['oct_subscribe_form_data'] = $this->config->get('oct_subscribe_form_data');
+			$data['oct_subscribe_status'] = $this->config->get('oct_subscribe_status');
+			$data['oct_subscribe_day_now'] = date("Y-m-d H:i:s");
+			
+			if (isset($data['oct_ultrastore_data']['footer_subscribe']) && $data['oct_ultrastore_data']['footer_subscribe'] == 'on') {
+				$data['oct_subscribe'] = $this->load->controller('octemplates/module/oct_subscribe');
+			}
+			]]></add>
+		</operation>
+	</file>
+	<file path="catalog/view/theme/oct_ultrastore/template/common/footer.twig">
+		<operation error="skip">
+			<search><![CDATA[{% for script in scripts %}]]></search>
+			<add position="before"><![CDATA[
+			{% if oct_subscribe_status is defined and oct_subscribe_status %}
+			<script>
+			function getSubscribeCookie(name) {
+				var matches = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"));
+				return matches ? decodeURIComponent(matches[1]) : 'undefined';
+			}
+			
+			$(function() {
+				if (getSubscribeCookie('oct_subscribe') == 'undefined') {
+					setTimeout(function(){
+						octPopupSubscribe();
+					}, {{ oct_subscribe_form_data.seconds ? oct_subscribe_form_data.seconds : '10000' }});
+					
+					const date = new Date('{{ oct_subscribe_day_now }}'.replace(/-/g, "/"));
+					date.setTime(date.getTime() + ({{ oct_subscribe_form_data.expire ? oct_subscribe_form_data.expire : '1' }} * 24 * 60 * 60 * 1000));
+					document.cookie = 'oct_subscribe=1; path=/; expires=' + date.toUTCString();
+				}
+			});
+			</script>
+			{% endif %}
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search><![CDATA[<div class="container footer-sub">]]></search>
+			<add position="after"><![CDATA[
+			{% if oct_subscribe is defined %}
+			{{ oct_subscribe }}
+			{% endif %}
+			]]></add>
+		</operation>
+	</file>
+</modification>

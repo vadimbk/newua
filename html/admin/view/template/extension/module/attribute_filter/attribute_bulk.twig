@@ -1,0 +1,52 @@
+      <div class="" id="tab-attribute-group" style="display:block">
+		<fieldset class="form-inline">
+          <legend>{{ text_change_group }} </legend>
+	      <div class="input-group">
+			<span class="input-group-addon">  
+              <select name="attribute_group_id" id="input-attribute-group" class="form-control">
+                <option value="0"></option>
+                {% for attribute_group in attribute_groups %}
+                <option value="{{ attribute_group['attribute_group_id'] }}">{{ attribute_group['name'] }}</option>
+				{% endfor %}
+              </select>
+			</span>
+			<span class="input-group-addon">     
+				<button onclick="change_group()" type="button" id="button-bulk" class="btn btn-primary pull-right"><i class="fa fa-cogs"></i> {{ button_change_group }}</button>
+			</span>
+			</div>
+		</fieldset>
+	  </div>
+<script>
+function change_group(){
+	data = $('input[name^=\'selected\']:checked, select[name=attribute_group_id]');
+	$.ajax({
+		url:'{{ bulkChangeGroup }}' + getFilter(),
+		method: 'POST',
+		data: data,
+		success: function(json){
+			if (json['success']){
+				document.location.reload(true);
+			}
+			if (json['error']){
+				$('#bulk_error').remove();
+				$('#tab-attribute-group').prepend('<div class="text-warning">' + json['error'] + '</div>');
+			}
+		}
+	});
+}
+/*
+$(document).ready(function(){
+	$('input[name^=\'selected\']').on('change', function() {
+		var selected = $('input[name^=\'selected\']:checked');
+		if (selected.length) {
+			$('#tab-attribute-group').show();
+		} else {
+			$('#tab-attribute-group').hide();
+		}
+	});
+	if (!$('input[name^=\'selected\']:checked').length) {
+		$('#tab-attribute-group').hide();
+	}
+});
+*/
+</script>

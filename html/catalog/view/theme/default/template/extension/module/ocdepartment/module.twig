@@ -1,0 +1,317 @@
+{#<nav class="navbar navbar-default visible-xs" id="ocdepartment-mobile">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#ocdepartment-mobile-container" aria-expanded="false" style="padding: 6px 10px;"><i class="fa fa-bars"></i></button>
+      {% if (parent) %}
+		<a href="{{ parent.href }}" class="navbar-brand"><i class="fa fa-arrow-left"></i>&nbsp; {{ parent.name }}</a>
+      {% else %}
+      <span class="navbar-brand">
+        {{ heading_title }}
+        {% if (manufacturer) %}
+        {{ manufacturer }}
+        {% endif %}
+      </span>
+      {% endif %}
+    </div>
+    <div class="collapse navbar-collapse" id="ocdepartment-mobile-container"></div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+#}
+<div id="ocdepartment-container" class="ocdepartment-call">
+  <div class="panel panel-default module-ocdepartment">
+    <div class="panel-heading">
+      {% if (parent) %}
+		<a href="{{ parent.href }}"><i class="fa fa-arrow-left"></i>&nbsp; {{ parent.name }}</a>
+      {% else %}
+		{{ heading_title }}
+		{% if (manufacturer) %}
+			{{ manufacturer }}
+		{% endif %}
+      {% endif %}
+    </div>
+    <div class="list-group">
+      {% if (collapse_parent and collapse_parent_limit > 0 and categories|length > collapse_parent_limit) %}
+		{% set hidden_parent_categories = categories[collapse_parent_limit:] %}
+		{% set visible_parent_categories = categories[:collapse_parent_limit] %}
+      {% else %}
+		{% set hidden_parent_categories = [] %}
+		{% set visible_parent_categories = categories %}
+      {% endif %}
+		
+      {% for category in visible_parent_categories %}
+		{% include 'default/template/extension/module/ocdepartment/category_item.twig' %}
+      {% endfor %}
+
+      {% if (hidden_parent_categories|length > 0) %}
+
+		  {% for key_1,category in hidden_parent_categories %}
+			  {% set active = category.active %}
+			  {% for key_2,child in category.children %}
+				  {% if (child.active) %}
+					{% set active = constant('true') %}
+				  {% endif %}
+			  {% endfor %}
+
+			  {% if (active) %}
+				{% include 'default/template/extension/module/ocdepartment/category_item.twig' %}
+				{% set hidden_parent_categories = { (key_1): false } + hidden_parent_categories %}
+			  {% endif %}
+		  {% endfor %}
+
+      {% endif %}
+
+      {% if (hidden_parent_categories|length > 0) %}
+      <div class="collapse" id="ocdepartment-hidden-categories">
+        {% for category in hidden_parent_categories %}
+        {% include 'default/template/extension/module/ocdepartment/category_item.twig' %}
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+    {% if (hidden_parent_categories|length > 0) %}
+    <div class="panel-footer">
+      <button type="button" data-target="#ocdepartment-hidden-categories" data-toggle="collapse" data-show-text="{{ button_show }} <i class='fa fa-fw fa-angle-down'></i>" data-hide-text="{{ button_hide }} <i class='fa fa-fw fa-angle-up'></i>" class="btn btn-primary btn-block">{{ button_show }} <i class="fa fa-fw fa-angle-down"></i></button>
+    </div>
+    {% endif %}
+  </div>
+</div>
+<script type="text/javascript"><!--
+/*$('#ocdepartment-container .list-group>.list-group-item').click(function () {
+  $(this).toggleClass('active-item');
+  $('.toggle-cat-'+$(this).data('catid')).toggleClass('active');
+});
+*/
+$('#ocdepartment-container').on('click', '.list-group>.list-group-item', function () {
+  $(this).toggleClass('active-item');
+  $('.toggle-cat-' + $(this).data('catid')).toggleClass('active');
+});
+/*
+$('#ocdepartment-container .for-link-wrap i').click(function () {
+  $(this).closest('.for-link-wrap').toggleClass('active-item');
+  $('.toggle-cat-'+$(this).data('catid')).toggleClass('active');
+});
+*/
+$('#ocdepartment-container').on('click', '.for-link-wrap i', function () {
+  $(this).closest('.for-link-wrap').toggleClass('active-item');
+  $('.toggle-cat-' + $(this).data('catid')).toggleClass('active');
+});
+$(function() {
+  if ('undefined' == typeof $.fn.collapse || 'undefined' == typeof $.fn.carousel) {
+    console.error('Error: OCDepartment\'s requires BootStrap collapse and carousel. Please, install this plugins to your store');
+
+    return;
+  }
+
+  $('.ocd-child-carousel').on('slid.bs.carousel', function(e) {
+    if ($(e.relatedTarget).index() > 0) {
+      var $carousel = $(e.target);
+
+      $carousel.find('.ocd-child-collapse').collapse('show').one('hidden.bs.collapse', (e) => $carousel.carousel('prev'));
+      $carousel.find('.ocd-child-collapse').find('.list-group-item').fadeBg({ type: 'info' });
+    }
+  });
+
+  $('#ocdepartment-hidden-categories').on({
+    'shown.bs.collapse': (e) => $('[data-target="#ocdepartment-hidden-categories"]').button('hide'),
+    'hidden.bs.collapse': (e) => $('[data-target="#ocdepartment-hidden-categories"]').button('show')
+  });
+
+  var sticky = true;
+
+  if (sticky && $('#content').length && $('#column-left:visible, #column-left:visible').length > 0) {
+    if ($('#content').outerHeight(true) > $(window).height() && ($('#column-left').height() > $('#content').outerHeight(true) || $('#column-right').height() > $('#content').outerHeight(true))) {
+      setTimeout(function() {
+        $('#content').css({
+          'position': 'sticky',
+          'top': -($('#content').outerHeight(true) - $(window).height() + 30) + 'px'
+        });
+      }, 100);
+    }
+  }
+
+  // Mobile version
+  $('.breadcrumb').after($('#ocdepartment-mobile').remove().get(0).outerHTML);
+
+  var $mobileContainer = $('#ocdepartment-mobile');
+
+  function toggleMobile(isMobile) {
+    if (isMobile) {
+      if ($('#ocdepartment-mobile-container').html() == '') {
+        $('#ocdepartment-mobile-container').html($('#ocdepartment-container').html());
+
+        $('#ocdepartment-container').html('');
+      }
+    } else {
+      if ($('#ocdepartment-container').html() == '') {
+        $('#ocdepartment-container').html($('#ocdepartment-mobile-container').html());
+
+        $('#ocdepartment-mobile-container').html('');
+      }
+    }
+  }
+
+  var resizeTimer;
+
+  $(window).on('resize', function() {
+    clearTimeout(resizeTimer);
+
+    resizeTimer = setTimeout(function() {
+      toggleMobile($mobileContainer.is(':visible'))
+    }, 250);
+  }).trigger('resize');
+});
+
+// Transition Fade backgound-color
+// Author: SooR
++function($) {
+  'use strict';
+
+  // FADEBG PUBLIC CLASS DEFINITION
+  // ==============================
+
+  var FadeBG = function(element, options) {
+    this.timer = null;
+
+    this.$element = $(element);
+
+    this.options = $.extend({}, FadeBG.DEFAULTS, this.$element.data(), options);
+
+    if (this.options.delay < 10) {
+      this.options.delay = 10;
+    }
+
+    this.fade();
+  };
+
+  FadeBG.DEFAULTS = {
+    delay: 250,
+    type: 'success'
+  };
+
+  FadeBG.prototype.fade = function() {
+    clearTimeout(this.timer);
+
+    var bgClass;
+
+    if (this.$element.hasClass('list-group-item')) {
+      bgClass = 'list-group-item-' + this.options.type;
+    } else if (this.$element.is('td') || this.$element.is('tr')) {
+      bgClass = this.options.type;
+    } else {
+      bgClass = 'bg-' + this.options.type;
+    }
+
+    this.timer = setTimeout(function(that) {
+      that.$element.addClass('bg-transition');
+    }, this.options.delay, this);
+
+    this.$element.removeClass(bgClass + ' bg-transition').addClass(bgClass).one('bsTransitionEnd', function(e) {
+      $(this).removeClass(bgClass + ' bg-transition');
+    });
+  };
+
+  // FADEBG PLUGIN DEFINITION
+  // ========================
+
+  function Plugin(option) {
+    return this.each(function() {
+      var $this   = $(this);
+      var options = typeof option == 'object' && option;
+
+      var data = new FadeBG(this, options);
+
+      if (typeof option == 'string') {
+        data[option].apply(data, Array.prototype.slice.call(arguments, 1));
+      }
+    })
+  }
+
+  $.fn.fadeBg             = Plugin
+  $.fn.fadeBg.Constructor = FadeBG
+}(jQuery);
+//--></script>
+
+<style>
+
+#ocdepartment-container .module-ocdepartment .list-group-item{
+padding: 5px 6px !important;
+}
+
+#ocdepartment-container .list-group-item-warning {
+    background-color: #5f87d1;
+    color: #fff;
+}
+
+#ocdepartment-container .module-ocdepartment .level_2{
+margin-bottom:5px;
+}
+
+#ocdepartment-container .toggle-wrap.active{
+margin-left: 20px;
+  margin-top: -10px;
+}
+
+.for-link-wrap i:hover {
+    background-color: #fff!important;
+}
+
+#ocdepartment-container .list-group>.list-group-item {
+	display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+    align-items: center;
+	margin-bottom: 10px;
+}
+.toggle-wrap {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease, opacity 0.5s ease;
+  opacity: 0;
+}
+
+.toggle-wrap.active {
+  max-height: 500px; /* Укажите максимально возможную высоту */
+  opacity: 1;
+}
+
+.wrap-sub-cat3 {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease, opacity 0.5s ease;
+  opacity: 0;
+}
+
+.wrap-sub-cat3.active {
+  max-height: 500px; /* Укажите максимально возможную высоту */
+  opacity: 1;
+}
+
+.list-group-item.active-item .fa-arrow-down:before {
+    content: "\f062";
+}
+#column-left .list-group-item.level_3{
+	padding-left: 15px !important;
+}
+
+.for-link-wrap{
+	display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    /* border-bottom: 1px solid #D9D9D9; */
+    /* padding: 1px; */
+    gap: 10px;
+}
+.for-link-wrap i{
+	width: 24px;
+    /* height: 24px; */
+    padding: 5px 0px !important;
+    text-align: center;
+    cursor: pointer;
+}
+.for-link-wrap.active-item .fa-arrow-down:before {
+    content: "\f062";
+}
+.for-link-wrap i:hover{
+	background-color:#cecece;
+}
+</style>

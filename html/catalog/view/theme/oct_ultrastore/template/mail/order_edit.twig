@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/strict.dtd">
+<html>
+<body style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #000000;">
+<div style="width: 680px;">
+<a href="{{ store_url }}" title="{{ store_name }}"><img src="{{ logo }}" alt="{{ store_name }}" style="margin-bottom: 20px; border: none; max-width: 250px; display: block; margin: 20px auto;"/></a>
+{{ text_order_id }} {{ order_id }}<br>
+{{ text_date_added }} {{ date_added }}<br><br>
+
+{{ text_order_status }}<br><br>
+
+<b>{{ order_status }}</b><br><br>
+
+{{ link_account }}<br><br>
+
+{% if link %}
+{{ text_link }}<br><br>
+
+{{ link }}
+{% endif %}
+{% if comment %}
+
+{{ text_comment }}<br><br>
+
+{{ comment }}
+{{ text_footer }}<br><br>
+{% else %} 
+{{ text_footer }}<br><br>
+{% endif %}
+
+
+	<div style="color: #757575; font-size: 12px; text-align: center; margin: 30px 0;">
+		{% if oct_ultrastore_contact_address %}
+		{{ oct_ultrastore_contact_address }}
+		{% endif %}
+		<div style="padding: 15px 0;">
+		{% if oct_ultrastore_contact_telephone %}
+			{% for phone in oct_ultrastore_contact_telephone %}
+				<a style="font-size: 16px; line-height: 24px; font-weight: bold; color: #333333;" href="tel:{{ phone }}">{{ phone }}</a><br />
+			{% endfor %}
+		{% endif %}
+		</div>
+		{% if oct_ultrastore_contact_open %}
+			{% for contact_open in oct_ultrastore_contact_open %}
+				{{ contact_open }}
+			{% endfor %}
+		{% endif %}
+		<div style="padding: 15px 0;">
+		{% if oct_ultrastore_socials %}
+			{% for social in oct_ultrastore_socials %}
+				<a style="font-size: 18px; line-height: 27px; font-weight: bold; color: #000000;" href="{{ social.link }}">{{ social.title }}</a><br />
+			{% endfor %}
+		{% endif %}
+		</div>
+	</div>
+
+</div>
+</body>
+</html>

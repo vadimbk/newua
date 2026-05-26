@@ -1,0 +1,16 @@
+{% if advtags_gtag_status and advtags_gtag_tracker %}
+<script async src="https://www.googletagmanager.com/gtag/js?id={{advtags_gtag_tracker}}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '{{advtags_gtag_tracker}}');
+</script>
+{% if gtag_events %}
+  <script>
+    {% for ev in gtag_events %}
+      gtag('event', '{{ ev.type }}', {{ ev.params|json_encode(constant('JSON_UNESCAPED_SLASHES')) }} );
+    {% endfor %}
+  </script>
+{%endif%}
+{%endif%}

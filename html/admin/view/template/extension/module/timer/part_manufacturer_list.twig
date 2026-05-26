@@ -1,0 +1,7 @@
+<div class="scrollbox manufacturers">
+	{% for manufacturer in manufacturers %}  
+		<label class="level-0">
+		<input type="checkbox" name="manufacturers[]" value="{{ manufacturer.manufacturer_id }}" class="manufacturer"/>{{ manufacturer.name }}
+		</label>
+	{% endfor %}
+</div>

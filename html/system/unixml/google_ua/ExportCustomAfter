@@ -1,0 +1,5 @@
+<?php
+//Этот файл - кастомный код модуля UniXML, фид google_ua
+//info: https://unixml.pro
+
+$data['product_type'] = true;

@@ -1,0 +1,1091 @@
+<IfModule Litespeed>
+RewriteEngine On
+
+
+# Serve static files directly (bypass PHP)
+RewriteCond %{REQUEST_URI} \.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|pdf)$ [NC]
+RewriteRule ^(.*)$ - [L]
+
+
+
+# Block aggressive bots
+RewriteCond %{HTTP_USER_AGENT} Bytespider [NC]
+RewriteRule .* - [F,L]
+
+Deny from 199.47.82.18
+# Tencent Cloud — distributed bot abuse 2026-05-25
+Deny from 43.128.0.0/11
+Deny from 43.160.0.0/12
+Deny from 49.51.0.0/16
+Deny from 119.28.0.0/15
+Deny from 124.156.0.0/16
+Deny from 150.109.0.0/16
+Deny from 162.62.0.0/16
+Deny from 170.106.0.0/16
+
+# Allow access for AHRefs
+
+Allow from 54.36.148.0/24
+Allow from 54.36.149.0/24
+Allow from 195.154.122.0/24
+Allow from 195.154.123.0/24
+Allow from 195.154.126.0/24
+Allow from 195.154.127.0/24
+Allow from 51.222.253.0/26
+
+
+
+RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+RewriteCond %{HTTPS} !on
+RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+
+# 1.To use URL Alias you need to be running apache with mod_rewrite enabled.
+
+# 2. In your opencart directory rename htaccess.txt to .htaccess.
+
+# For any support issues please visit: http://www.opencart.com
+
+Options +FollowSymlinks
+
+# Prevent Directoy listing
+Options -Indexes
+
+# Prevent Direct Access to files
+<FilesMatch "(?i)((\.tpl|.twig|\.ini|\.log|(?<!robots)\.txt))">
+ Require all denied
+## For apache 2.2 and older, replace "Require all denied" with these two lines :
+# Order deny,allow
+# Deny from all
+</FilesMatch>
+
+# X-Frame-Options
+<IfModule mod_headers.c>
+	Header always append X-Frame-Options SAMEORIGIN
+</IfModule>
+
+<IfModule mod_deflate.c>
+# compress text, HTML, JavaScript, CSS, and XML
+AddOutputFilterByType DEFLATE text/plain
+AddOutputFilterByType DEFLATE text/html
+AddOutputFilterByType DEFLATE text/xml
+AddOutputFilterByType DEFLATE text/css
+AddOutputFilterByType DEFLATE application/xml
+AddOutputFilterByType DEFLATE application/xhtml+xml
+AddOutputFilterByType DEFLATE application/rss+xml
+AddOutputFilterByType DEFLATE application/javascript
+AddOutputFilterByType DEFLATE application/x-javascript
+</IfModule>
+
+Header add Link "</catalog/view/theme/oct_ultrastore/stylesheet/fontawesome-free-5.6.1-web/webfonts/fa-regular-400.woff2>; rel=preload; as=font; type=font/woff2; crossorigin" 
+Header add Link "</catalog/view/theme/oct_ultrastore/stylesheet/fontawesome-free-5.6.1-web/webfonts/fa-solid-900.woff2>; rel=preload; as=font; type=font/woff2; crossorigin"
+
+RewriteCond %{HTTP_ACCEPT} "image/webp"
+RewriteCond %{REQUEST_FILENAME}.webp -f
+RewriteRule ^(.*).(jpg|png|gif) $1.$2.webp [T=image/webp,L]
+
+#### Prevent kill signal
+RewriteRule .* - [E=noabort:1]
+
+# SEO URL Settings
+RewriteEngine On
+
+
+# If your opencart installation does not run on the main web folder make sure you folder it does run in ie. / becomes /shop/
+
+RewriteBase /
+
+
+#Redirect / v konce
+RewriteRule ^admin/ - [L]
+RewriteCond %{HTTP_HOST} (.*)
+RewriteCond %{REQUEST_URI} /$ [NC]
+RewriteRule ^(.*)(/)$ $1 [L,R=301]
+
+#Redirect / vseredine
+RewriteCond %{THE_REQUEST} \s/+(.*?)/{2,}([^\s]*)
+RewriteRule ^ %1/%2 [R=302,L,NE]
+RewriteRule (.+)/$ /$1 [L,R=301]
+
+#Redirect page=1
+RewriteCond %{QUERY_STRING} ^page=1$
+RewriteRule (.*) $1? [L,R=301]
+
+#Redirect %20
+RewriteRule ^(.*)\s(.*) /$1$2 [L,R=301]
+
+# Redirect technical blog URL to SEO URL
+RewriteCond %{QUERY_STRING} ^route=octemplates/blog/oct_bloglatest$ [NC]
+RewriteCond %{REQUEST_URI} ^/uk/index\.php$ [NC]
+RewriteRule ^uk/index\.php$ /uk/blog? [R=301,L]
+
+RewriteCond %{QUERY_STRING} ^route=octemplates/blog/oct_bloglatest$ [NC]
+RewriteCond %{REQUEST_URI} ^/index\.php$ [NC]
+RewriteRule ^index\.php$ /blog? [R=301,L]
+
+
+RewriteRule ^sitemap.xml$ index.php?route=extension/feed/google_sitemap [L]
+RewriteRule ^filter_sitemap.xml$ index.php?route=extension/feed/ocfilter_sitemap [L]
+RewriteRule ^uk_filter_sitemap.xml$ uk/index.php?route=extension/feed/ocfilter_sitemap [L]
+RewriteRule ^googlebase.xml$ index.php?route=extension/feed/google_base [L]
+RewriteRule ^system/storage/(.*) index.php?route=error/not_found [L]
+RewriteRule ^sitemap_index.xml$ index.php?route=extension/hbseo/sitemap [L,QSA] 
+RewriteRule ^sitemaps/([^?]*)/product_sitemap_([0-9]+).xml$ index.php?route=extension/hbseo/sitemap/products&hbxmllang=$1&page=$2 [L,QSA] 
+RewriteRule ^sitemaps/([^?]*)/product_tags_sitemap_([0-9]+).xml$ index.php?route=extension/hbseo/sitemap/product_tags&hbxmllang=$1&page=$2 [L,QSA] 
+RewriteRule ^sitemaps/([^?]*)/category_sitemap.xml$ index.php?route=extension/hbseo/sitemap/category&hbxmllang=$1 [L,QSA] 
+RewriteRule ^sitemaps/([^?]*)/brand_sitemap.xml$ index.php?route=extension/hbseo/sitemap/brand&hbxmllang=$1 [L,QSA] 
+RewriteRule ^sitemaps/([^?]*)/information_sitemap.xml$ index.php?route=extension/hbseo/sitemap/information&hbxmllang=$1 [L,QSA] 
+RewriteRule ^sitemaps/([^?]*)/category_to_product_sitemap.xml$ index.php?route=extension/hbseo/sitemap/category_to_product&hbxmllang=$1 [L,QSA] 
+RewriteRule ^sitemaps/([^?]*)/brand_to_product_sitemap.xml$ index.php?route=extension/hbseo/sitemap/brand_to_product&hbxmllang=$1 [L,QSA] 
+RewriteRule ^sitemaps/misc_sitemap.xml$ index.php?route=extension/hbseo/sitemap/misc [L,QSA] 
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !.*\.(ico|gif|jpg|jpeg|png|js|css)
+RewriteRule ^([^?]*) index.php?_route_=$1 [L,QSA]
+
+RewriteCond %{REQUEST_URI} ^(.*?)\/{2,}(.*?)$
+    RewriteRule . %1/%2 [L,R=301]
+    RewriteCond %{THE_REQUEST} //
+    RewriteRule .* /$0 [R=301,L]
+
+
+RewriteCond %{QUERY_STRING} ^route=common/home$
+RewriteCond %{REQUEST_METHOD} !^POST$
+RewriteRule ^index\.php$ /? [R=301,L]
+
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.php\ HTTP/
+RewriteRule ^index\.php$ / [R=301,L]
+
+
+Redirect 301 /sitemap.xml /sitemap_index.xml
+
+Redirect 301 /metalloiskateli /
+Redirect 301 /uk/metaloshukachi /uk
+Redirect 301 /meteostancii /
+Redirect 301 /uk/meteostanciyi /uk
+Redirect 301 /izmeritelnye-pribory/analizatory-batarej /
+Redirect 301 /uk/vymiryuvalni-prylady/analizatory-batarej /uk
+Redirect 301 /analizatory-batarej /
+Redirect 301 /uk/analizatory-batarej /uk
+
+#Redirect categories
+
+Redirect 301 /oborudovanie-dlya-sto/garazhnoe-oborudovanie /garazhnoe-oborudovanie
+Redirect 301 /oborudovanie-dlya-sto/gidravlicheskoe-oborudovanie /gidravlicheskoe-oborudovanie
+		
+Redirect 301 /oborudovanie-dlya-sto/diagnosticheskoe-oborudovanie /diagnosticheskoe-oborudovanie
+Redirect 301 /oborudovanie-dlya-sto/diagnosticheskoe-oborudovanie/avtoskanery /avtoskanery
+Redirect 301 /oborudovanie-dlya-sto/diagnosticheskoe-oborudovanie/vakuummetry /vakuummetry
+Redirect 301 /oborudovanie-dlya-sto/diagnosticheskoe-oborudovanie/dymogeneratory /dymogeneratory
+Redirect 301 /oborudovanie-dlya-sto/diagnosticheskoe-oborudovanie/oborudovanie-dlya-regulirovki-far /oborudovanie-dlya-regulirovki-far
+Redirect 301 /oborudovanie-dlya-sto/diagnosticheskoe-oborudovanie/obsluzhivanie-i-remont-forsunok /obsluzhivanie-i-remont-forsunok
+Redirect 301 /oborudovanie-dlya-sto/diagnosticheskoe-oborudovanie/proverka-svechej-zazhiganiya /proverka-svechej-zazhiganiya
+Redirect 301 /oborudovanie-dlya-sto/diagnosticheskoe-oborudovanie/stetoskopy /stetoskopy
+Redirect 301 /oborudovanie-dlya-sto/diagnosticheskoe-oborudovanie/stroboskopy /stroboskopy
+Redirect 301 /oborudovanie-dlya-sto/diagnosticheskoe-oborudovanie/testery-davleniya-masla /testery-davleniya-masla
+Redirect 301 /oborudovanie-dlya-sto/diagnosticheskoe-oborudovanie/testery-inzhektora /testery-inzhektora
+Redirect 301 /oborudovanie-dlya-sto/diagnosticheskoe-oborudovanie/endoskopy /endoskopy
+		
+		
+Redirect 301 /oborudovanie-dlya-sto/domkraty-upory /domkraty-upory
+Redirect 301 /oborudovanie-dlya-sto/domkraty-upory/butylochnye-domkraty /butylochnye-domkraty
+Redirect 301 /oborudovanie-dlya-sto/domkraty-upory/domkraty-pnevmaticheskie /domkraty-pnevmaticheskie
+Redirect 301 /oborudovanie-dlya-sto/domkraty-upory/podkatnye-gidravlicheskie-domkraty /podkatnye-gidravlicheskie-domkraty
+Redirect 301 /oborudovanie-dlya-sto/domkraty-upory/podstavki-pod-avtomobil /podstavki-pod-avtomobil
+Redirect 301 /oborudovanie-dlya-sto/domkraty-upory/reechnye-domkraty /reechnye-domkraty
+Redirect 301 /oborudovanie-dlya-sto/domkraty-upory/domkraty-vintovye /domkraty-vintovye
+Redirect 301 /oborudovanie-dlya-sto/domkraty-upory/upory-bashmaki /upory-bashmaki
+		
+Redirect 301 /oborudovanie-dlya-sto/oborudovanie-dlya-zameny-masla /oborudovanie-dlya-zameny-masla
+Redirect 301 /oborudovanie-dlya-sto/oborudovanie-dlya-zameny-masla/nasosy-dlya-maslyanyh-bochek /nasosy-dlya-maslyanyh-bochek
+Redirect 301 /oborudovanie-dlya-sto/oborudovanie-dlya-zameny-masla/ustanovki-zameny-masla-v-akpp /ustanovki-zameny-masla-v-akpp
+Redirect 301 /oborudovanie-dlya-sto/oborudovanie-dlya-zameny-masla/ustanovki-dlya-zameny-masla /ustanovki-dlya-zameny-masla
+Redirect 301 /oborudovanie-dlya-sto/oborudovanie-dlya-zameny-masla/ustanovki-dlya-slyva-i-otkachki-masla /ustanovki-dlya-slyva-i-otkachki-masla
+Redirect 301 /oborudovanie-dlya-sto/oborudovanie-dlya-zameny-masla/nagnetateli-masla-i-smazok /nagnetateli-masla-i-smazok
+
+Redirect 301 /uk/obladnannya-dlya-sto/obladnannya-dlya-zaminy-masla/nasosu-dlya-maslyanyh-bochok /nasosu-dlya-maslyanyh-bochok
+Redirect 301 /uk/obladnannya-dlya-sto/obladnannya-dlya-zaminy-masla/ustanovky-zaminy-masla-v-akpp /ustanovky-zaminy-masla-v-akpp
+Redirect 301 /uk/obladnannya-dlya-sto/obladnannya-dlya-zaminy-masla/ustanovky-dlya-zaminy-masla /ustanovky-dlya-zaminy-masla
+Redirect 301 /uk/obladnannya-dlya-sto/obladnannya-dlya-zaminy-masla/ustanovky-dlya-zlyvu-ta-vidkachuvannya-masla /ustanovky-dlya-zlyvu-ta-vidkachuvannya-masla
+Redirect 301 /uk/obladnannya-dlya-sto/obladnannya-dlya-zaminy-masla/nagnitachi-masla-ta-mastyl /nagnitachi-masla-ta-mastyl
+
+		
+Redirect 301 /oborudovanie-dlya-sto/podemniki /podemniki
+Redirect 301 /oborudovanie-dlya-sto/podemniki/aksessuary-dlya-podemnikov /aksessuary-dlya-podemnikov
+Redirect 301 /oborudovanie-dlya-sto/podemniki/podemniki-dvuhstoechnye /podemniki-dvuhstoechnye
+Redirect 301 /oborudovanie-dlya-sto/podemniki/podemniki-dlya-motocikla /podemniki-dlya-motocikla
+Redirect 301 /oborudovanie-dlya-sto/podemniki/podemniki-nozhnichnye /podemniki-nozhnichnye
+Redirect 301 /oborudovanie-dlya-sto/podemniki/podemniki-chetyrehstoechnye /podemniki-chetyrehstoechnye
+		
+Redirect 301 /oborudovanie-dlya-sto/svarochnoe-oborudovanye /svarochnoe-oborudovanye
+Redirect 301 /oborudovanie-dlya-sto/svarochnoe-oborudovanye/svarochnye-poluavtomaty /svarochnye-poluavtomaty
+Redirect 301 /oborudovanie-dlya-sto/svarochnoe-oborudovanye/spottery /spottery
+Redirect 301 /oborudovanie-dlya-sto/svarochnoe-oborudovanye/payalniki-dlya-plastika /payalniki-dlya-plastika
+
+Redirect 301 /uk/obladnannya-dlya-sto/zvaryuvalne-obladnannya/zvaryuvalnyj-napivavtomat /uk/zvaryuvalnyj-napivavtomat
+Redirect 301 /uk/obladnannya-dlya-sto/zvaryuvalne-obladnannya/spotteru /uk/spotteru
+Redirect 301 /uk/obladnannya-dlya-sto/zvaryuvalne-obladnannya/payalnyky-dlya-plastyka /uk/payalnyky-dlya-plastyka
+
+Redirect 301 /oborudovanie-dlya-sto/shinomontazhnoe-oborudovanie /shinomontazhnoe-oborudovanie
+Redirect 301 /oborudovanie-dlya-sto/shinomontazhnoe-oborudovanie/balansirovochnye-stanki /balansirovochnye-stanki
+Redirect 301 /oborudovanie-dlya-sto/shinomontazhnoe-oborudovanie/bortorasshiriteli /bortorasshiriteli
+Redirect 301 /oborudovanie-dlya-sto/shinomontazhnoe-oborudovanie/vulkanizatory /vulkanizatory
+Redirect 301 /oborudovanie-dlya-sto/shinomontazhnoe-oborudovanie/stanki-dlya-pravki-diskov /stanki-dlya-pravki-diskov
+Redirect 301 /oborudovanie-dlya-sto/shinomontazhnoe-oborudovanie/shinomontazhnye-stanki /shinomontazhnye-stanki
+
+Redirect 301 /oborudovanie-dlya-sto/shinomontazhnoe-oborudovanie/instrumenty-dlya-remonta-shin /instrumenty-dlya-remonta-shin
+Redirect 301 /oborudovanie-dlya-sto/shinomontazhnoe-oborudovanie/kleshchi-balansirovochnye /kleshchi-balansirovochnye
+Redirect 301 /oborudovanie-dlya-sto/shinomontazhnoe-oborudovanie/komplektuyushchie-dlya-shinomontazhnogo-oborudovaniya /komplektuyushchie-dlya-shinomontazhnogo-oborudovaniya
+Redirect 301 /oborudovanie-dlya-sto/shinomontazhnoe-oborudovanie/montirovki-lopatki-shinomontazhnye /montirovki-lopatki-shinomontazhnye
+Redirect 301 /oborudovanie-dlya-sto/shinomontazhnoe-oborudovanie/izmepiteli-ppotektopa-i-dicka /izmepiteli-ppotektopa-i-dicka
+Redirect 301 /oborudovanie-dlya-sto/shinomontazhnoe-oborudovanie/bustery-inflyatory /bustery-inflyatory
+Redirect 301 /oborudovanie-dlya-sto/shinomontazhnoe-oborudovanie/vanny-i-telezhki-dlya-koles /vanny-i-telezhki-dlya-koles
+
+Redirect 301 /uk/obladnannya-dlya-sto/shynomontazhne-obladnannya/instrumenty-dlya-remontu-shyn /uk/instrumenty-dlya-remontu-shyn
+Redirect 301 /uk/obladnannya-dlya-sto/shynomontazhne-obladnannya/klishchi-balansuvalni /uk/klishchi-balansuvalni
+Redirect 301 /uk/obladnannya-dlya-sto/shynomontazhne-obladnannya/komplektuyuchi-dlya-shynomontazhnogo-obladnannya /uk/komplektuyuchi-dlya-shynomontazhnogo-obladnannya
+Redirect 301 /uk/obladnannya-dlya-sto/shynomontazhne-obladnannya/montuvannya-lopatky-shynomontazhni /uk/montuvannya-lopatky-shynomontazhni
+Redirect 301 /uk/obladnannya-dlya-sto/shynomontazhne-obladnannya/vymiryuvachi-protektora-i-dyska /uk/vymiryuvachi-protektora-i-dyska
+Redirect 301 /uk/obladnannya-dlya-sto/shynomontazhne-obladnannya/bustery-inflyatory /uk/bustery-inflyatory
+Redirect 301 /uk/obladnannya-dlya-sto/shynomontazhne-obladnannya/vanny-ta-vizky-dlya-kolis /uk/vanny-ta-vizky-dlya-kolis
+
+Redirect 301 /uk/obladnannya-dlya-sto/garazhne-obladnannya /uk/garazhne-obladnannya
+Redirect 301 /uk/obladnannya-dlya-sto/gidravlichne-obladnannya /uk/gidravlichne-obladnannya
+		
+Redirect 301 /uk/obladnannya-dlya-sto/diagnostychne-obladnannya /uk/diagnostychne-obladnannya
+Redirect 301 /uk/obladnannya-dlya-sto/diagnostychne-obladnannya/avtoskaneru /uk/avtoskaneru
+Redirect 301 /uk/obladnannya-dlya-sto/diagnostychne-obladnannya/vakuummetru /uk/vakuummetru
+Redirect 301 /uk/obladnannya-dlya-sto/diagnostychne-obladnannya/dymogeneratoru /uk/dymogeneratoru
+Redirect 301 /uk/obladnannya-dlya-sto/diagnostychne-obladnannya/obladnannya-dlya-regulyuvannya-far /uk/obladnannya-dlya-regulyuvannya-far
+Redirect 301 /uk/obladnannya-dlya-sto/diagnostychne-obladnannya/obslugovuvannya-ta-remont-forsunok /uk/obslugovuvannya-ta-remont-forsunok
+Redirect 301 /uk/obladnannya-dlya-sto/diagnostychne-obladnannya/perevirka-svichok-zapalyuvannya /uk/perevirka-svichok-zapalyuvannya
+Redirect 301 /uk/obladnannya-dlya-sto/diagnostychne-obladnannya/stetoskopu /uk/stetoskopu
+Redirect 301 /uk/obladnannya-dlya-sto/diagnostychne-obladnannya/stroboskopu /uk/stroboskopu
+Redirect 301 /uk/obladnannya-dlya-sto/diagnostychne-obladnannya/testery-tysku-masla /uk/testery-tysku-masla
+Redirect 301 /uk/obladnannya-dlya-sto/diagnostychne-obladnannya/testery-inzhektoru /uk/testery-inzhektoru
+Redirect 301 /uk/obladnannya-dlya-sto/diagnostychne-obladnannya/endoskopu /uk/endoskopu
+		
+		
+Redirect 301 /uk/obladnannya-dlya-sto/domkraty-uporu /uk/domkraty-uporu
+Redirect 301 /uk/obladnannya-dlya-sto/domkraty-uporu/plyashkovi-domkraty /uk/plyashkovi-domkraty
+Redirect 301 /uk/obladnannya-dlya-sto/domkraty-uporu/domkraty-pnevmatychni /uk/domkraty-pnevmatychni
+Redirect 301 /uk/obladnannya-dlya-sto/domkraty-uporu/pidkatni-gidravlichni-domkraty /uk/pidkatni-gidravlichni-domkraty
+Redirect 301 /uk/obladnannya-dlya-sto/domkraty-uporu/pidstavky-pid-avtomobil /uk/pidstavky-pid-avtomobil
+Redirect 301 /uk/obladnannya-dlya-sto/domkraty-uporu/rejkovi-domkraty /uk/rejkovi-domkraty
+
+Redirect 301 /uk/obladnannya-dlya-sto/domkraty-uporu/domkraty-gvyntovi /uk/domkraty-gvyntovi
+Redirect 301 /uk/obladnannya-dlya-sto/domkraty-uporu/upory-cherevyky /uk/upory-cherevyky
+		
+Redirect 301 /uk/obladnannya-dlya-sto/obladnannya-dlya-zaminy-masla /uk/obladnannya-dlya-zaminy-masla
+		
+Redirect 301 /uk/obladnannya-dlya-sto/pidjomnyky /uk/pidjomnyky
+Redirect 301 /uk/obladnannya-dlya-sto/pidjomnyky/aksesuary-dlya-pidjomnykiv /uk/aksesuary-dlya-pidjomnykiv
+Redirect 301 /uk/obladnannya-dlya-sto/pidjomnyky/pidjomnyky-dvostiykovi /uk/pidjomnyky-dvostiykovi
+Redirect 301 /uk/obladnannya-dlya-sto/pidjomnyky/pidjomnyky-dlya-motocyklu /uk/pidjomnyky-dlya-motocyklu
+Redirect 301 /uk/obladnannya-dlya-sto/pidjomnyky/pidjomnyky-nozhychni /uk/pidjomnyky-nozhychni
+Redirect 301 /uk/obladnannya-dlya-sto/pidjomnyky/pidjomnyky-chotyrohstijkovi /uk/pidjomnyky-chotyrohstijkovi
+		
+Redirect 301 /uk/obladnannya-dlya-sto/zvaryuvalne-obladnannya /uk/zvaryuvalne-obladnannya
+Redirect 301 /uk/obladnannya-dlya-sto/shynomontazhne-obladnannya /uk/shynomontazhne-obladnannya
+Redirect 301 /uk/obladnannya-dlya-sto/shynomontazhne-obladnannya/balansuvalni-verstaty /uk/balansuvalni-verstaty
+Redirect 301 /uk/obladnannya-dlya-sto/shynomontazhne-obladnannya/bortorozshyryuvachi /uk/bortorozshyryuvachi
+Redirect 301 /uk/obladnannya-dlya-sto/shynomontazhne-obladnannya/vulkanizatoru /uk/vulkanizatoru
+Redirect 301 /uk/obladnannya-dlya-sto/shynomontazhne-obladnannya/stanky-dlya-pravky-dyskiv /uk/stanky-dlya-pravky-dyskiv
+Redirect 301 /uk/obladnannya-dlya-sto/shynomontazhne-obladnannya/shynomontazhni-stanky /uk/shynomontazhni-stanky
+
+Redirect 301 /rashodnye-materialy/himiya/izgotovlenie-plat /izgotovlenie-plat
+Redirect 301 /rashodnye-materialy/himiya/peny-germetiki /peny-germetiki
+Redirect 301 /rashodnye-materialy/himiya /himiya
+Redirect 301 /uk/vytratni-materialy/himiya/vygotovlennya-plat /uk/vygotovlennya-plat
+Redirect 301 /uk/vytratni-materialy/himiya/piny-germetyky /uk/piny-germetyky
+Redirect 301 /uk/vytratni-materialy/himiya /uk/himiya
+Redirect 301 /instrumenty/sistemy-xranenija /sistemy-xranenija
+Redirect 301 /uk/instrumenty/systemy-zberigannya /uk/systemy-zberigannya
+Redirect 301 /instrumenty/dlya-snyatiya-izolyacii /dlya-snyatiya-izolyacii
+Redirect 301 /uk/instrumenty/instrument-dlya-znyattya-izolyaciyi /uk/instrument-dlya-znyattya-izolyaciyi
+Redirect 301 /izmeritelnye-pribory/alkotestery /alkotestery
+Redirect 301 /uk/vymiryuvalni-prylady/alkotestery /uk/alkotestery
+Redirect 301 /elementy-pitaniya/zaryadnye-ustroystva /zaryadnye-ustroystva
+Redirect 301 /uk/elementy-zhyvlennya/zaryadni-prystroyi /uk/zaryadni-prystroyi
+Redirect 301 /dinamiki/10-dyuymov /10-dyuymov
+Redirect 301 /uk/dynamiky/10-dyujmiv /uk/10-dyujmiv
+Redirect 301 /instrumenty/izmeritelnyj-instrument /izmeritelnyj-instrument
+Redirect 301 /uk/instrumenty/vymiryuvalnyj-instrument /uk/vymiryuvalnyj-instrument
+Redirect 301 /svetodiody-i-led-produkciya/kontrollery /kontrollery
+Redirect 301 /uk/svitlodiody-ta-led-produkciya/kontrolery /uk/kontrolery
+Redirect 301 /instrumenty/rasxodnye-materialy-dlja-instrumenta/bury-probojniki-zubila /bury-probojniki-zubila
+Redirect 301 /instrumenty/rasxodnye-materialy-dlja-instrumenta/lezvija /lezvija
+Redirect 301 /uk/instrumenty/vytratni-materialy-dlya-instrumentu/bury-probijnyky-zubyla /uk/bury-probijnyky-zubyla
+
+Redirect 301 /instrumenty/rasxodnye-materialy-dlja-instrumenta/bity-i-nabory-bit /bity-i-nabory-bit
+Redirect 301 /uk/instrumenty/vytratni-materialy-dlya-instrumentu/bity-ta-nabory-bit /uk/bity-ta-nabory-bit
+
+Redirect 301 /instrumenty/remont-mobilnyx-ustrojstv /remont-mobilnyx-ustrojstv
+Redirect 301 /uk/instrumenty/dlya-remontu-mobilnyh-prystroyiv /uk/dlya-remontu-mobilnyh-prystroyiv
+Redirect 301 /bloki-pitaniya/laboratornye-bloki-pitaniya /laboratornye-bloki-pitaniya
+Redirect 301 /uk/bloky-zhyvlennya/laboratorni-bloky-zhyvlennya /uk/laboratorni-bloky-zhyvlennya
+Redirect 301 /rashodnye-materialy/himiya/payalnaya-pasta /payalnaya-pasta
+Redirect 301 /uk/vytratni-materialy/himiya/payalna-pasta /uk/payalna-pasta
+Redirect 301 /instrumenty/akkumuljatornyj-instrument/akkum-nozhovki /akkum-nozhovki
+Redirect 301 /uk/instrumenty/akumulyatornyj-instrument/nozhivky /uk/nozhivky
+Redirect 301 /razemy/razemy-interfeysnye /razemy-interfeysnye
+Redirect 301 /uk/roz-yemy/roz-yemy-interfejsni /uk/roz-yemy-interfejsni
+Redirect 301 /chasy?page=0 /chasy
+Redirect 301 /uk/godynnyky?page=0 /uk/godynnyky
+Redirect 301 /akustika-i-zvuk/usiliteli /usiliteli
+Redirect 301 /uk/akustika-ta-zvuk/pidsylyuvachi-ta-filtry /uk/pidsylyuvachi-ta-filtry
+Redirect 301 /instrumenty/pnevmoinstrument/dreli-pnevmaticheskie /dreli-pnevmaticheskie
+Redirect 301 /uk/instrumenty/pnevmoinstrument/dryli-pnevmatychni /uk/dryli-pnevmatychni
+Redirect 301 /instrumenty/instrument-dlja-otdelochnyx-rabot/tsikli-i-polotna-po-gipsokartonu /tsikli-i-polotna-po-gipsokartonu
+Redirect 301 /uk/instrumenty/instrument-dlya-ozdoblyuvalnyh-robit/cykly-i-polotna-po-gipsokartonu /uk/cykly-i-polotna-po-gipsokartonu
+Redirect 301 /instrumenty/elektroinstrument/elektrorubanki-elektrolobziki /elektrorubanki-elektrolobziki
+Redirect 301 /uk/instrumenty/elektroinstrument/elektrorubanky-elektrolobzyky /uk/elektrorubanky-elektrolobzyky
+Redirect 301 /instrumenty/pnevmoinstrument/pistolety-produvochnye-pnevmaticheskie /pistolety-produvochnye-pnevmaticheskie
+Redirect 301 /uk/instrumenty/pnevmoinstrument/pistolety-produvalni-pnevmatychni /uk/pistolety-produvalni-pnevmatychni
+Redirect 301 /instrumenty/sistemy-xranenija/pojasa-fartuki-karmany-dlja-instrumentov /pojasa-fartuki-karmany-dlja-instrumentov
+Redirect 301 /uk/instrumenty/systemy-zberigannya/poyasy-fartuhy-kysheni-dlya-instrumentiv /uk/poyasy-fartuhy-kysheni-dlya-instrumentiv
+Redirect 301 /dinamiki/avtomobilnye /avtomobilnye
+Redirect 301 /uk/dynamiky/avtomobilni /uk/avtomobilni
+Redirect 301 /instrumenty/elektroinstrument/otbojnye-molotki /otbojnye-molotki
+Redirect 301 /uk/instrumenty/elektroinstrument/vidbijni-molotky /uk/vidbijni-molotky
+Redirect 301 /payalnoe-oborudovanie/feny-tehnicheskie /feny-tehnicheskie
+Redirect 301 /uk/payalne-obladnannya/feny-tehnichni /uk/feny-tehnichni
+/**/
+Redirect 301 /payalnoe-oborudovanie/zapchasti-dlya-payalnyh-stancij /zapchasti-dlya-payalnyh-stancij
+Redirect 301 /uk/payalne-obladnannya/zapchastyny-dlya-payalnyh-stancij /uk/zapchastyny-dlya-payalnyh-stancij
+Redirect 301 /zapchasti-dlya-payalnyh-stancij/ventilyatory-dlya-payalnyh-stantsij /ventilyatory-dlya-payalnyh-stantsij
+Redirect 301 /uk/zapchastyny-dlya-payalnyh-stancij/ventilyatorу-dlya-payalnih-stantsіj /uk/ventilyatorу-dlya-payalnih-stantsіj
+Redirect 301 /zapchasti-dlya-payalnyh-stancij/zapasnye-demontazhnye-pistolety /zapasnye-demontazhnye-pistolety
+Redirect 301 /uk/zapchastyny-dlya-payalnyh-stancij/zapasni-demontazhni-pistolety /uk/zapasni-demontazhni-pistolety
+Redirect 301 /zapchasti-dlya-payalnyh-stancij/zapasnye-payalniki /zapasnye-payalniki
+Redirect 301 /uk/zapchastyny-dlya-payalnyh-stancij/zapasni-payalnyky /uk/zapasni-payalnyky
+Redirect 301 /zapchasti-dlya-payalnyh-stancij/zapasnye-termopary /zapasnye-termopary
+Redirect 301 /uk/zapchastyny-dlya-payalnyh-stancij/zapasni-termopary /uk/zapasni-termopary
+Redirect 301 /zapchasti-dlya-payalnyh-stancij/zapasnye-termopincety /zapasnye-termopincety
+Redirect 301 /uk/zapchastyny-dlya-payalnyh-stancij/zapasni-termopincety /uk/zapasni-termopincety
+Redirect 301 /zapchasti-dlya-payalnyh-stancij/zapasnye-feny /zapasnye-feny
+Redirect 301 /uk/zapchastyny-dlya-payalnyh-stancij/zapasni-feny /uk/zapasni-feny
+Redirect 301 /zapchasti-dlya-payalnyh-stancij/kompresory-dlya-payalnyh-stancij /kompresory-dlya-payalnyh-stancij
+Redirect 301 /uk/zapchastyny-dlya-payalnyh-stancij/kompresory-dlya-payalnyh-stancij /uk/kompresory-dlya-payalnyh-stancij
+Redirect 301 /zapchasti-dlya-payalnyh-stancij/nagrevatelnye-elementy /nagrevatelnye-elementy
+Redirect 301 /uk/zapchastyny-dlya-payalnyh-stancij/nagrivalni-elementy /uk/nagrivalni-elementy
+/**/
+Redirect 301 /radiodetali/rezistory/peremennye-rezistory-encoder /peremennye-rezistory-encoder
+Redirect 301 /uk/radiodetali/rezystory/zminni-rezystory-encoder /uk/zminni-rezystory-encoder
+Redirect 301 /knopki-pereklyuchateli-i-rele/pereklyuchateli /pereklyuchateli
+Redirect 301 /uk/knopky-peremykachi-ta-rele/peremykachi /uk/peremykachi
+Redirect 301 /kompyuternye-aksessuary/chehly-dlya-planshetov /chehly-dlya-planshetov
+Redirect 301 /uk/komp-yuterni-aksesuary/chohly-dlya-planshetiv /uk/chohly-dlya-planshetiv
+Redirect 301 /payalnoe-oborudovanie/aksessuary /aksessuary
+Redirect 301 /uk/payalne-obladnannya/aksesuary /uk/aksesuary
+Redirect 301 /texnika-dlja-doma-i-sada/motobloki-i-kultivatory /motobloki-i-kultivatory
+Redirect 301 /uk/tehnika-dlya-domu-ta-sadu/motobloky-ta-kultyvatory /uk/motobloky-ta-kultyvatory
+Redirect 301 /texnika-dlja-doma-i-sada/generatory-benzinovye /generatory-benzinovye
+Redirect 301 /uk/tehnika-dlya-domu-ta-sadu/generatory-benzynovi /uk/generatory-benzynovi
+Redirect 301 /texnika-dlja-doma-i-sada/nasosy /nasosy
+Redirect 301 /uk/tehnika-dlya-domu-ta-sadu/nasosy /uk/nasosy
+Redirect 301 /kompyuternye-aksessuary/3d-pechat /3d-pechat
+Redirect 301 /uk/komp-yuterni-aksesuary/3d-druk /uk/3d-druk
+Redirect 301 /texnika-dlja-doma-i-sada/gazonokosilki-trimmery/gazonokosilki-akkumuljatornaja /gazonokosilki-akkumuljatornaja
+Redirect 301 /uk/tehnika-dlya-domu-ta-sadu/gazonokosarky-trymery/gazonokosarky-akumulyatorni /uk/gazonokosarky-akumulyatorni
+Redirect 301 /instrumenty/stoljarno-slesarnyj-instrument /stoljarno-slesarnyj-instrument
+Redirect 301 /uk/instrumenty/stolyarno-slyusarnyj-instrument /uk/stolyarno-slyusarnyj-instrument
+Redirect 301 /instrumenty/instrument-dlja-otdelochnyx-rabot/kelmy-masterki-kovshi /kelmy-masterki-kovshi
+Redirect 301 /uk/instrumenty/instrument-dlya-ozdoblyuvalnyh-robit/kelmy-kelmy-kovshi /uk/kelmy-kelmy-kovshi
+Redirect 301 /texnika-dlja-doma-i-sada/vozduxoduvki /vozduxoduvki
+Redirect 301 /uk/tehnika-dlya-domu-ta-sadu/povitroduvky /uk/povitroduvky
+Redirect 301 /bloki-pitaniya/istochniki-bespereboynogo-pitaniya-ibp /istochniki-bespereboynogo-pitaniya-ibp
+Redirect 301 /uk/bloky-zhyvlennya/dzherela-bezperebijnogo-zhyvlennya-dbzh /uk/dzherela-bezperebijnogo-zhyvlennya-dbzh
+Redirect 301 /kabel-shnury-i-provoda/akusticheskiy-kabel /akusticheskiy-kabel
+Redirect 301 /uk/kabel-shnury-ta-droty/akustychnyj-kabel /uk/akustychnyj-kabel
+Redirect 301 /kompyuternye-aksessuary/ventilyatory /ventilyatory
+Redirect 301 /uk/komp-yuterni-aksesuary/ventylyatory /uk/ventylyatory
+Redirect 301 /instrumenty/pnevmoinstrument/pistolety-dlja-nakachki-shin-pnevmaticheskie /pistolety-dlja-nakachki-shin-pnevmaticheskie
+Redirect 301 /uk/instrumenty/pnevmoinstrument/pistolety-dlya-nakachuvannya-shyn-pnevmatychni /uk/pistolety-dlya-nakachuvannya-shyn-pnevmatychni
+Redirect 301 /kompyuternye-aksessuary/naushniki /naushniki
+Redirect 301 /uk/komp-yuterni-aksesuary/navushnyky /uk/navushnyky
+Redirect 301 /instrumenty/rasxodnye-materialy-dlja-instrumenta/skoby /skoby
+Redirect 301 /uk/instrumenty/vytratni-materialy-dlya-instrumentu/skoby /uk/skoby
+Redirect 301 /instrumenty/elektroinstrument/kraskopulty-elektricheskie /kraskopulty-elektricheskie
+Redirect 301 /uk/instrumenty/elektroinstrument/farbopulty-elektrychni /uk/farbopulty-elektrychni
+Redirect 301 /instrumenty/pnevmoinstrument/steplery-pnevmaticheskie /steplery-pnevmaticheskie
+Redirect 301 /uk/instrumenty/pnevmoinstrument/steplery-pnevmatychni /uk/steplery-pnevmatychni
+Redirect 301 /payalnoe-oborudovanie/ultrazvukovye-vanny /ultrazvukovye-vanny
+Redirect 301 /uk/payalne-obladnannya/ultrazvukovi-vanny /uk/ultrazvukovi-vanny
+Redirect 301 /razemy/razemy-pitaniya /razemy-pitaniya
+Redirect 301 /uk/roz-yemy/roz-yemy-zhyvlennya /uk/roz-yemy-zhyvlennya
+Redirect 301 /instrumenty/avtoinstrument/golovki-tortsevye /golovki-tortsevye
+Redirect 301 /uk/instrumenty/avtoinstrument/golovky-torcevi /uk/golovky-torcevi
+
+Redirect 301 /instrumenty/avtoinstrument/Rukoyatki-vorotki-perehodnik-kardanyi /Rukoyatki-vorotki-perehodnik-kardanyi
+
+Redirect 301 /instrumenty/pnevmoinstrument/nabory-pnevmaticheskogo-instrumenta /nabory-pnevmaticheskogo-instrumenta
+Redirect 301 /uk/instrumenty/pnevmoinstrument/nabory-pnevmatychnogo-instrumentu /uk/nabory-pnevmatychnogo-instrumentu
+Redirect 301 /elementy-pitaniya/derzhateli-batareek /derzhateli-batareek
+Redirect 301 /uk/elementy-zhyvlennya/trymachi-batarejok /uk/trymachi-batarejok
+Redirect 301 /instrumenty/elektroinstrument/svarochnoe-oborudovanie /svarochnoe-oborudovanie
+Redirect 301 /uk/instrumenty/elektroinstrument/zvaryuvalne-obladnannya /uk/zvaryuvalne-obladnannya
+Redirect 301 /instrumenty/elektroinstrument/elektropily /elektropily
+Redirect 301 /uk/instrumenty/elektroinstrument/elektropyly /uk/elektropyly
+Redirect 301 /izmeritelnye-pribory/dalnomery /dalnomery
+Redirect 301 /uk/vymiryuvalni-prylady/dalekomiry /uk/dalekomiry
+Redirect 301 /rashodnye-materialy/abrazivnyj-material/bruski-i-kamni-shlifovalnye /bruski-i-kamni-shlifovalnye
+Redirect 301 /uk/vytratni-materialy/abrazyvnyj-material/brusky-ta-kameni-shlifuvalni /uk/brusky-ta-kameni-shlifuvalni
+Redirect 301 /radiodetali/predohraniteli-i-aksessuary /predohraniteli-i-aksessuary
+Redirect 301 /radiodetali/predohraniteli-i-aksessuary/6-h-30 /6-h-30
+Redirect 301 /uk/radiodetali/zapobizhnyky-i-aksesuary /uk/zapobizhnyky-i-aksesuary
+Redirect 301 /uk/radiodetali/zapobizhnyky-i-aksesuary/6-h-30 /uk/6-h-30
+Redirect 301 /instrumenty/rasxodnye-materialy-dlja-instrumenta/gvozdi-shpilki /gvozdi-shpilki
+Redirect 301 /uk/instrumenty/vytratni-materialy-dlya-instrumentu/cvyahy-shpylky /uk/cvyahy-shpylky
+Redirect 301 /kabel-shnury-i-provoda/kompyuternye-shnury /kompyuternye-shnury
+Redirect 301 /uk/kabel-shnury-ta-droty/komp-yuterni-shnury /uk/komp-yuterni-shnury
+Redirect 301 /instrumenty/kleevye-pistolety /kleevye-pistolety
+Redirect 301 /uk/instrumenty/klejovi-pistolety /uk/klejovi-pistolety
+Redirect 301 /kompyuternye-aksessuary/usb-haby /usb-haby
+Redirect 301 /uk/komp-yuterni-aksesuary/usb-haby /uk/usb-haby
+Redirect 301 /radiodetali/rezistory/podstroechnye-rezistory /podstroechnye-rezistory
+Redirect 301 /uk/radiodetali/rezystory/pidstrochenni-rezystory /uk/pidstrochenni-rezystory
+Redirect 301 /instrumenty/avtoinstrument/gidravlika /gidravlika
+Redirect 301 /uk/instrumenty/avtoinstrument/gidravlika /uk/gidravlika
+Redirect 301 /instrumenty/rasxodnye-materialy-dlja-instrumenta/schetki /schetki
+Redirect 301 /uk/instrumenty/vytratni-materialy-dlya-instrumentu/shitky /uk/shitky
+Redirect 301 /payalnoe-oborudovanie/gazovye-payalniki /gazovye-payalniki
+Redirect 301 /uk/payalne-obladnannya/gazovi-payalnyky /uk/gazovi-payalnyky
+Redirect 301 /texnika-dlja-doma-i-sada/gazonokosilki-trimmery/motokosy-benzokosy /motokosy-benzokosy
+Redirect 301 /uk/tehnika-dlya-domu-ta-sadu/gazonokosarky-trymery/motokosy-benzokosy /uk/motokosy-benzokosy
+Redirect 301 /instrumenty/akkumuljatornyj-instrument/pily /pily
+Redirect 301 /uk/instrumenty/akumulyatornyj-instrument/pyly /uk/pyly
+Redirect 301 /payalnoe-oborudovanie/vspomogatelnoe-oborudovanie /vspomogatelnoe-oborudovanie
+Redirect 301 /uk/payalne-obladnannya/dopomizhne-obladnannya /uk/dopomizhne-obladnannya
+Redirect 301 /instrumenty/sistemy-xranenija/sumki-i-chehli-dlja-instrumentov /sumki-i-chehli-dlja-instrumentov
+Redirect 301 /uk/instrumenty/systemy-zberigannya/sumky-ta-chohly-dlya-instrumentiv /uk/sumky-ta-chohly-dlya-instrumentiv
+Redirect 301 /texnika-dlja-doma-i-sada/sistemy-poliva/tajmery-dlja-podachi-vody /tajmery-dlja-podachi-vody
+Redirect 301 /uk/tehnika-dlya-domu-ta-sadu/systemy-polyvu/tajmery-dlya-podachi-vody /uk/tajmery-dlya-podachi-vody
+Redirect 301 /payalnoe-oborudovanie/pajalniki-dlja-plastikovyx-trub /pajalniki-dlja-plastikovyx-trub
+Redirect 301 /uk/payalne-obladnannya/payalnyky-dlya-plastykovyh-trub /uk/payalnyky-dlya-plastykovyh-trub
+Redirect 301 /radiodetali/transformatory/toroidalnye /toroidalnye
+Redirect 301 /uk/radiodetali/transformatory/toroyidalni /uk/toroyidalni
+Redirect 301 /texnika-dlja-doma-i-sada/gazonokosilki-trimmery /gazonokosilki-trimmery
+Redirect 301 /uk/tehnika-dlya-domu-ta-sadu/gazonokosarky-trymery /uk/gazonokosarky-trymery
+Redirect 301 /kompyuternye-aksessuary/kompyuternye-kolonki /kompyuternye-kolonki
+Redirect 301 /uk/komp-yuterni-aksesuary/komp-yuterni-kolonky /uk/komp-yuterni-kolonky
+Redirect 301 /instrumenty/avtoinstrument /avtoinstrument
+Redirect 301 /uk/instrumenty/avtoinstrument /uk/avtoinstrument
+Redirect 301 /knopki-pereklyuchateli-i-rele/knopki /knopki
+Redirect 301 /uk/knopky-peremykachi-ta-rele/knopki /uae/knopki
+Redirect 301 /radiodetali/kondensatory/elektroliticheskie-nepoljarnye /elektroliticheskie-nepoljarnye
+Redirect 301 /uk/radiodetali/kondensatory/elektrolitychni-nepolyarni /uk/elektrolitychni-nepolyarni
+Redirect 301 /instrumenty/pnevmoinstrument/fitingi-dlja-pnevmosistem /fitingi-dlja-pnevmosistem
+Redirect 301 /uk/instrumenty/pnevmoinstrument/fityngy-dlya-pnevmosystem /uk/fityngy-dlya-pnevmosystem
+Redirect 301 /instrumenty/pnevmoinstrument/zubila-pnevmaticheskie /zubila-pnevmaticheskie
+Redirect 301 /uk/instrumenty/pnevmoinstrument/zubyla-pnevmatychni /uk/zubyla-pnevmatychni
+Redirect 301 /instrumenty/elektroinstrument/pylesosy-stroitelnye /pylesosy-stroitelnye
+Redirect 301 /uk/instrumenty/elektroinstrument/pylososy-dlya-budivnyctva /uk/pylososy-dlya-budivnyctva
+Redirect 301 /instrumenty/akkumuljatornyj-instrument/zarjadnye-ustrojstva /zarjadnye-ustrojstva
+Redirect 301 /uk/instrumenty/akumulyatornyj-instrument/zaryadni-prystroyi /uk/zaryadni-prystroyi
+Redirect 301 /svetodiody-i-led-produkciya/svetilniki /svetilniki
+Redirect 301 /uk/svitlodiody-ta-led-produkciya/led-svitylnyky /uk/led-svitylnyky
+Redirect 301 /instrumenty/akkumuljatornyj-instrument/perforatory /perforatory
+Redirect 301 /uk/instrumenty/akumulyatornyj-instrument/perforatory /uk/perforatory
+Redirect 301 /instrumenty/pincety /pincety
+Redirect 301 /uk/instrumenty/pincety /uk/pincety
+Redirect 301 /radiodetali/rezistory /rezistory
+Redirect 301 /uk/radiodetali/rezystory /uk/rezystory
+Redirect 301 /rashodnye-materialy/styazhki-kabelnye /styazhki-kabelnye
+Redirect 301 /uk/vytratni-materialy/styazhky-kabelni /uk/styazhky-kabelni
+Redirect 301 /payalnoe-oborudovanie/vyzhigateli-po-derevu /vyzhigateli-po-derevu
+Redirect 301 /uk/payalne-obladnannya/vyzhygately-po-derevu /uk/vyzhygately-po-derevu
+Redirect 301 /instrumenty/prinadlezhnosti-k-instrumentu/materialy-rasxodnye-dlja-moek-vysokogo-davlenija /materialy-rasxodnye-dlja-moek-vysokogo-davlenija
+Redirect 301 /uk/instrumenty/prynalezhnosti-do-instrumentu/materialy-vytratni-dlya-myjok-vysokogo-tysku /uk/materialy-vytratni-dlya-myjok-vysokogo-tysku
+Redirect 301 /instrumenty/pnevmoinstrument/gajkoverty-pnevmaticheskie /gajkoverty-pnevmaticheskie
+Redirect 301 /uk/instrumenty/pnevmoinstrument/gajkoverty-pnevmatychni /uk/gajkoverty-pnevmatychni
+Redirect 301 /instrumenty/prinadlezhnosti-k-instrumentu/perexodniki-sds-plus-i-sds-max /perexodniki-sds-plus-i-sds-max
+Redirect 301 /uk/instrumenty/prynalezhnosti-do-instrumentu/perehidnyky-sds-plus-y-sds-max /uk/perehidnyky-sds-plus-y-sds-max
+Redirect 301 /instrumenty/izmeritelnyj-instrument/ruletki /ruletki
+Redirect 301 /uk/vymiryuvalnyj-instrument/ruletki /uk/ruletki
+Redirect 301 /instrumenty/rasxodnye-materialy-dlja-instrumenta/pilnye-polotna /pilnye-polotna
+Redirect 301 /uk/instrumenty/vytratni-materialy-dlya-instrumentu/pylni-polotna /uk/pylni-polotna
+Redirect 301 /texnika-dlja-doma-i-sada/gazonokosilki-trimmery/gazonokosilki-elektricheskie /gazonokosilki-elektricheskie
+Redirect 301 /uk/tehnika-dlya-domu-ta-sadu/gazonokosarky-trymery/gaazonokosarky-elektrychni /uk/gaazonokosarky-elektrychni
+Redirect 301 /taymery-chasy-priyomniki/vesy /vesy
+Redirect 301 /uk/taymery-chasy-priyomniki/vagy /uk/vagy
+Redirect 301 /razemy/klemmy /klemmy
+Redirect 301 /uk/roz-yemy/klemy /uk/klemy
+Redirect 301 /razemy/avtomobilnye-razemy /avtomobilnye-razemy
+Redirect 301 /uk/roz-yemy/avtomobilni-roz-yemy /uk/avtomobilni-roz-yemy
+Redirect 301 /radiodetali/transformatory /transformatory
+Redirect 301 /uk/radiodetali/transformatory /uk/transformatory
+Redirect 301 /rashodnye-materialy/himiya/szhatyy-vozduh /szhatyy-vozduh
+Redirect 301 /uk/vytratni-materialy/himiya/stysnene-povitrya /uk/stysnene-povitrya
+Redirect 301 /razemy/razemy-mikrofonnye /razemy-mikrofonnye
+Redirect 301 /uk/roz-yemy/roz-yemy-mikrofonni /uk/roz-yemy-mikrofonni
+Redirect 301 /radiodetali/transformatory/zalitye /zalitye
+Redirect 301 /uk/radiodetali/transformatory/zalyti /uk/zalyti
+Redirect 301 /kabel-shnury-i-provoda/preobrazovateli /preobrazovateli
+Redirect 301 /uk/kabel-shnury-ta-droty/peretvoryuvachi-sygnalu /uk/peretvoryuvachi-sygnalu
+Redirect 301 /instrumenty/stoljarno-slesarnyj-instrument/molotki-topory /molotki-topory
+Redirect 301 /uk/instrumenty/stolyarno-slyusarnyj-instrument/molotky-sokyry-zubyla /uk/molotky-sokyry-zubyla
+Redirect 301 /akustika-i-zvuk/kolonki /kolonki
+Redirect 301 /uk/akustika-ta-zvuk/kolonki /uk/kolonki
+Redirect 301 /instrumenty/avtoinstrument/sjemniki-obzhimki /sjemniki-obzhimki
+Redirect 301 /uk/instrumenty/avtoinstrument/znimachi-krympery /uk/znimachi-krympery
+Redirect 301 /texnika-dlja-doma-i-sada/sredstva-individualnoj-zaschity/odezhda-rabochaja /odezhda-rabochaja
+Redirect 301 /uk/tehnika-dlya-domu-ta-sadu/zasoby-indyvidualnogo-zahystu/odyag-robochyj /uk/odyag-robochyj
+Redirect 301 /instrumenty/prinadlezhnosti-k-instrumentu/prinadlezhnosti-k-elektricheskim-trimmeram /prinadlezhnosti-k-elektricheskim-trimmeram
+Redirect 301 /uk/instrumenty/prynalezhnosti-do-instrumentu/prynalezhnosti-do-elektrychnyh-trimmera /uk/prynalezhnosti-do-elektrychnyh-trimmera
+Redirect 301 /svetodiody-i-led-produkciya/svetodiody-3-mm /svetodiody-3-mm
+Redirect 301 /uk/svitlodiody-ta-led-produkciya/svitlodiody-3-mm /uk/svitlodiody-3-mm
+Redirect 301 /svetodiody-i-led-produkciya/korpusa /korpusa
+Redirect 301 /uk/svitlodiody-ta-led-produkciya/korpusy /uk/korpusy
+Redirect 301 /razemy/izolyaciya-razemov /izolyaciya-razemov
+Redirect 301 /uk/roz-yemy/izolyaciya-roz-yemiv /uk/izolyaciya-roz-yemiv
+Redirect 301 /texnika-dlja-doma-i-sada/sredstva-individualnoj-zaschity/perchatki-rabochie /perchatki-rabochie
+Redirect 301 /uk/tehnika-dlya-domu-ta-sadu/zasoby-indyvidualnogo-zahystu/rukavyci-robochi /uk/rukavyci-robochi
+Redirect 301 /instrumenty/prinadlezhnosti-k-instrumentu/kljuchi-dlja-zazhima-patrona /kljuchi-dlja-zazhima-patrona
+Redirect 301 /uk/instrumenty/prynalezhnosti-do-instrumentu/klyuchi-dlya-zatysku-patrona /uk/klyuchi-dlya-zatysku-patrona
+Redirect 301 /instrumenty/rasxodnye-materialy-dlja-instrumenta/diski-instrument /diski-instrument
+Redirect 301 /uk/instrumenty/vytratni-materialy-dlya-instrumentu/diski-instrument /uk/diski-instrument
+Redirect 301 /instrumenty/obzhimnoy-instrument /obzhimnoy-instrument
+Redirect 301 /uk/instrumenty/obzhymka-obtysknyj-instrument /uk/obzhymka-obtysknyj-instrument
+Redirect 301 /instrumenty/sistemy-xranenija/shkafy-i-polki-dlja-instrumentov /shkafy-i-polki-dlja-instrumentov
+Redirect 301 /uk/instrumenty/systemy-zberigannya/shafy-i-polyci-dlya-instrumentiv /uk/shafy-i-polyci-dlya-instrumentiv
+Redirect 301 /instrumenty/elektroinstrument/miksery-elektricheskie /miksery-elektricheskie
+Redirect 301 /uk/instrumenty/elektroinstrument/miksery-elektrychni /uk/miksery-elektrychni
+Redirect 301 /bloki-pitaniya/bloki-pitaniya-obshchego-naznacheniya /bloki-pitaniya-obshchego-naznacheniya
+Redirect 301 /uk/bloky-zhyvlennya/bloky-zhyvlennya-zagalnogo-pryznachennya /uk/bloky-zhyvlennya-zagalnogo-pryznachennya
+Redirect 301 /dinamiki/do-4-dyuymov /do-4-dyuymov
+Redirect 301 /uk/dynamiky/do-4-dyujmiv /uk/do-4-dyujmiv
+Redirect 301 /texnika-dlja-doma-i-sada/sistemy-poliva/shlangi-i-katushki /shlangi-i-katushki
+Redirect 301 /uk/tehnika-dlya-domu-ta-sadu/systemy-polyvu/shlangy-i-kotushky /uk/shlangy-i-kotushky
+Redirect 301 /instrumenty/ruchnoj-instrument /ruchnoj-instrument
+Redirect 301 /uk/instrumenty/ruchnyj-instrument /uk/ruchnyj-instrument
+Redirect 301 /instrumenty/instrument-dlja-otdelochnyx-rabot/steklorezy /steklorezy
+Redirect 301 /uk/instrumenty/instrument-dlya-ozdoblyuvalnyh-robit/sklorizy /uk/sklorizy
+Redirect 301 /razemy/av-razemy /av-razemy
+Redirect 301 /uk/roz-yemy/av-roz-yemy /uk/av-roz-yemy
+Redirect 301 /svetodiody-i-led-produkciya/sverhmoshchnye-svetodiody /sverhmoshchnye-svetodiody
+Redirect 301 /uk/svitlodiody-ta-led-produkciya/nadpotuzhni-svitlodiody /uk/nadpotuzhni-svitlodiody
+Redirect 301 /radiodetali/kondensatory/puskovye /puskovye
+Redirect 301 /uk/radiodetali/kondensatory/puskovi /uk/puskovi
+Redirect 301 /instrumenty/ruchnoj-instrument/nozhi /nozhi
+Redirect 301 /uk/instrumenty/ruchnyj-instrument/nozhi /uk/nozhi
+Redirect 301 /instrumenty/stoljarno-slesarnyj-instrument/nozhnitsy-po-metallu /nozhnitsy-po-metallu
+Redirect 301 /uk/instrumenty/stolyarno-slyusarnyj-instrument/nozhyci-po-metalu /uk/nozhyci-po-metalu
+Redirect 301 /elementy-pitaniya/akkumulyatory-gelevye /akkumulyatory-gelevye
+Redirect 301 /uk/elementy-zhyvlennya/akumulyatory-gelevi /uk/akumulyatory-gelevi
+Redirect 301 /instrumenty/avtoinstrument/kompressometry /kompressometry
+Redirect 301 /uk/instrumenty/avtoinstrument/kompresometry /uk/kompresometry
+Redirect 301 /svetodiody-i-led-produkciya/smd /smd
+Redirect 301 /uk/svitlodiody-ta-led-produkciya/smd /uk/smd
+Redirect 301 /texnika-dlja-doma-i-sada/sredstva-individualnoj-zaschity/obuv-rabochaja /obuv-rabochaja
+Redirect 301 /uk/tehnika-dlya-domu-ta-sadu/zasoby-indyvidualnogo-zahystu/vzuttya-roboche /uk/vzuttya-roboche
+Redirect 301 /instrumenty/prinadlezhnosti-k-instrumentu/prinadlezhnosti-k-motokosam /prinadlezhnosti-k-motokosam
+Redirect 301 /uk/instrumenty/prynalezhnosti-do-instrumentu/prynalezhnosti-do-motokos /uk/prynalezhnosti-do-motokos
+Redirect 301 /svetodiody-i-led-produkciya/svetodiody-8-mm /svetodiody-8-mm
+Redirect 301 /uk/svitlodiody-ta-led-produkciya/svitlodiody-8-mm /uk/svitlodiody-8-mm
+Redirect 301 /taymery-chasy-priyomniki/taymery /taymery
+Redirect 301 /uk/tajmery-godynnyky-pryjmachi/tajmery /uk/tajmery
+Redirect 301 /instrumenty/akkumuljatornyj-instrument/lobziki /lobziki
+Redirect 301 /uk/instrumenty/akumulyatornyj-instrument/lobzyky /uk/lobzyky
+Redirect 301 /instrumenty/elektroinstrument/dreli-perforatory /dreli-perforatory
+Redirect 301 /uk/instrumenty/elektroinstrument/dryli-perforatory /uk/dryli-perforatory
+Redirect 301 /instrumenty/pnevmoinstrument/kompressory /kompressory
+Redirect 301 /uk/instrumenty/pnevmoinstrument/kompresory /uk/kompresory
+Redirect 301 /rashodnye-materialy/termousadochnaya-trubka /termousadochnaya-trubka
+Redirect 301 /uk/vytratni-materialy/termozbizhna-trubka /uk/termozbizhna-trubka
+Redirect 301 /instrumenty/avtoinstrument/lebedki /lebedki
+Redirect 301 /uk/instrumenty/avtoinstrument/lebidky /uk/lebidky
+Redirect 301 /bloki-pitaniya/bloki-pitaniya-dlya-noutbukov /bloki-pitaniya-dlya-noutbukov
+Redirect 301 /uk/bloky-zhyvlennya/bloky-zhyvlennya-dlya-noutbukiv /uk/bloky-zhyvlennya-dlya-noutbukiv
+Redirect 301 /radiodetali/predohraniteli-i-aksessuary/5-h-20 /5-h-20
+Redirect 301 /uk/radiodetali/zapobizhnyky-i-aksesuary/5-h-20 /uk/5-h-20
+Redirect 301 /instrumenty/stoljarno-slesarnyj-instrument/stusla-rubanki-stameski /stusla-rubanki-stameski
+Redirect 301 /uk/instrumenty/stolyarno-slyusarnyj-instrument/stusla-rubanky-stamesky /uk/stusla-rubanky-stamesky
+Redirect 301 /payalnoe-oborudovanie/vpityvayushchaya-lenta /vpityvayushchaya-lenta
+Redirect 301 /uk/payalne-obladnannya/vpytuyavoyusha-lenta /uk/vpytuyavoyusha-lenta
+Redirect 301 /instrumenty/pnevmoinstrument/zaklepochniki-pnevmaticheskie /zaklepochniki-pnevmaticheskie
+Redirect 301 /uk/instrumenty/pnevmoinstrument/zaklepochnyky-pnevmatychni /uk/zaklepochnyky-pnevmatychni
+Redirect 301 /rashodnye-materialy/himiya/flyusy /flyusy
+Redirect 301 /uk/vytratni-materialy/himiya/flyusy /uk/flyusy
+Redirect 301 /kompyuternye-aksessuary/podstavki-dlya-noutbukov /podstavki-dlya-noutbukov
+Redirect 301 /uk/komp-yuterni-aksesuary/pidstavky-dlya-noutbukiv /uk/pidstavky-dlya-noutbukiv
+Redirect 301 /izmeritelnye-pribory/ampermetry /ampermetry
+Redirect 301 /uk/vymiryuvalni-prylady/ampermetry /uk/ampermetry
+Redirect 301 /svetodiody-i-led-produkciya/svetodiody-10-mm /svetodiody-10-mm
+Redirect 301 /uk/svitlodiody-ta-led-produkciya/svitlodiody-10-mm /uk/svitlodiody-10-mm
+Redirect 301 /izmeritelnye-pribory/specialnye /specialnye
+Redirect 301 /uk/vymiryuvalni-prylady/specialni-vymiryuvannya /uk/specialni-vymiryuvannya
+Redirect 301 /radiodetali/predohraniteli-i-aksessuary/derzhateli-predohraniteley /derzhateli-predohraniteley
+Redirect 301 /uk/radiodetali/zapobizhnyky-i-aksesuary/trymachi-zapobizhnykiv /uk/trymachi-zapobizhnykiv
+Redirect 301 /izmeritelnye-pribory/analizatory-spektra /analizatory-spektra
+Redirect 301 /uk/vymiryuvalni-prylady/analizatory-spektra /uk/analizatory-spektra
+Redirect 301 /izmeritelnye-pribory/aksessuary-1 /aksessuary-1
+Redirect 301 /uk/vymiryuvalni-prylady/aksesuary /uk/aksesuary
+Redirect 301 /radiodetali/predohraniteli-i-aksessuary/10-h-38 /10-h-38
+Redirect 301 /uk/radiodetali/zapobizhnyky-i-aksesuary/10-h-38 /uk/10-h-38
+Redirect 301 /instrumenty/pnevmoinstrument /pnevmoinstrument
+Redirect 301 /uk/instrumenty/pnevmoinstrument /uk/pnevmoinstrument
+Redirect 301 /dinamiki/65-dyuymov /65-dyuymov
+Redirect 301 /uk/dynamiky/6-5-dyujmiv /uk/6-5-dyujmiv
+Redirect 301 /instrumenty/stoljarno-slesarnyj-instrument/nozhovki /nozhovki
+Redirect 301 /uk/instrumenty/stolyarno-slyusarnyj-instrument/nozhivky /uk/nozhivky
+Redirect 301 /texnika-dlja-doma-i-sada/sredstva-individualnoj-zaschity /sredstva-individualnoj-zaschity
+Redirect 301 /uk/tehnika-dlya-domu-ta-sadu/zasoby-indyvidualnogo-zahystu /uk/zasoby-indyvidualnogo-zahystu
+Redirect 301 /instrumenty/instrument-dlja-otdelochnyx-rabot/maljarnyj-instrument /maljarnyj-instrument
+Redirect 301 /uk/instrumenty/instrument-dlya-ozdoblyuvalnyh-robit/malyarskyj-instrument /uk/malyarskyj-instrument
+Redirect 301 /optika/mikroskopy /mikroskopy
+Redirect 301 /uk/optyka/mikroskopy /uk/mikroskopy
+Redirect 301 /radiodetali/transformatory/sh-obraznye /sh-obraznye
+Redirect 301 /uk/radiodetali/transformatory/sh-obrazni /uk/sh-obrazni
+Redirect 301 /instrumenty/rasxodnye-materialy-dlja-instrumenta/sverla /sverla
+Redirect 301 /uk/instrumenty/vytratni-materialy-dlya-instrumentu/sverdla /uk/sverdla
+Redirect 301 /rashodnye-materialy/izolenta-i-skotch /izolenta-i-skotch
+Redirect 301 /uk/vytratni-materialy/izolenta-i-skotch /uk/izolenta-i-skotch
+Redirect 301 /instrumenty/manipulyatory /manipulyatory
+Redirect 301 /uk/instrumenty/manipulyatory /uk/manipulyatory
+Redirect 301 /texnika-dlja-doma-i-sada/tachki-sadovye-i-stroitelnye/tachki-odnokolesnye /tachki-odnokolesnye
+Redirect 301 /uk/tehnika-dlya-domu-ta-sadu/tachky-sadovi-ta-budivelni/tachky-odnokolisni /uk/tachky-odnokolisni
+Redirect 301 /instrumenty/elektroinstrument/shurpoverty-otvertki /shurpoverty-otvertki
+Redirect 301 /uk/instrumenty/elektroinstrument/shurupoverty-vykrutky /uk/shurupoverty-vykrutky
+Redirect 301 /payalnoe-oborudovanie/olovootsosy /olovootsosy
+Redirect 301 /uk/payalne-obladnannya/olovootsosy /uk/olovootsosy
+Redirect 301 /bloki-pitaniya/preobrazovateli-napryazheniya /preobrazovateli-napryazheniya
+Redirect 301 /uk/bloky-zhyvlennya/peretvoryuvachi-naprugy /uk/peretvoryuvachi-naprugy
+Redirect 301 /radiodetali/predohraniteli-i-aksessuary/avtomobilnyy-mini /avtomobilnyy-mini
+Redirect 301 /uk/radiodetali/zapobizhnyky-i-aksesuary/avtomobilnyj-mini /uk/avtomobilnyj-mini
+Redirect 301 /rashodnye-materialy/abrazivnyj-material/setka-abrazivnaja /setka-abrazivnaja
+Redirect 301 /uk/vytratni-materialy/abrazyvnyj-material/sitka-abrazyvna /uk/sitka-abrazyvna
+Redirect 301 /instrumenty/avtoinstrument/yato /avtoinstrument
+Redirect 301 /uk/instrumenty/avtoinstrument/yato /uk/avtoinstrument
+Redirect 301 /texnika-dlja-doma-i-sada/motopily-tsepnye-benzopily /motopily-tsepnye-benzopily
+Redirect 301 /uk/tehnika-dlya-domu-ta-sadu/benzopyly-benzorizy /uk/benzopyly-benzorizy
+Redirect 301 /payalnoe-oborudovanie/lampy-i-linzy /lampy-i-linzy
+Redirect 301 /uk/payalne-obladnannya/lampy-i-linzy /uk/lampy-i-linzy
+Redirect 301 /uk/optyka/lampy-i-linzy /uk/lampy-i-linzy
+Redirect 301 /knopki-pereklyuchateli-i-rele/rele /rele
+Redirect 301 /uk/knopky-peremykachi-ta-rele/rele /uk/rele
+Redirect 301 /instrumenty/remont-mobilnyx-ustrojstv/separatory /separatory
+Redirect 301 /uk/instrumenty/dlya-remontu-mobilnyh-prystroyiv/separatory /uk/separatory
+Redirect 301 /razemy/kabelnye-nakonechniki /kabelnye-nakonechniki
+Redirect 301 /uk/roz-yemy/kabelni-nakonechnyky /uk/kabelni-nakonechnyky
+Redirect 301 /instrumenty/instrument-dlja-otdelochnyx-rabot/terki-shpateli-zatirki /terki-shpateli-zatirki
+Redirect 301 /uk/instrumenty/instrument-dlya-ozdoblyuvalnyh-robit/tertky-shpateli-zatirky /uk/tertky-shpateli-zatirky
+Redirect 301 /akustika-i-zvuk/avtomobilnye-sabvufery /avtomobilnye-sabvufery
+Redirect 301 /uk/akustika-ta-zvuk/avtomobilni-sabvufery /uk/avtomobilni-sabvufery
+Redirect 301 /instrumenty/instrument-dlja-otdelochnyx-rabot/pistolety-dlja-peny-i-silikona /pistolety-dlja-peny-i-silikona
+Redirect 301 /uk/instrumenty/instrument-dlya-ozdoblyuvalnyh-robit/pistolety-dlya-piny-ta-sylikonu /uk/pistolety-dlya-piny-ta-sylikonu
+Redirect 301 /izmeritelnye-pribory/anemometry /anemometry
+Redirect 301 /uk/vymiryuvalni-prylady/anemometry /uk/anemometry
+Redirect 301 /instrumenty/izmeritelnyj-instrument/shtangencirkuli /shtangencirkuli
+Redirect 301 /uk/instrumenty/vymiryuvalnyj-instrument/shtangencyrkuli /uk/shtangencyrkuli
+Redirect 301 /payalnoe-oborudovanie/binokulyary /binokulyary
+Redirect 301 /uk/payalne-obladnannya/binokulyary /uk/binokulyary
+Redirect 301 /uk/optyka/binokulyary /uk/binokulyary
+Redirect 301 /kabel-shnury-i-provoda/setevye-shnury /setevye-shnury
+Redirect 301 /uk/kabel-shnury-ta-droty/kabeli-zhyvlennya /uk/kabeli-zhyvlennya
+Redirect 301 /radiodetali/rezistory/rezistory-10-vt /rezistory-10-vt
+Redirect 301 /uk/radiodetali/rezystory/rezystory-10-vt /uk/rezystory-10-vt
+Redirect 301 /kljuchi-razvodnye?page=0 /kljuchi-razvodnye
+Redirect 301 /uk/klyuchi-rozvidni?page=0 /uk/klyuchi-rozvidni
+Redirect 301 /rashodnye-materialy/abrazivnyj-material/krugi-nazhdachnye-samoklejuschiesja /krugi-nazhdachnye-samoklejuschiesja
+Redirect 301 /uk/vytratni-materialy/abrazyvnyj-material/krugy-nazhdakovi-samokleyuchi /uk/krugy-nazhdakovi-samokleyuchi
+Redirect 301 /instrumenty/avtoinstrument/ochistiteli-vysokogo-davlenija /ochistiteli-vysokogo-davlenija
+Redirect 301 /uk/instrumenty/avtoinstrument/universalni-myjky /uk/universalni-myjky
+Redirect 301 /rashodnye-materialy/kulki-s-zipperom /kulki-s-zipperom
+Redirect 301 /uk/vytratni-materialy/kulky-z-ziperom /uk/kulky-z-ziperom
+Redirect 301 /izmeritelnye-pribory/tokovye-kleshchi /tokovye-kleshchi
+Redirect 301 /uk/vymiryuvalni-prylady/strumovymiryuvalni-klishi /uk/strumovymiryuvalni-klishi
+Redirect 301 /radiodetali/kondensatory/ionistry-i-superkondensatory /ionistry-i-superkondensatory
+Redirect 301 /uk/radiodetali/kondensatory/ionistory-i-superkondensatory /uk/ionistory-i-superkondensatory
+Redirect 301 /instrumenty/prinadlezhnosti-k-instrumentu/prinadlezhnosti-dlja-graverov /prinadlezhnosti-dlja-graverov
+Redirect 301 /uk/instrumenty/prynalezhnosti-do-instrumentu/prynalezhnosti-dlya-graveriv /uk/prynalezhnosti-dlya-graveriv
+Redirect 301 /instrumenty/elektroinstrument/niveliry-i-shtativy /niveliry-i-shtativy
+Redirect 301 /uk/instrumenty/elektroinstrument/niveliry-i-shtatyvy /uk/niveliry-i-shtatyvy
+Redirect 301 /instrumenty/instrument-dlja-otdelochnyx-rabot /instrument-dlja-otdelochnyx-rabot
+Redirect 301 /uk/instrumenty/instrument-dlya-ozdoblyuvalnyh-robit /uk/instrument-dlya-ozdoblyuvalnyh-robit
+Redirect 301 /instrumenty/nabory-instrumentov /nabory-instrumentov
+Redirect 301 /uk/instrumenty/nabory-instrumentiv /uk/nabory-instrumentiv
+Redirect 301 /radiodetali/kondensatory/polimernye /polimernye
+Redirect 301 /uk/radiodetali/kondensatory/polimerni /uk/polimerni
+Redirect 301 /rashodnye-materialy/himiya/ochistka-i-promyvka /ochistka-i-promyvka
+Redirect 301 /uk/vytratni-materialy/himiya/ochyshennya-i-promyvannya /uk/ochyshennya-i-promyvannya
+Redirect 301 /instrumenty/elektroinstrument /elektroinstrument
+Redirect 301 /uk/instrumenty/elektroinstrument /uk/elektroinstrument
+Redirect 301 /razemy/zazhimy-krokodil /zazhimy-krokodil
+Redirect 301 /uk/roz-yemy/zatyskachi-krokodyl /uk/zatyskachi-krokodyl
+Redirect 301 /instrumenty/instrument-dlja-otdelochnyx-rabot/instrument-dlja-plitki /instrument-dlja-plitki
+Redirect 301 /uk/instrumenty/instrument-dlya-ozdoblyuvalnyh-robit/instrument-dlya-plytky /uk/instrument-dlya-plytky
+Redirect 301 /instrumenty/akkumuljatornyj-instrument/akkumuljatory /akkumuljatory
+Redirect 301 /uk/instrumenty/akumulyatornyj-instrument/akumulyatory /uk/akumulyatory
+Redirect 301 /instrumenty/prinadlezhnosti-k-instrumentu/prisposoblenija-dlja-drelej /prisposoblenija-dlja-drelej
+Redirect 301 /uk/instrumenty/prynalezhnosti-do-instrumentu/prystosuvannya-dlya-dryliv /uk/prystosuvannya-dlya-dryliv
+Redirect 301 /razemy/telefonnye-i-setevye /telefonnye-i-setevye
+Redirect 301 /uk/roz-yemy/telefonni-i-merezhevi /uk/telefonni-i-merezhevi
+Redirect 301 /instrumenty/mnogofunktsionalnye-instrumenty /mnogofunktsionalnye-instrumenty
+Redirect 301 /uk/instrumenty/bagatofunkcionalni-instrumenty /uk/bagatofunkcionalni-instrumenty
+Redirect 301 /instrumenty/ruchnoj-instrument/steplery-mexanicheskie /steplery-mexanicheskie
+Redirect 301 /uk/instrumenty/ruchnyj-instrument/steplery-mehanichni /uk/steplery-mehanichni
+Redirect 301 /instrumenty/rasxodnye-materialy-dlja-instrumenta/frezy /frezy
+Redirect 301 /uk/instrumenty/vytratni-materialy-dlya-instrumentu/frezy /uk/frezy
+Redirect 301 /radiodetali/rezistory/rezistory-25vt-i-50vt /rezistory-25vt-i-50vt
+Redirect 301 /uk/radiodetali/rezystory/rezystory-25vt-i-50vt /uk/rezystory-25vt-i-50vt
+Redirect 301 /rashodnye-materialy/himiya/zamorozka-i-ohlazhdenie /zamorozka-i-ohlazhdenie
+Redirect 301 /uk/vytratni-materialy/himiya/zamorozhennya-i-oholodzhennya /uk/zamorozhennya-i-oholodzhennya
+Redirect 301 /svetodiody-i-led-produkciya/prozhektory /prozhektory
+Redirect 301 /uk/svitlodiody-ta-led-produkciya/prozhektory /uk/prozhektory
+Redirect 301 /rashodnye-materialy/himiya/tokoprovodyashchaya-himiya /tokoprovodyashchaya-himiya
+Redirect 301 /uk/vytratni-materialy/himiya/tokoprovidna-himiya /uk/tokoprovidna-himiya
+Redirect 301 /instrumenty/rasxodnye-materialy-dlja-instrumenta/zaklepki /zaklepki
+Redirect 301 /uk/instrumenty/vytratni-materialy-dlya-instrumentu/zaklepky /uk/zaklepky
+Redirect 301 /rashodnye-materialy/himiya/masla-i-smazki /masla-i-smazki
+Redirect 301 /uk/vytratni-materialy/himiya/masla-i-mastyla /uk/masla-i-mastyla
+Redirect 301 /radiodetali/kondensatory/elektroliticheskie-aksialnye /elektroliticheskie-aksialnye
+Redirect 301 /uk/radiodetali/kondensatory/elektrolitychni-aksialni /uk/elektrolitychni-aksialni
+Redirect 301 /instrumenty/stoljarno-slesarnyj-instrument/truborezy /truborezy
+Redirect 301 /uk/instrumenty/stolyarno-slyusarnyj-instrument/truborizy /uk/truborizy
+Redirect 301 /instrumenty/aksessuary-2 /aksessuary-2
+Redirect 301 /uk/instrumenty/aksesuary /uk/aksesuary
+Redirect 301 /svetodiody-i-led-produkciya/svetodiody-48-mm /svetodiody-48-mm
+Redirect 301 /uk/svitlodiody-ta-led-produkciya/svitlodiody-4-8-mm /uk/svitlodiody-4-8-mm
+Redirect 301 /texnika-dlja-doma-i-sada/sistemy-poliva/ostsiljatsionnye-orositeli /ostsiljatsionnye-orositeli
+Redirect 301 /uk/tehnika-dlya-domu-ta-sadu/systemy-polyvu/oscylyacijni-zroshuvachi /uk/oscylyacijni-zroshuvachi
+Redirect 301 /texnika-dlja-doma-i-sada/gazonokosilki-trimmery/gazonokosilki-benzinovye /gazonokosilki-benzinovye
+Redirect 301 /uk/tehnika-dlya-domu-ta-sadu/gazonokosarky-trymery/gazonokosarky-benzynovi /uk/gazonokosarky-benzynovi
+Redirect 301 /izmeritelnye-pribory/dozimetry /dozimetry
+Redirect 301 /uk/vymiryuvalni-prylady/dozymetry /uk/dozymetry
+Redirect 301 /rashodnye-materialy/himiya/zashchitnye-pokrytiya /zashchitnye-pokrytiya
+Redirect 301 /uk/vytratni-materialy/himiya/zahysni-pokryttya /uk/zahysni-pokryttya
+Redirect 301 /izmeritelnye-pribory/teplovizory /teplovizory
+Redirect 301 /uk/vymiryuvalni-prylady/teplovizory /uk/teplovizory
+Redirect 301 /instrumenty/prinadlezhnosti-k-instrumentu/kljuchi-dlja-zazhima-kontrgajki-dlja-ushm /kljuchi-dlja-zazhima-kontrgajki-dlja-ushm
+Redirect 301 /uk/instrumenty/prynalezhnosti-do-instrumentu/klyuchi-dlya-zatysku-kontrgajky-dlya-kshm /uk/klyuchi-dlya-zatysku-kontrgajky-dlya-kshm
+Redirect 301 /instrumenty/akkumuljatornyj-instrument /akkumuljatornyj-instrument
+Redirect 301 /uk/instrumenty/akumulyatornyj-instrument /uk/akumulyatornyj-instrument
+Redirect 301 /kabel-shnury-i-provoda/shleyfy-i-razemy /shleyfy-i-razemy
+Redirect 301 /uk/kabel-shnury-ta-droty/shlejfy-ta-roz-yemy /uk/shlejfy-ta-roz-yemy
+Redirect 301 /instrumenty/remont-mobilnyx-ustrojstv/stanki-i-termopressy /stanki-i-termopressy
+Redirect 301 /uk/instrumenty/dlya-remontu-mobilnyh-prystroyiv/verstaty-ta-termopresy /uk/verstaty-ta-termopresy
+Redirect 301 /instrumenty/otvertki /otvertki
+Redirect 301 /uk/instrumenty/vykrutky /uk/vykrutky
+Redirect 301 /izmeritelnye-pribory/megaommetry /megaommetry
+Redirect 301 /uk/vymiryuvalni-prylady/megaommetry /uk/megaommetry
+Redirect 301 /instrumenty/prinadlezhnosti-k-instrumentu/kontrgajki-prizhimnye-dlja-ushm /kontrgajki-prizhimnye-dlja-ushm
+Redirect 301 /uk/instrumenty/prynalezhnosti-do-instrumentu/kontrgajky-prytyskni-dlya-kshm /uk/kontrgajky-prytyskni-dlya-kshm
+Redirect 301 /kabel-shnury-i-provoda/kabel-koaksialnyy /kabel-koaksialnyy
+Redirect 301 /uk/kabel-shnury-ta-droty/kabel-koaksialnyj /uk/kabel-koaksialnyj
+Redirect 301 /texnika-dlja-doma-i-sada/instrument-sadovyj /instrument-sadovyj
+Redirect 301 /uk/tehnika-dlya-domu-ta-sadu/instrument-sadovyj /uk/instrument-sadovyj
+Redirect 301 /texnika-dlja-doma-i-sada/reklamno-suvenirnaja-produktsija /reklamno-suvenirnaja-produktsija
+Redirect 301 /uk/tehnika-dlya-domu-ta-sadu/reklamno-suvenirna-produkciya /uk/reklamno-suvenirna-produkciya
+Redirect 301 /dinamiki/5-dyuymov /5-dyuymov
+Redirect 301 /uk/dynamiky/5-dyujmiv /uk/5-dyujmiv
+Redirect 301 /instrumenty/izmeritelnyj-instrument/ugolniki-pravila-linejki /ugolniki-pravila-linejki
+Redirect 301 /uk/instrumenty/vymiryuvalnyj-instrument/kosynci-pravyla-linijky /uk/kosynci-pravyla-linijky
+Redirect 301 /instrumenty/instrument-dlja-otdelochnyx-rabot/stroitelnye-emkosti /stroitelnye-emkosti
+Redirect 301 /uk/instrumenty/instrument-dlya-ozdoblyuvalnyh-robit/budivelni-yemnosti /uk/budivelni-yemnosti
+Redirect 301 /rashodnye-materialy/maketnye-platy /maketnye-platy
+Redirect 301 /uk/vytratni-materialy/maketni-platy /uk/maketni-platy
+Redirect 301 /instrumenty/elektroinstrument/betonosmesiteli /betonosmesiteli
+Redirect 301 /uk/instrumenty/elektroinstrument/betonozmishuvachi /uk/betonozmishuvachi
+Redirect 301 /instrumenty/elektroinstrument/mashiny-shlifovalnye-polirovalnye /mashiny-shlifovalnye-polirovalnye
+Redirect 301 /uk/instrumenty/elektroinstrument/mashyny-shlifuvalni-poliruvalni /uk/mashyny-shlifuvalni-poliruvalni
+Redirect 301 /izmeritelnye-pribory/multimetry-1 /multimetry-1
+Redirect 301 /uk/vymiryuvalni-prylady/multymetry /uk/multymetry
+Redirect 301 /instrumenty/rasxodnye-materialy-dlja-instrumenta /rasxodnye-materialy-dlja-instrumenta
+Redirect 301 /uk/instrumenty/vytratni-materialy-dlya-instrumentu /uk/vytratni-materialy-dlya-instrumentu
+Redirect 301 /instrumenty/sistemy-xranenija/organajzery-dlja-instrumentov /organajzery-dlja-instrumentov
+Redirect 301 /uk/instrumenty/systemy-zberigannya/organajzery-dlya-instrumentiv /uk/organajzery-dlya-instrumentiv
+Redirect 301 /dinamiki/8-dyuymov /8-dyuymov
+Redirect 301 /uk/dynamiky/8-dyujmiv /uk/8-dyujmiv
+Redirect 301 /rashodnye-materialy/himiya/klei /klei
+Redirect 301 /uk/vytratni-materialy/himiya/kleyi /uk/kleyi
+Redirect 301 /instrumenty/avtoinstrument/instrument-dlja-smazki /instrument-dlja-smazki
+Redirect 301 /uk/instrumenty/avtoinstrument/instrument-dlya-zmashennya /uk/instrument-dlya-zmashennya
+Redirect 301 /instrumenty/prinadlezhnosti-k-instrumentu/materialy-rasxodnye-dlja-akkumuljatornyx-instrumentov /materialy-rasxodnye-dlja-akkumuljatornyx-instrumentov
+Redirect 301 /uk/instrumenty/prynalezhnosti-do-instrumentu/materialy-vydatkovi-dlya-akumulyatornyh-instrumentiv /uk/materialy-vydatkovi-dlya-akumulyatornyh-instrumentiv
+Redirect 301 /texnika-dlja-doma-i-sada/sistemy-poliva /sistemy-poliva
+Redirect 301 /uk/tehnika-dlya-domu-ta-sadu/systemy-polyvu /uk/systemy-polyvu
+Redirect 301 /elementy-pitaniya/batareyki-i-akkumulyatory /batareyki-i-akkumulyatory
+Redirect 301 /uk/elementy-zhyvlennya/batarejky-ta-akumulyatory /uk/batarejky-ta-akumulyatory
+Redirect 301 /kabel-shnury-i-provoda/telefonnye-provoda /telefonnye-provoda
+Redirect 301 /uk/kabel-shnury-ta-droty/telefonni-droty /uk/telefonni-droty
+Redirect 301 /texnika-dlja-doma-i-sada/sistemy-poliva/konnektory-i-mufty-dlja-shlangov /konnektory-i-mufty-dlja-shlangov
+Redirect 301 /uk/tehnika-dlya-domu-ta-sadu/systemy-polyvu/konnektory-ta-mufty-dlya-shlangiv /uk/konnektory-ta-mufty-dlya-shlangiv
+Redirect 301 /instrumenty/avtoinstrument/kljuchi /kljuchi
+Redirect 301 /uk/instrumenty/avtoinstrument/klyuchi /uk/klyuchi
+Redirect 301 /elementy-pitaniya/adaptery-batareek /adaptery-batareek
+Redirect 301 /uk/elementy-zhyvlennya/adaptery-batarejok /uk/adaptery-batarejok
+Redirect 301 /rashodnye-materialy/himiya/pripoy /pripoy
+Redirect 301 /uk/vytratni-materialy/himiya/prypij /uk/prypij
+Redirect 301 /instrumenty/izmeritelnyj-instrument/urovni /urovni
+Redirect 301 /uk/instrumenty/vymiryuvalnyj-instrument/rivni /uk/rivni
+Redirect 301 /instrumenty/prinadlezhnosti-k-instrumentu/miksery /miksery
+Redirect 301 /uk/instrumenty/prynalezhnosti-do-instrumentu/miksery /uk/miksery
+Redirect 301 /dinamiki/12-dyuymov /12-dyuymov
+Redirect 301 /uk/dynamiky/12-dyujmiv /uk/12-dyujmiv
+Redirect 301 /instrumenty/avtoinstrument/ustrojstva-zarjadnye-i-pusko-zarjadnye-dlja-akb /ustrojstva-zarjadnye-i-pusko-zarjadnye-dlja-akb
+Redirect 301 /uk/instrumenty/avtoinstrument/prystroyi-zaryadni-ta-pusko-zaryadni-dlya-akb /uk/prystroyi-zaryadni-ta-pusko-zaryadni-dlya-akb
+Redirect 301 /instrumenty/prinadlezhnosti-k-instrumentu /prinadlezhnosti-k-instrumentu
+Redirect 301 /uk/instrumenty/prynalezhnosti-do-instrumentu /uk/prynalezhnosti-do-instrumentu
+Redirect 301 /radiodetali/predohraniteli-i-aksessuary/termopredohraniteli /termopredohraniteli
+Redirect 301 /uk/radiodetali/zapobizhnyky-i-aksesuary/termozapobizhnyky /uk/termozapobizhnyky
+Redirect 301 /instrumenty/elektroinstrument/yato /elektroinstrument
+Redirect 301 /uk/instrumenty/elektroinstrument/yato /uk/elektroinstrument
+Redirect 301 /kljuchi-trubnye?page=0 /kljuchi-trubnye
+Redirect 301 /uk/klyuchi-trubni?page=0 /uk/klyuchi-trubni
+Redirect 301 /instrumenty/remont-mobilnyx-ustrojstv/programmatory-i-dongly /programmatory-i-dongly
+Redirect 301 /uk/instrumenty/dlya-remontu-mobilnyh-prystroyiv/programatory-i-dongly /uk/programatory-i-dongly
+Redirect 301 /payalnoe-oborudovanie/payalniki /payalniki
+Redirect 301 /uk/payalne-obladnannya/payalnyky /uk/payalnyky
+Redirect 301 /instrumenty/elektroinstrument/steplery /steplery
+Redirect 301 /uk/instrumenty/elektroinstrument/steplery /uk/steplery
+Redirect 301 /rashodnye-materialy/himiya/termoprovodyashchaya-himiya /termoprovodyashchaya-himiya
+Redirect 301 /uk/vytratni-materialy/himiya/termoprovodyasha-himiya /uk/termoprovodyasha-himiya
+Redirect 301 /texnika-dlja-doma-i-sada/sredstva-individualnoj-zaschity/sredstva /sredstva
+Redirect 301 /uk/tehnika-dlya-domu-ta-sadu/zasoby-indyvidualnogo-zahystu/zasoby-zahystu /uk/zasoby-zahystu
+Redirect 301 /razemy/klemmniki-i-kolodki /klemmniki-i-kolodki
+Redirect 301 /uk/roz-yemy/klemnyky-i-kolodky /uk/klemnyky-i-kolodky
+Redirect 301 /kabel-shnury-i-provoda/signalnyy-kabel /signalnyy-kabel
+Redirect 301 /uk/kabel-shnury-ta-droty/sygnalnyj-kabel /uk/sygnalnyj-kabel
+Redirect 301 /instrumenty/stoljarno-slesarnyj-instrument/plashki-i-metchiki /plashki-i-metchiki
+Redirect 301 /uk/instrumenty/stolyarno-slyusarnyj-instrument/plashky-ta-mitchyky /uk/plashky-ta-mitchyky
+Redirect 301 /kabel-shnury-i-provoda/vitaya-para /vitaya-para
+Redirect 301 /uk/kabel-shnury-ta-droty/kruchena-para /uk/kruchena-para
+Redirect 301 /instrumenty/prinadlezhnosti-k-instrumentu/patrony-dlja-drelej /patrony-dlja-drelej
+Redirect 301 /uk/instrumenty/prynalezhnosti-do-instrumentu/patrony-dlya-dryliv /uk/patrony-dlya-dryliv
+Redirect 301 /radiodetali/kondensatory/elektroliticheskie-nizkoimpedansnye /elektroliticheskie-nizkoimpedansnye
+Redirect 301 /uk/radiodetali/kondensatory/elektrolitychni-nizkoimpedansnye /uk/elektrolitychni-nizkoimpedansnye
+Redirect 301 /razemy/vysokochastotnye-razemy /vysokochastotnye-razemy
+Redirect 301 /uk/roz-yemy/vysokochastotni-roz-yemy /uk/vysokochastotni-roz-yemy
+Redirect 301 /instrumenty/pnevmoinstrument/shlifmashiny-pnevmaticheskie /shlifmashiny-pnevmaticheskie
+Redirect 301 /uk/instrumenty/pnevmoinstrument/shlifmashyny-pnevmatychni /uk/shlifmashyny-pnevmatychni
+Redirect 301 /texnika-dlja-doma-i-sada/tachki-sadovye-i-stroitelnye/tachki-dvuxkolesnye /tachki-dvuxkolesnye
+Redirect 301 /uk/tehnika-dlya-domu-ta-sadu/tachky-sadovi-ta-budivelni/tachky-dvokolisni /uk/tachky-dvokolisni
+Redirect 301 /izmeritelnye-pribory/detektory /detektory
+Redirect 301 /uk/vymiryuvalni-prylady/detektory /uk/detektory
+Redirect 301 /instrumenty/izmeritelnyj-instrument/instrument-dlja-razmetki /instrument-dlja-razmetki
+Redirect 301 /uk/instrumenty/vymiryuvalnyj-instrument/instrument-dlya-rozmitky /uk/instrument-dlya-rozmitky
+Redirect 301 /radiodetali/kondensatory/elektroliticheskie /elektroliticheskie
+Redirect 301 /uk/radiodetali/kondensatory/elektrolitychni-vyvidni /uk/elektrolitychni-vyvidni
+Redirect 301 /instrumenty/remont-mobilnyx-ustrojstv/laminatory-i-avtoklavy /laminatory-i-avtoklavy
+Redirect 301 /uk/instrumenty/dlya-remontu-mobilnyh-prystroyiv/laminatory-ta-avtoklavy /uk/laminatory-ta-avtoklavy
+Redirect 301 /bloki-pitaniya/promyshlennye-bloki-pitaniya /promyshlennye-bloki-pitaniya
+Redirect 301 /uk/bloky-zhyvlennya/promyslovi-bloky-zhyvlennya /uk/promyslovi-bloky-zhyvlennya
+Redirect 301 /instrumenty/pnevmoinstrument/pistolety-dlja-raspylenija-i-nagnetanija-pnevmaticheskie /pistolety-dlja-raspylenija-i-nagnetanija-pnevmaticheskie
+Redirect 301 /uk/instrumenty/pnevmoinstrument/pistolety-dlya-rozpylennya-i-nagnitannya-pnevmatychni /uk/pistolety-dlya-rozpylennya-i-nagnitannya-pnevmatychni
+Redirect 301 /instrumenty/elektroinstrument/stanki /stanki
+Redirect 301 /uk/instrumenty/elektroinstrument/verstaty-tochylni-ta-sverdlylni /uk/verstaty-tochylni-ta-sverdlylni
+Redirect 301 /instrumenty/pnevmoinstrument/ustrojstva-podgotovki-i-ochistki-vozduxa /ustrojstva-podgotovki-i-ochistki-vozduxa
+Redirect 301 /uk/instrumenty/pnevmoinstrument/prystroyi-pidgotovky-ta-ochyshennya-povitrya /uk/prystroyi-pidgotovky-ta-ochyshennya-povitrya
+Redirect 301 /texnika-dlja-doma-i-sada/lestnitsy-i-stremjanki /lestnitsy-i-stremjanki
+Redirect 301 /uk/tehnika-dlya-domu-ta-sadu/shody-i-drabyny /uk/shody-i-drabyny
+Redirect 301 /kabel-shnury-i-provoda/montazhnye-provoda /montazhnye-provoda
+Redirect 301 /uk/kabel-shnury-ta-droty/montazhni-droty /uk/montazhni-droty
+Redirect 301 /instrumenty/kusachki-i-bokorezy /kusachki-i-bokorezy
+Redirect 301 /uk/instrumenty/kusachky-i-bokorizy /uk/kusachky-i-bokorizy
+Redirect 301 /radiodetali/aksessuary-k-transformatoram /aksessuary-k-transformatoram
+Redirect 301 /uk/radiodetali/aksesuary-ta-inshe /uk/aksesuary-ta-inshe
+Redirect 301 /instrumenty/rasxodnye-materialy-dlja-instrumenta/navesnoe-oborudovanie-dlja /navesnoe-oborudovanie-dlja
+Redirect 301 /uk/instrumenty/vytratni-materialy-dlya-instrumentu/navisne-obladnannya-dlya-motoblokiv /uk/navisne-obladnannya-dlya-motoblokiv
+Redirect 301 /rashodnye-materialy/abrazivnyj-material/diski /diski
+Redirect 301 /uk/vytratni-materialy/abrazyvnyj-material/dysky /uk/dysky
+Redirect 301 /dinamiki/4-dyuyma /4-dyuyma
+Redirect 301 /uk/dynamiky/4-dyujmy /uk/4-dyujmy
+Redirect 301 /kabel-shnury-i-provoda/audio-video-shnury /audio-video-shnury
+Redirect 301 /uk/kabel-shnury-ta-droty/audio-video-shnury /uk/audio-video-shnury
+Redirect 301 /dinamiki/15-dyuymov /15-dyuymov
+Redirect 301 /uk/dynamiky/15-dyujmiv /uk/15-dyujmiv
+Redirect 301 /instrumenty/stoljarno-slesarnyj-instrument/napilniki-rashpili-nadfili /napilniki-rashpili-nadfili
+Redirect 301 /uk/instrumenty/stolyarno-slyusarnyj-instrument/napylky-rashpyli-nadfili /uk/napylky-rashpyli-nadfili
+Redirect 301 /radiodetali/predohraniteli-i-aksessuary/avtomobilnyy-maxi /avtomobilnyy-maxi
+Redirect 301 /uk/radiodetali/zapobizhnyky-i-aksesuary/avtomobilnyj-maxi /uk/avtomobilnyj-maxi
+Redirect 301 /svetodiody-i-led-produkciya/svetodiodnye-lenty /svetodiodnye-lenty
+Redirect 301 /uk/svitlodiody-ta-led-produkciya/svitlodiodni-strichky /uk/svitlodiodni-strichky
+Redirect 301 /instrumenty/stoljarno-slesarnyj-instrument/kleschi /kleschi
+Redirect 301 /uk/instrumenty/stolyarno-slyusarnyj-instrument/klishi /uk/klishi
+Redirect 301 /instrumenty/avtoinstrument/vspomogatelnyj-instrument /vspomogatelnyj-instrument
+Redirect 301 /uk/instrumenty/avtoinstrument/dopomizhni-instrumenty /uk/dopomizhni-instrumenty
+Redirect 301 /instrumenty/pnevmoinstrument/shurupoverty-pnevmaticheskie /shurupoverty-pnevmaticheskie
+Redirect 301 /uk/instrumenty/pnevmoinstrument/shurupokruty-pnevmatychni /uk/shurupokruty-pnevmatychni
+Redirect 301 /instrumenty/stoljarno-slesarnyj-instrument/strubtsiny /strubtsiny
+Redirect 301 /uk/instrumenty/stolyarno-slyusarnyj-instrument/strubcyny /uk/strubcyny
+Redirect 301 /instrumenty/tiski /tiski
+Redirect 301 /uk/instrumenty/leshata /uk/leshata
+Redirect 301 /kabel-shnury-i-provoda/mikrofonnye-shnury /mikrofonnye-shnury
+Redirect 301 /uk/kabel-shnury-ta-droty/mikrofonni-shnury /uk/mikrofonni-shnury
+Redirect 301 /svetodiody-i-led-produkciya/svetodiody-5-mm /svetodiody-5-mm
+Redirect 301 /uk/svitlodiody-ta-led-produkciya/svitlodiody-5-mm /uk/svitlodiody-5-mm
+Redirect 301 /kabel-shnury-i-provoda/kabel-elektricheskiy /kabel-elektricheskiy
+Redirect 301 /uk/kabel-shnury-ta-droty/kabel-elektrychnyj /uk/kabel-elektrychnyj
+Redirect 301 /izmeritelnye-pribory/generatory-signalov /generatory-signalov
+Redirect 301 /uk/vymiryuvalni-prylady/generatory-sygnaliv /uk/generatory-sygnaliv
+Redirect 301 /kabel-shnury-i-provoda/setevye-udliniteli-i-perehodniki /setevye-udliniteli-i-perehodniki
+Redirect 301 /uk/kabel-shnury-ta-droty/merezhevi-podovzhuvachi-ta-perehidnyky /uk/merezhevi-podovzhuvachi-ta-perehidnyky
+Redirect 301 /izmeritelnye-pribory/oscillografy /oscillografy
+Redirect 301 /uk/vymiryuvalni-prylady/oscylografy /uk/oscylografy
+Redirect 301 /payalnoe-oborudovanie/payalnye-stancii /payalnye-stancii
+Redirect 301 /uk/payalne-obladnannya/payalni-stanciyi /uk/payalni-stanciyi
+Redirect 301 /instrumenty/sistemy-xranenija/jaschiki-dlja-instrumentov /jaschiki-dlja-instrumentov
+Redirect 301 /uk/instrumenty/systemy-zberigannya/yashyky-dlya-instrumentiv /uk/yashyky-dlya-instrumentiv
+Redirect 301 /instrumenty/prinadlezhnosti-k-instrumentu/prisposoblenija-dlja-ushm /prisposoblenija-dlja-ushm
+Redirect 301 /uk/instrumenty/prynalezhnosti-do-instrumentu/prystosuvannya-dlya-kshm /uk/prystosuvannya-dlya-kshm
+Redirect 301 /texnika-dlja-doma-i-sada/tachki-sadovye-i-stroitelnye/kolesa-k-tachkam /kolesa-k-tachkam
+Redirect 301 /uk/tehnika-dlya-domu-ta-sadu/tachky-sadovi-ta-budivelni/kolesa-do-tachok /uk/kolesa-do-tachok
+Redirect 301 /rashodnye-materialy/abrazivnyj-material /abrazivnyj-material
+Redirect 301 /uk/vytratni-materialy/abrazyvnyj-material /uk/abrazyvnyj-material
+Redirect 301 /texnika-dlja-doma-i-sada/snegouborschiki /snegouborschiki
+Redirect 301 /uk/tehnika-dlya-domu-ta-sadu/snigoprybyrachi /uk/snigoprybyrachi
+Redirect 301 /instrumenty/remont-mobilnyx-ustrojstv/formy /formy
+Redirect 301 /uk/instrumenty/dlya-remontu-mobilnyh-prystroyiv/formy /uk/formy
+Redirect 301 /izmeritelnye-pribory/pirometry /pirometry
+Redirect 301 /uk/vymiryuvalni-prylady/pirometry /uk/pirometry
+Redirect 301 /texnika-dlja-doma-i-sada/tachki-sadovye-i-stroitelnye /tachki-sadovye-i-stroitelnye
+Redirect 301 /uk/tehnika-dlya-domu-ta-sadu/tachky-sadovi-ta-budivelni /uk/tachky-sadovi-ta-budivelni
+Redirect 301 /razemy/razemy-televizionnye /razemy-televizionnye
+Redirect 301 /uk/roz-yemy/roz-yemy-televizijni /uk/roz-yemy-televizijni
+Redirect 301 /izmeritelnye-pribory/cable-tester /cable-tester
+Redirect 301 /uk/vymiryuvalni-prylady/testery /uk/testery
+Redirect 301 /instrumenty/ploskogubcy-i-dlinnogubcy /ploskogubcy-i-dlinnogubcy
+Redirect 301 /uk/instrumenty/ploskogubci-i-dlinnogubcy /uk/ploskogubci-i-dlinnogubcy
+Redirect 301 /18-djujmov?page=0 /18-djujmov
+Redirect 301 /uk/18-dyujmiv?page=0 /uk/18-dyujmiv
+Redirect 301 /texnika-dlja-doma-i-sada/gazonokosilki-trimmery/trimmery /trimmery
+Redirect 301 /uk/tehnika-dlya-domu-ta-sadu/gazonokosarky-trymery/trymmery /uk/trymmery
+Redirect 301 /vspomogatelnoe-oborudovanie/pajalnye-vanny-tigeli /pajalnye-vanny-tigeli
+Redirect 301 /uk/dopomizhne-obladnannya/payalni-vanny /uk/payalni-vanny
+Redirect 301 /akustika-i-zvuk/dinamiki/do-4-dyuymov /do-4-dyuymov
+Redirect 301 /uk/akustika-ta-zvuk/dynamiky/do-4-dyujmiv /uk/do-4-dyujmiv
+Redirect 301 /akustika-i-zvuk/dinamiki/vysokochastotnye-dinamiki /vysokochastotnye-dinamiki
+Redirect 301 /uk/akustika-ta-zvuk/dynamiky/vysokochastotni-dynamiky /uk/vysokochastotni-dynamiky
+Redirect 301 /texnika-dlja-doma-i-sada/fonari-lampochki-fary /fonari-lampochki-fary
+Redirect 301 /uk/tehnika-dlya-domu-ta-sadu/lihtari-lampochky-fary /uk/lihtari-lampochky-fary
+Redirect 301 /radiodetali/ventilyatory /ventilyatory
+Redirect 301 /uk/radiodetali/ventylyatory /uk/ventylyatory
+Redirect 301 /kompanijam /company
+Redirect 301 /uk/kompanijam /uk/company
+Redirect 301 /tovary-dlya-otdyha /
+Redirect 301 /uk/tovary-dlya-vidpochynku-ta-sportu /uk
+Redirect 301 /kompyuternye-aksessuary /
+Redirect 301 /uk/komp-yuterni-aksesuary /uk
+Redirect 301 /taymery-chasy-priyomniki /
+Redirect 301 /uk/tajmery-godynnyky-pryjmachi /uk
+Redirect 301 /taymery /
+Redirect 301 /chasy /
+Redirect 301 /vesy /
+Redirect 301 /elektrotransport /
+Redirect 301 /radioupravljaemye-modeli /
+Redirect 301 /kemping-i-rybalka /
+Redirect 301 /podstavki-dlya-noutbukov /
+Redirect 301 /kompyuternye-kolonki /
+Redirect 301 /myshi-kompyuternye /
+Redirect 301 /naushniki /
+Redirect 301 /chehly-dlya-planshetov /
+Redirect 301 /usb-haby /
+Redirect 301 /3d-pechat /
+Redirect 301 /uk/tajmery-godynnyky-pryjmachi /uk
+Redirect 301 /uk/godynnyky /uk
+Redirect 301 /uk/vagy /uk
+Redirect 301 /uk/elektrotransport /uk
+Redirect 301 /uk/radiokerovani-modeli /uk
+Redirect 301 /uk/kemping-i-rybalka /uk
+Redirect 301 /uk/pidstavky-dlya-noutbukiv /uk
+Redirect 301 /uk/myshi-komp-yuterni /uk
+Redirect 301 /uk/navushnyky /uk
+Redirect 301 /uk/chohly-dlya-planshetiv /uk
+Redirect 301 /uk/usb-haby /uk
+Redirect 301 /uk/3d-druk /uk
+Redirect 301 /uk/tajmery /uk
+Redirect 301 /uk/komp-yuterni-kolonky /uk
+Redirect 301 /uk/multymetry//price/1000-76500 /uk/multymetry/price/1000-76500
+
+
+
+RewriteCond %{QUERY_STRING} ^route=information/company$
+RewriteRule ^(.*)$ /company? [R=301,L]
+
+RewriteCond %{QUERY_STRING} ^route=information/contact$
+RewriteRule ^(.*)$ /contact? [R=301,L]
+
+#RewriteCond %{QUERY_STRING} ^uk/route=information/company$
+#RewriteRule ^(.*)$ /uk/company? [R=301, L]
+
+#RewriteCond /uk/index.php?route=information/contact
+#RewriteRule ^(.*)$ /uk/contact? [R=301, L]
+
+#Redirect 301 /uk/index.php?route=information/contact /uk/contact
+
+#Redirect 301 /uk/index.php?route=information/company /uk/company
+
+
+
+
+
+php_flag display_startup_errors on
+php_flag display_errors on
+php_flag html_errors on
+
+
+
+
+### Additional Settings that may need to be enabled for some servers
+### Uncomment the commands by removing the # sign in front of it.
+### If you get an "Internal Server Error 500" after enabling any of the following settings, restore the # as this means your host doesn't allow that.
+
+# 1. If your cart only allows you to add one item at a time, it is possible register_globals is on. This may work to disable it:
+# php_flag register_globals off
+
+# 2. If your cart has magic quotes enabled, This may work to disable it:
+# php_flag magic_quotes_gpc Off
+
+# 3. Set max upload file size. Most hosts will limit this and not allow it to be overridden but you can try
+# php_value upload_max_filesize 999M
+
+# 4. set max post size. uncomment this line if you have a lot of product options or are getting errors where forms are not saving all fields
+# php_value post_max_size 999M
+
+# 5. set max time script can take. uncomment this line if you have a lot of product options or are getting errors where forms are not saving all fields
+# php_value max_execution_time 200
+
+# 6. set max time for input to be recieved. Uncomment this line if you have a lot of product options or are getting errors where forms are not saving all fields
+# php_value max_input_time 200
+
+# 7. disable open_basedir limitations
+# php_admin_value open_basedir none
+
+<IfModule Litespeed>
+# php parameters for upload files
+php_value upload_max_filesize 1360M
+php_value post_max_size 4096M
+php_value memory_limit 2G
+php_value max_execution_time 36000
+php_value max_input_time 36000
+php_value max_input_vars 10000
+php_value date.timezone Europe/Kiev
+</IfModule>
+
+
+
+
+
+
+### LITESPEED_CACHE_START - Do not remove this line
+<IfModule LiteSpeed>
+CacheLookup on
+## Uncomment the following directives if you has a separate mobile view
+RewriteEngine On
+RewriteCond %{HTTP_USER_AGENT} "iPhone|iPod|BlackBerry|Palm|Googlebot-Mobile|Mobile|mobile|mobi|Windows Mobile|Safari Mobile|Android|Opera Mini" [NC] RewriteRule .* - [E=Cache-Control:vary=ismobile]
+## Uncomment the following directives if you has a separate Safari browser view
+##RewriteCond %{HTTP_USER_AGENT} Safari
+##RewriteCond %{HTTP_USER_AGENT} !Chrome
+##RewriteCond %{HTTP_USER_AGENT} !CriOS
+##RewriteRule .* - [E=Cache-Control:vary=isSafari]
+##RewriteCond %{HTTP_USER_AGENT} "iPhone|iPod|BlackBerry|Palm|Googlebot-Mobile|Mobile|mobile|mobi|Windows Mobile|Safari Mobile|Android|Opera Mini" [NC]
+##RewriteCond %{HTTP_USER_AGENT} Safari
+##RewriteCond %{HTTP_USER_AGENT} !Chrome
+##RewriteCond %{HTTP_USER_AGENT} !CriOS
+##RewriteRule .* - [E=Cache-Control:vary=isMobileSafari]
+</IfModule>
+### LITESPEED_CACHE_END
+</IfModule>

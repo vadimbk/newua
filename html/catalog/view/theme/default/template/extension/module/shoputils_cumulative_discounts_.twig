@@ -1,0 +1,17 @@
+<h3>{{ heading_title }}</h3>
+<div class="row">
+  <div class="col-sm-12">
+      {{ text_customer }} 
+  </div>
+  {% if (cumulative_summ is defined) %} 
+  <div class="col-sm-12">
+      {{ cumulative_summ }} 
+  </div>
+  {% endif %} 
+  <div class="col-sm-12">
+      {{ text_description }} 
+  </div>
+  <div class="col-sm-12" style="margin-bottom:20px;">
+      <a style="text-decoration:underline;" href="{{ href_discounts }}">{{ text_href_discounts }}</a>
+  </div>
+</div>

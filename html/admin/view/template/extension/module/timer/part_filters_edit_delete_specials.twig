@@ -1,0 +1,76 @@
+<h3><span>{{ filter_by_products_parameters }}</span></h3>
+
+<!-- Categories -->
+<div class="form-group ajax-update">
+  <label class="col-sm-4 control-label">{{ text_categories }}</label>
+  <div class="col-sm-5">
+    {{ category_list }}
+    <a onclick="$(this).parent().find(':checkbox').prop('checked', true);" class="select-all">{{ select_all }}</a> /
+    <a onclick="$(this).parent().find(':checkbox').prop('checked', false);" class="unselect-all">{{ unselect_all }}</a>
+  </div>
+</div>
+
+<!-- Manufacturers -->
+<div class="form-group ajax-update">
+  <label class="col-sm-4 control-label">{{ text_manufacturers }}</label>
+  <div class="col-sm-5">
+  {{ manufacturer_list }}
+  <a onclick="$(this).parent().find(':checkbox').prop('checked', true);" class="select-all">{{ select_all }}</a> /
+  <a onclick="$(this).parent().find(':checkbox').prop('checked', false);" class="unselect-all">{{ unselect_all }}</a>
+  </div>
+</div>
+
+<!-- Special groups -->
+<div class="form-group ajax-update">
+  <label class="col-sm-4 control-label text-right">{{ text_special_groups }}</label>
+  <div class="col-sm-5">
+    <div class="scrollbox special-groups">
+      {% for special_group in special_groups %}
+      <label class="level-0">
+        <input type="checkbox" name="special_groups[]" value="{{ special_group.product_special_group_id }}" class="special-group"/>{{ special_group.name }}
+      </label>
+      {% endfor %}
+    </div>
+    <a onclick="$(this).parent().find(':checkbox').prop('checked', true);" class="select-all">{{ select_all }}</a> /
+    <a onclick="$(this).parent().find(':checkbox').prop('checked', false);" class="unselect-all">{{ unselect_all }}</a>
+  </div>
+</div>
+
+<!-- Select additional products -->
+{{ include_products_html }}
+<!-- Select additional products END -->
+
+<hr>
+<h4 class="text-center text-found-specials">
+    {{ found_specials }}
+    <div class="total-found-specials">...</div>
+</h4>
+
+<div class="block-show-possible-specials">
+  <a class="show-found-specials">{{ show_found_specials }}</a>
+
+  <div class="block-specials">
+    <a class="close-block-specials">x</a>
+    <table class="found-specials table table-bordered table-hover">
+      <thead>
+        <tr>
+          <td class="text-center">#</td>
+          <td class="text-center">{{ photo }}</td>
+          <td class="text-center">{{ name }}</td>
+          <td class="text-center">{{ old_price }}</td>
+          <td class="text-center">{{ special_price }}</td>
+          <td class="text-center">{{ status }}</td>
+          <td class="text-center">{{ text_special_group }}</td>
+          <td class="text-center">{{ date_start }}</td>
+          <td class="text-center">{{ date_end }}</td>
+
+          {% if hours_days_status %}
+            <td class="text-center">{{ text_weekdays }}</td>
+            <td class="text-center">{{ text_hours }}</td>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>

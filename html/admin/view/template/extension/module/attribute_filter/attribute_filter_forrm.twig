@@ -1,0 +1,76 @@
+        <div class="well">
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label class="control-label" for="input-name">{{ entry_name }}</label>
+                <input type="text" name="filter_name" value="{{ filter_name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control" />
+              </div>
+			  <div>
+			  _ - <small>заменяет один символ (clock_peed)</small>
+			  <br>
+			  || - or <small>(abs || bcd)</small>
+			  </div>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <label class="control-label" for="input-group">{{ entry_group }}</label>
+                <select name="filter_attribute_group_id" id="input-group" class="form-control">
+                  <option value="*"></option>
+				  {% for group in attribute_groups %}
+                  {% if filter_attribute_group_id == group['attribute_group_id'] %}
+                  <option value="{{ group['attribute_group_id'] }}" selected="selected">{{ group['name'] }}</option>
+                  {% else %}
+                  <option value="{{ group['attribute_group_id'] }}">{{ group['name'] }}</option>
+                  {% endif %}>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <button type="button" id="button-filter" class="btn btn-primary pull-right"><i class="fa fa-filter"></i> {{ button_filter }}</button>
+            </div>
+          </div>
+        </div>
+<script>
+$(document).ready(function() {
+    $.fn.editable.defaults.mode = 'popup';
+    $('.fast-edit').editable({
+		error: function(response, newValue) {
+			if(response.status === 401) {
+				location.reload();
+				return 'Not Authorized';
+			} else {
+				return response.responseText;
+			}
+		}
+    });
+});
+function getFilter() {
+	var url ='';
+	var filter_name = $('input[name=\'filter_name\']').val();
+
+	if (filter_name) {
+		url += '&filter_name=' + encodeURIComponent(filter_name);
+	}
+
+	var filter_attribute_group_id = $('select[name=\'filter_attribute_group_id\']').val();
+
+	if (filter_attribute_group_id != '*') {
+		url += '&filter_attribute_group_id=' + encodeURIComponent(filter_attribute_group_id);
+	}
+
+	var filter_limit = $('select[name=\'filter_limit\']').val();
+
+	if (filter_limit) {
+		url += '&limit=' + encodeURIComponent(filter_limit);
+	}
+	return url;
+}
+$('#button-filter').on('click', function() {
+	var url = '{{ filter }}';
+	url += getFilter();
+	location = url;
+});
+
+</script>
+  

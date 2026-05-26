@@ -1,0 +1,2150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+<name>SP AUTO SEO FAQ admin</name>
+<code>sp_auto_seo_faq_admin</code>
+<version>6.1</version>
+<author>spectre</author>
+<link>https://freelancer.od.ua/</link>
+<file path="admin/language/{ru-ru,russian}*/{catalog,blog}/*.php">
+	<operation error="skip">
+		<search><![CDATA[// Entry]]></search>
+		<add position="before"><![CDATA[
+		$_['column_faq'] = 'Ответ (можно HTML)';
+		$_['column_question'] = 'Вопрос (можно HTML)';
+		$_['column_sort_order'] = 'Порядок сортировки';
+		$_['column_link'] = 'Ссылка на которой выводить блок';
+		$_['tab_faq'] = '<i class="fa fa-rocket"></i> SP AUTO SEO FAQ';
+		$_['button_remove'] = 'Удалить';
+		$_['faq_name'] = 'Название блока вопрос-ответ';
+		$_['text_auto_category_help'] = 'Доступные теги: {category_name} {meta_title} {heading_title} {month} {year}';
+		$_['text_auto_blog_help'] = 'Доступные теги: {article_name} {meta_title} {heading_title} {month} {year}';
+		$_['text_auto_category_products'] = 'FAQ во всех товарах категории';
+		$_['text_auto_manufacturer_help'] = 'Доступные теги: {manufacturer_name} {meta_title} {heading_title} {month} {year}';
+		$_['text_auto_manufacturer_products'] = 'FAQ во всех товарах производителя';
+		$_['text_auto_product_help'] = 'Доступные теги: {product_name} {product_price} {meta_title} {manufacturer} {heading_title} {model} {sku} {month} {year}';
+		$_['text_auto_information_help'] = 'Доступные теги: {information_name} {meta_title} {heading_title} {month} {year}';
+		]]></add>
+	</operation>
+</file>
+<file path="admin/language/{uk-ua,ukrainian}*/{catalog,blog}/*.php">
+	<operation error="skip">
+		<search><![CDATA[// Entry]]></search>
+		<add position="before"><![CDATA[
+		$_['column_faq'] = 'Відповідь (можна HTML)';
+		$_['column_question'] = 'Питання (можна HTML)';
+		$_['column_sort_order'] = 'Порядок сортування';
+		$_['column_link'] = 'Посилання, на якому виводити блок';
+		$_['tab_faq'] = '<i class="fa fa-rocket"></i> SP AUTO SEO FAQ';
+		$_['button_remove'] = 'Видалити';
+		$_['faq_name'] = 'Назва блоку питання-відповідь';
+		$_['text_auto_category_help'] = 'Доступні теги: {category_name} {meta_title} {heading_title} {month} {year}';
+		$_['text_auto_blog_help'] = 'Доступні теги: {article_name} {meta_title} {heading_title} {month} {year}';
+		$_['text_auto_category_products'] = 'FAQ у всіх товарах категорії';
+		$_['text_auto_manufacturer_help'] = 'Доступні теги: {manufacturer_name} {meta_title} {heading_title} {month} {year}';
+		$_['text_auto_manufacturer_products'] = 'FAQ у всіх товарах виробника'; 
+		$_['text_auto_product_help'] = 'Доступні теги: {product_name} {product_price} {meta_title} {manufacturer} {heading_title} {model} {sku} {month} {year}';
+		$_['text_auto_information_help'] = 'Доступні теги: {information_name} {meta_title} {heading_title} {month} {year}';
+		]]></add>
+	</operation>
+</file>
+<file path="admin/language/{en-gb,english}*/{catalog,blog}/*.php">
+	<operation error="skip">
+		<search><![CDATA[// Entry]]></search>
+		<add position="before"><![CDATA[
+		$_['column_faq'] = 'Answer (HTML)';
+		$_['column_question'] = 'Question';
+		$_['column_sort_order'] = 'Sort order';
+		$_['column_link'] = 'Link';
+		$_['tab_faq'] = '<i class="fa fa-rocket"></i> SP AUTO SEO FAQ';
+		$_['button_remove'] = 'Remove';
+		$_['faq_name'] = 'Faq block heading';
+		$_['text_auto_category_help'] = 'Available tags: {category_name} {meta_title} {heading_title} {month} {year}';
+		$_['text_auto_blog_help'] = 'Available tags: {article_name} {meta_title} {heading_title} {month} {year}';
+		$_['text_auto_category_products'] = 'FAQ in all products of a category';
+		$_['text_auto_manufacturer_help'] = 'Available tags: {manufacturer_name} {meta_title} {heading_title} {month} {year}';
+		$_['text_auto_manufacturer_products'] = 'FAQ in all manufacturer products';
+		$_['text_auto_product_help'] = 'Available tags: {product_name} {product_price} {meta_title} {manufacturer} {heading_title} {model} {sku} {month} {year}';
+		$_['text_auto_information_help'] = 'Available tags: {information_name} {meta_title} {heading_title} {month} {year}';
+		]]></add>
+	</operation>
+</file>
+<file path="admin/controller/{catalog,blog,extension/module}/{category,product,manufacturer,information,article,ocfilter/page}.php">
+	<operation error="skip">
+		<search><![CDATA[$data['cancel'] =]]></search>
+		<add position="after"><![CDATA[
+		$data['column_faq_name'] = $this->language->get('column_faq_name');
+		$data['column_sort_order'] = $this->language->get('column_sort_order');
+		$data['column_question'] = $this->language->get('column_question');
+		$data['column_faq'] = $this->language->get('column_faq');
+		$data['column_link'] = $this->language->get('column_link');
+		$data['tab_faq'] = $this->language->get('tab_faq');
+		$data['faq_name'] = $this->language->get('faq_name');
+		$data['button_remove'] = $this->language->get('button_remove');
+		$data['text_auto_category_help'] = $this->language->get('text_auto_category_help');
+		$data['text_auto_blog_help'] = $this->language->get('text_auto_blog_help');
+		$data['text_auto_category_products'] = $this->language->get('text_auto_category_products');
+		$data['text_auto_manufacturer_help'] = $this->language->get('text_auto_manufacturer_help');
+		$data['text_auto_manufacturer_products'] = $this->language->get('text_auto_manufacturer_products');
+		$data['text_auto_product_help'] = $this->language->get('text_auto_product_help');
+		$data['text_auto_information_help'] = $this->language->get('text_auto_information_help');
+		$data['sp_auto_seo_faq_status'] = $this->config->get('sp_auto_seo_faq_status');
+		]]></add>
+	</operation>
+</file>
+<file path="admin/controller/extension/module/ocfilter/page.php">
+	<operation error="skip">
+		<search><![CDATA[if (isset($this->request->post['keyword'])) {]]></search>
+		<add position="before"><![CDATA[
+		$this->load->language('catalog/product');
+		$data['column_faq_name'] = $this->language->get('column_faq_name');
+		$data['column_sort_order'] = $this->language->get('column_sort_order');
+		$data['column_question'] = $this->language->get('column_question');
+		$data['column_faq'] = $this->language->get('column_faq');
+		$data['column_link'] = $this->language->get('column_link');
+		$data['tab_faq'] = $this->language->get('tab_faq');
+		$data['faq_name'] = $this->language->get('faq_name');
+		$data['button_remove'] = $this->language->get('button_remove');
+		$data['text_auto_category_help'] = $this->language->get('text_auto_category_help');
+		$data['text_auto_category_products'] = $this->language->get('text_auto_category_products');
+		$data['text_auto_manufacturer_help'] = $this->language->get('text_auto_manufacturer_help');
+		$data['text_auto_manufacturer_products'] = $this->language->get('text_auto_manufacturer_products');
+		$data['text_auto_product_help'] = $this->language->get('text_auto_product_help');
+		$data['text_auto_information_help'] = $this->language->get('text_auto_information_help');
+		$data['sp_auto_seo_faq_status'] = $this->config->get('sp_auto_seo_faq_status');
+		
+		if (isset($this->request->post['faq'])) {
+			$faq = $this->request->post['faq'];
+		} elseif (isset($this->request->get['page_id'])) {
+			$faq = $this->model_extension_module_ocfilter_page->getOcfilterFaq($this->request->get['page_id']);
+		} else {
+			$faq = [];
+		}
+		
+		$data['ocfilter_faq'] = [];
+		foreach ($faq as $ocfilter_faq) {
+			$data['ocfilter_faq'][] = [
+				'faq_data' => $ocfilter_faq['faq_data'],
+				'sort_order' => $ocfilter_faq['sort_order']
+			];
+		}
+		
+		]]></add>
+	</operation>
+</file>
+<file path="admin/model/extension/module/ocfilter/page.php">
+	<operation error="skip">
+		<search><![CDATA[public function getSeoUrl(]]></search>
+		<add position="before"><![CDATA[
+		public function getOcfilterFaq($page_id) {
+			$faq = [];
+			$type = 'ocfilter';
+			$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "seo_faq WHERE category_id = '" . (int)$page_id . "' AND type = '" . $type . "' ORDER BY sort_order ASC");
+			foreach ($query->rows as $row) {
+				$faq_data = [];
+				$description_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "seo_faq_description WHERE faq_id = '" . (int)$row['faq_id'] . "'");
+					foreach ($description_query->rows as $result) {
+						$faq_data[$result['language_id']] = [
+							'question' => $result['question'],
+							'answer' => $result['answer']
+						];
+					}
+				$faq[] = [ 
+					'sort_order' => $row['sort_order'],
+					'data' => $row,
+					'faq_data' => $faq_data
+				];	
+			}
+			return $faq;
+		}
+		]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[if (isset($data['page_layout'])) {]]></search>
+		<add position="before"><![CDATA[
+		$this->db->query("DELETE FROM " . DB_PREFIX . "seo_faq WHERE category_id = '" . (int)$page_id . "' AND type = 'ocfilter'");
+		$this->db->query("DELETE FROM " . DB_PREFIX . "seo_faq_description WHERE category_id = '" . (int)$page_id . "' AND type = 'ocfilter'");
+		if (isset($data['faq'])) {
+			foreach ($data['faq'] as $ocfilter_faq) {
+				$this->db->query("INSERT INTO " . DB_PREFIX . "seo_faq SET category_id = '" . (int)$page_id . "', `sort_order` = '" . (int)$ocfilter_faq['sort_order'] . "', type = 'ocfilter'");
+				$faq_id = $this->db->getLastId();
+				foreach ($ocfilter_faq['faq_data'] as $language_id => $value) {
+					$this->db->query("INSERT INTO " . DB_PREFIX . "seo_faq_description SET faq_id = '" . (int)$faq_id . "', category_id = '" . (int)$page_id . "', language_id = '" . (int)$language_id . "', question = '" . $this->db->escape($value['question']) . "', answer = '" . $this->db->escape($value['answer']) . "', type = 'ocfilter'");
+				}
+			}
+		} 
+		]]></add>
+	</operation>
+</file>
+<file path="admin/view/template/extension/module/ocfilter/page_form.twig">
+	<operation error="skip">
+		<search><![CDATA[<li><a href="#tab-display"]]></search>
+		<add position="after"><![CDATA[{% if sp_auto_seo_faq_status %}<li><a href="#tab-faq" data-toggle="tab">{{ tab_faq }}</a></li>{% endif %}]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[{{ footer }}]]></search>
+		<add position="before"><![CDATA[
+<script type="text/javascript"><!--
+var faq_row = {{ faq_row }};
+function addFaq() {
+html = '<tr id="faq-row' + faq_row + '">';
+html += '<td class="text-center">';
+{% for language in languages %}
+html += '<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <input type="text" name="faq[' + faq_row + '][faq_data][{{ language.language_id }}][question]" value="" class="form-control" style="display:inline-block;width:80%;" /><br>';
+{% endfor %}
+html += '</td>';
+html += ' <td class="text-center">';
+{% for language in languages %}
+html += ' <img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <textarea rows="3" name="faq[' + faq_row + '][faq_data][{{ language.language_id }}][answer]" class="form-control" style="display:inline-block;width:80%;"></textarea><br>';
+{% endfor %}
+html += '</td>';
+html += '<td class="text-center" style="width:10%"><input type="text" name="faq[' + faq_row + '][sort_order]" value="" class="form-control" /></td>';
+html += '<td class="text-center"><button type="button" onclick="$(\'#faq-row' + faq_row + '\').remove();" data-toggle="tooltip" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+html += '</tr>';
+$('#faq tbody').append(html);
+faq_row++;
+}
+//--></script>
+		]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[</form>]]></search>
+		<add position="before" offset="1"><![CDATA[
+			<div class="tab-pane" id="tab-faq">
+			<div class="form-group">
+			<div class="table-responsive">
+				<table id="faq" class="table table-striped table-bordered table-hover">
+				<thead>
+					<tr>
+					<td class="text-center">{{ column_question }}</td>
+					<td class="text-center">{{ column_faq }}</td>
+					<td class="text-center" style="width:10%">{{ column_sort_order }}</td>
+					<td class="text-center" style="width:10%"></td>
+					</tr>
+				</thead>
+				<tbody>
+					{% set faq_row = 0 %}
+					{% for faq in ocfilter_faq %}
+					<tr id="faq-row{{ faq_row }}">
+					<td class="text-center">
+					{% for language in languages %}
+					<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <input type="text" name="faq[{{ faq_row }}][faq_data][{{ language.language_id }}][question]" value="{{ faq.faq_data[language.language_id].question }}" class="form-control" style="display:inline-block;width:80%;" /><br>
+					{% endfor %}
+					</td>
+					<td class="text-center">
+					{% for language in languages %}
+					<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <textarea rows="3" name="faq[{{ faq_row }}][faq_data][{{ language.language_id }}][answer]" class="form-control" style="display:inline-block;width:80%;">{{ faq.faq_data[language.language_id].answer }}</textarea><br>
+					{% endfor %}
+					</td>
+					<td class="text-center"><input type="text" name="faq[{{ faq_row }}][sort_order]" value="{{ faq['sort_order'] }}" class="form-control" /></td>
+					<td class="text-center"><button type="button" onclick="$('#faq-row{{ faq_row }}').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>
+					</tr>
+					{% set faq_row = faq_row + 1 %}
+					{% endfor %}
+				</tbody>
+				<tfoot>
+					<tr> 
+					<td colspan="3"></td>
+					<td class="text-center"><button type="button" onclick="addFaq();" data-toggle="tooltip" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+					</tr>
+				</tfoot>
+				</table>
+			</div>
+			</div>
+		</div>
+		]]></add>
+	</operation>
+</file>
+<file path="admin/view/template/extension/module/ocfilter/page_form.tpl">
+	<operation error="skip">
+		<search><![CDATA[<li><a href="#tab-display"]]></search>
+		<add position="after"><![CDATA[<?php if ($sp_auto_seo_faq_status) { ?><li><a href="#tab-faq" data-toggle="tab"><?php echo $tab_faq; ?></a></li><?php } ?>]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[<?php echo $footer; ?>]]></search>
+		<add position="before"><![CDATA[
+<script type="text/javascript"><!--
+var faq_row = <?php echo $faq_row; ?>;
+function addFaq() {
+html = '<tr id="faq-row' + faq_row + '">';
+html += '<td class="text-center">';
+<?php foreach($languages as $language) { ?>
+html += '<img src="language/<?php echo $language['code']; ?>/<?php echo $language['code']; ?>.png" style="display:inline-block;"/> <input type="text" name="faq[' + faq_row + '][faq_data][<?php echo $language['language_id']; ?>][question]" value="" class="form-control" style="display:inline-block;width:80%;" /><br>';
+<?php } ?>
+html += '</td>';
+html += '<td class="text-center">';
+<?php foreach($languages as $language) { ?>
+html += '<img src="language/<?php echo $language['code']; ?>/<?php echo $language['code']; ?>.png" style="display:inline-block;"/> <textarea rows="3" name="faq[' + faq_row + '][faq_data][<?php echo $language['language_id']; ?>][answer]" value="" class="form-control" style="display:inline-block;width:80%;"></textarea><br>';
+<?php } ?>
+html += '</td>';
+html += '<td class="text-center" style="width:10%"><input type="text" name="faq[' + faq_row + '][sort_order]" value="" class="form-control" /></td>';
+html += '<td class="text-center"><button type="button" onclick="$(\'#faq-row' + faq_row + '\').remove();" data-toggle="tooltip" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+html += '</tr>';
+$('#faq tbody').append(html);
+faq_row++;
+}
+//--></script>
+		]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[</form>]]></search>
+		<add position="before" offset="1"><![CDATA[
+			<div class="tab-pane" id="tab-faq"> 
+			<div class="table-responsive">
+			<table id="faq" class="table table-striped table-bordered table-hover">
+				<thead>
+				<tr>
+					<td class="text-center"><?php echo $column_question; ?></td>
+					<td class="text-center"><?php echo $column_faq; ?></td>
+					<td class="text-center" style="width:10%"><?php echo $column_sort_order; ?></td>
+					<td class="text-center" style="width:10%"></td>
+				</tr>
+				</thead>
+				<tbody>
+				<?php $faq_row = 0; ?>
+				<?php foreach ($ocfilter_faq as $faq) { ?>
+				<tr id="faq-row<?php echo $faq_row; ?>">
+					<td class="text-center">
+					<?php foreach($languages as $language) { ?>
+					<img src="language/<?php echo $language['code']; ?>/<?php echo $language['code']; ?>.png" style="display:inline-block;"/> <input type="text" name="faq[<?php echo $faq_row; ?>][faq_data][<?php echo $language['language_id']; ?>][question]" value="<?php if (!empty($faq['faq_data'][$language['language_id']]['question'])) echo $faq['faq_data'][$language['language_id']]['question']; ?>" class="form-control" style="display:inline-block;width:80%;" /><br>
+					<?php } ?>
+					</td>
+					<td class="text-center">
+					<?php foreach($languages as $language) { ?>
+					<img src="language/<?php echo $language['code']; ?>/<?php echo $language['code']; ?>.png" style="display:inline-block;"/> <textarea rows="3" name="faq[<?php echo $faq_row; ?>][faq_data][<?php echo $language['language_id']; ?>][answer]" class="form-control" style="display:inline-block;width:80%;"><?php if (!empty($faq['faq_data'][$language['language_id']]['answer'])) echo $faq['faq_data'][$language['language_id']]['answer']; ?></textarea><br>
+					<?php } ?> 
+					</td>
+					<td class="text-center"><input type="text" name="faq[<?php echo $faq_row; ?>][sort_order]" value="<?php echo $faq['sort_order']; ?>" class="form-control" /></td>
+					<td class="text-center"><button type="button" onclick="$('#faq-product-row<?php echo $faq_row; ?>').remove();" data-toggle="tooltip" title="<?php echo $button_remove; ?>" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>
+				</tr> 
+				<?php $faq_row++; ?>
+				<?php } ?>
+				</tbody>
+				<tfoot>
+				<tr>
+					<td colspan="3"></td>
+					<td class="text-center"><button type="button" onclick="addFaq();" data-toggle="tooltip" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+				</tr>
+				</tfoot>
+			</table>
+			</div>
+		</div>
+		]]></add>
+	</operation>
+</file>
+<file path="admin/controller/catalog/category.php">
+	<operation error="skip">
+		<search><![CDATA[if (isset($this->request->post['category_layout'])) {]]></search>
+		<add position="before"><![CDATA[
+		if (isset($this->request->post['faq'])) {
+			$faq = $this->request->post['faq'];
+		} elseif (isset($this->request->get['category_id'])) {
+			$faq = $this->model_catalog_category->getCategoryFaq($this->request->get['category_id']);
+		} else {
+			$faq = [];
+		}
+		
+		$data['category_faq'] = [];
+		foreach ($faq as $category_faq) {
+			$data['category_faq'][] = [
+				'faq_data' => $category_faq['faq_data'],
+				'link' => $category_faq['link'],
+				'sort_order' => $category_faq['sort_order']
+			];
+		}
+		
+		if (isset($this->request->post['faq_products'])) {
+			$faq_products = $this->request->post['faq_products'];
+		} elseif (isset($this->request->get['category_id'])) {
+			$faq_products = $this->model_catalog_category->getCategoryFaq($this->request->get['category_id'], true);
+		} else {
+			$faq_products = [];
+		}
+		
+		$data['category_faq_products'] = []; 
+		foreach ($faq_products as $category_faq) {
+			$data['category_faq_products'][] = [
+				'faq_data' => $category_faq['faq_data'],
+				'sort_order' => $category_faq['sort_order']
+			];
+		}
+		]]></add>
+	</operation>
+</file>
+<file path="admin/model/catalog/category.php">
+	<operation error="skip">
+		<search><![CDATA[public function getCategoryDescriptions]]></search>
+		<add position="before"><![CDATA[
+		public function getCategoryFaq($category_id, $products = false) {
+			$faq = [];
+			$type = 'category';
+			if ($products) {
+				$type = 'category_products';
+			}
+			$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "seo_faq WHERE category_id = '" . (int)$category_id . "' AND type = '" . $type . "' ORDER BY sort_order ASC");
+			foreach ($query->rows as $row) {
+				$faq_data = [];
+				$description_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "seo_faq_description WHERE faq_id = '" . (int)$row['faq_id'] . "'");
+					foreach ($description_query->rows as $result) {
+						$faq_data[$result['language_id']] = [
+							'question' => $result['question'],
+							'answer' => $result['answer']
+						];
+					}
+				$faq[] = [ 
+					'sort_order' => $row['sort_order'],
+					'link' => $row['link'],
+					'data' => $row,
+					'faq_data' => $faq_data
+				];
+			}
+		 
+			return $faq;
+		}
+		]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[if (isset($data['category_store'])) {]]></search>
+		<add position="before"><![CDATA[
+		$this->db->query("DELETE FROM " . DB_PREFIX . "seo_faq WHERE category_id = '" . (int)$category_id . "' AND type = 'category'");
+		$this->db->query("DELETE FROM " . DB_PREFIX . "seo_faq_description WHERE category_id = '" . (int)$category_id . "' AND type = 'category'");
+		$this->db->query("DELETE FROM " . DB_PREFIX . "seo_faq WHERE category_id = '" . (int)$category_id . "' AND type = 'category_products'");
+		$this->db->query("DELETE FROM " . DB_PREFIX . "seo_faq_description WHERE category_id = '" . (int)$category_id . "' AND type = 'category_products'");
+		if (isset($data['faq'])) {
+			foreach ($data['faq'] as $category_faq) {
+				$this->db->query("INSERT INTO " . DB_PREFIX . "seo_faq SET category_id = '" . (int)$category_id . "', `link` = '" . $this->db->escape($category_faq['link']) . "', `sort_order` = '" . (int)$category_faq['sort_order'] . "', type = 'category'");
+				$faq_id = $this->db->getLastId();
+				foreach ($category_faq['faq_data'] as $language_id => $value) {
+					$this->db->query("INSERT INTO " . DB_PREFIX . "seo_faq_description SET faq_id = '" . (int)$faq_id . "', category_id = '" . (int)$category_id . "', language_id = '" . (int)$language_id . "', question = '" . $this->db->escape($value['question']) . "', answer = '" . $this->db->escape($value['answer']) . "', type = 'category'");
+				}
+			}
+		}
+		if (isset($data['faq_products'])) {
+			foreach ($data['faq_products'] as $category_faq) {
+				$this->db->query("INSERT INTO " . DB_PREFIX . "seo_faq SET category_id = '" . (int)$category_id . "', `link` = '', `sort_order` = '" . (int)$category_faq['sort_order'] . "', type = 'category_products'");
+				$faq_id = $this->db->getLastId();
+				foreach ($category_faq['faq_data'] as $language_id => $value) {
+					$this->db->query("INSERT INTO " . DB_PREFIX . "seo_faq_description SET faq_id = '" . (int)$faq_id . "', category_id = '" . (int)$category_id . "', language_id = '" . (int)$language_id . "', question = '" . $this->db->escape($value['question']) . "', answer = '" . $this->db->escape($value['answer']) . "', type = 'category_products'");
+				}
+			}
+		}
+		]]></add>
+	</operation>
+</file>
+<file path="admin/view/template/catalog/category_form.tpl">
+	<operation error="skip">
+		<search><![CDATA[<li><a href="#tab-design" data-toggle="tab"><?php echo $tab_design; ?></a></li>]]></search>
+		<add position="after"><![CDATA[<?php if ($sp_auto_seo_faq_status) { ?><li><a href="#tab-faq" data-toggle="tab"><?php echo $tab_faq; ?></a></li><?php } ?>]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[<?php echo $footer; ?>]]></search>
+		<add position="before"><![CDATA[
+<script type="text/javascript"><!--
+var faq_row = <?php echo $faq_row; ?>;
+function addFaq() {
+html = '<tr id="faq-row' + faq_row + '">';
+html += '<td class="text-center">';
+<?php foreach($languages as $language) { ?>
+html += '<img src="language/<?php echo $language['code']; ?>/<?php echo $language['code']; ?>.png" style="display:inline-block;"/> <input type="text" name="faq[' + faq_row + '][faq_data][<?php echo $language['language_id']; ?>][question]" value="" class="form-control" style="display:inline-block;width:80%;" /><br>';
+<?php } ?>
+html += '</td>';
+html += '<td class="text-center">';
+<?php foreach($languages as $language) { ?>
+html += '<img src="language/<?php echo $language['code']; ?>/<?php echo $language['code']; ?>.png" style="display:inline-block;"/> <textarea rows="3" name="faq[' + faq_row + '][faq_data][<?php echo $language['language_id']; ?>][answer]" value="" class="form-control" style="display:inline-block;width:80%;"></textarea><br>';
+<?php } ?>
+html += '</td>';
+html += '<td class="text-center" style="width:10%"><input type="text" name="faq[' + faq_row + '][link]" value="" class="form-control" /></td>';
+html += '<td class="text-center" style="width:10%"><input type="text" name="faq[' + faq_row + '][sort_order]" value="" class="form-control" /></td>';
+html += '<td class="text-center"><button type="button" onclick="$(\'#faq-row' + faq_row + '\').remove();" data-toggle="tooltip" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+html += '</tr>';
+$('#faq tbody').append(html);
+faq_row++;
+}
+
+var p_faq_row = <?php echo $p_faq_row; ?>;
+function addFaqProducts() {
+html = '<tr id="faq-product-row' + p_faq_row + '">';
+html += '<td class="text-center">';
+<?php foreach($languages as $language) { ?>
+html += ' <img src="language/<?php echo $language['code']; ?>/<?php echo $language['code']; ?>.png" style="display:inline-block;"/> <input type="text" name="faq_products[' + p_faq_row + '][faq_data][<?php echo $language['language_id']; ?>][question]" value="" class="form-control" style="display:inline-block;width:80%;" /><br>';
+<?php } ?>
+html += '</td>';
+html += '<td class="text-center">';
+<?php foreach($languages as $language) { ?>
+html += '<img src="language/<?php echo $language['code']; ?>/<?php echo $language['code']; ?>.png" style="display:inline-block;"/> <textarea rows="3" name="faq_products[' + p_faq_row + '][faq_data][<?php echo $language['language_id']; ?>][answer]" value="" class="form-control" style="display:inline-block;width:80%;"></textarea><br>';
+<?php } ?>
+html += '</td>';
+html += '<td class="text-center" style="width:10%"><input type="text" name="faq_products[' + p_faq_row + '][sort_order]" value="" class="form-control" /></td>';
+html += '<td class="text-center"><button type="button" onclick="$(\'#faq-product-row' + p_faq_row + '\').remove();" data-toggle="tooltip" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+html += '</tr>';
+$('#faq-product tbody').append(html);
+p_faq_row++;
+}
+//--></script>
+		]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[</form>]]></search>
+		<add position="before" offset="1"><![CDATA[
+			<div class="tab-pane" id="tab-faq"> 
+			<legend><?php echo $text_auto_category_help; ?></legend>
+			<div class="table-responsive">
+			<table id="faq" class="table table-striped table-bordered table-hover">
+				<thead>
+				<tr>
+					<td class="text-center"><?php echo $column_question; ?></td>
+					<td class="text-center"><?php echo $column_faq; ?></td>
+					<td class="text-center" style="width:10%"><?php echo $column_link; ?></td>
+					<td class="text-center" style="width:10%"><?php echo $column_sort_order; ?></td>
+					<td class="text-center" style="width:10%"></td>
+				</tr>
+				</thead>
+				<tbody>
+				<?php $faq_row = 0; ?>
+				<?php foreach ($category_faq as $faq) { ?>
+				<tr id="faq-row<?php echo $faq_row; ?>">
+					<td class="text-center">
+					<?php foreach($languages as $language) { ?>
+					<img src="language/<?php echo $language['code']; ?>/<?php echo $language['code']; ?>.png" style="display:inline-block;"/> <input type="text" name="faq[<?php echo $faq_row; ?>][faq_data][<?php echo $language['language_id']; ?>][question]" value="<?php if (!empty($faq['faq_data'][$language['language_id']]['question'])) echo $faq['faq_data'][$language['language_id']]['question']; ?>" class="form-control" style="display:inline-block;width:80%;" /><br>
+					<?php } ?>
+					</td>
+					<td class="text-center">
+					<?php foreach($languages as $language) { ?>
+					<img src="language/<?php echo $language['code']; ?>/<?php echo $language['code']; ?>.png" style="display:inline-block;"/> <textarea rows="3" name="faq[<?php echo $faq_row; ?>][faq_data][<?php echo $language['language_id']; ?>][answer]" class="form-control" style="display:inline-block;width:80%;"><?php if (!empty($faq['faq_data'][$language['language_id']]['answer'])) echo $faq['faq_data'][$language['language_id']]['answer']; ?></textarea><br>
+					<?php } ?> 
+					</td>
+					<td class="text-center"><input type="text" name="faq[<?php echo $faq_row; ?>][link]" value="<?php echo $faq['link']; ?>" class="form-control" /></td>
+					<td class="text-center"><input type="text" name="faq[<?php echo $faq_row; ?>][sort_order]" value="<?php echo $faq['sort_order']; ?>" class="form-control" /></td>
+					<td class="text-center"><button type="button" onclick="$('#faq-row<?php echo $faq_row; ?>').remove();" data-toggle="tooltip" title="<?php echo $button_remove; ?>" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>
+				</tr> 
+				<?php $faq_row++; ?>
+				<?php } ?>
+				</tbody>
+				<tfoot>
+				<tr>
+					<td colspan="4"></td>
+					<td class="text-center"><button type="button" onclick="addFaq();" data-toggle="tooltip" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+				</tr>
+				</tfoot>
+			</table>
+			</div>
+			<legend><?php echo $text_auto_category_products; ?></legend>
+			<div class="table-responsive">
+			<table id="faq-product" class="table table-striped table-bordered table-hover">
+				<thead>
+				<tr>
+					<td class="text-center"><?php echo $column_question; ?></td>
+					<td class="text-center"><?php echo $column_faq; ?></td>
+					<td class="text-center" style="width:10%"><?php echo $column_sort_order; ?></td>
+					<td class="text-center" style="width:10%"></td>
+				</tr>
+				</thead>
+				<tbody>
+				<?php $p_faq_row = 0; ?>
+				<?php foreach ($category_faq_products as $faq) { ?>
+				<tr id="faq-product-row<?php echo $p_faq_row; ?>">
+					<td class="text-center">
+					<?php foreach($languages as $language) { ?>
+					<img src="language/<?php echo $language['code']; ?>/<?php echo $language['code']; ?>.png" style="display:inline-block;"/> <input type="text" name="faq_products[<?php echo $p_faq_row; ?>][faq_data][<?php echo $language['language_id']; ?>][question]" value="<?php if (!empty($faq['faq_data'][$language['language_id']]['question'])) echo $faq['faq_data'][$language['language_id']]['question']; ?>" class="form-control" style="display:inline-block;width:80%;" /><br>
+					<?php } ?>
+					</td>
+					<td class="text-center">
+					<?php foreach($languages as $language) { ?>
+					<img src="language/<?php echo $language['code']; ?>/<?php echo $language['code']; ?>.png" style="display:inline-block;"/> <textarea rows="3" name="faq_products[<?php echo $p_faq_row; ?>][faq_data][<?php echo $language['language_id']; ?>][answer]" class="form-control" style="display:inline-block;width:80%;"><?php if (!empty($faq['faq_data'][$language['language_id']]['answer'])) echo $faq['faq_data'][$language['language_id']]['answer']; ?></textarea><br>
+					<?php } ?> 
+					</td>
+					<td class="text-center"><input type="text" name="faq_products[<?php echo $p_faq_row; ?>][sort_order]" value="<?php echo $faq['sort_order']; ?>" class="form-control" /></td>
+					<td class="text-center"><button type="button" onclick="$('#faq-product-row<?php echo $p_faq_row; ?>').remove();" data-toggle="tooltip" title="<?php echo $button_remove; ?>" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>
+				</tr> 
+				<?php $p_faq_row++; ?>
+				<?php } ?>
+				</tbody>
+				<tfoot>
+				<tr>
+					<td colspan="3"></td>
+					<td class="text-center"><button type="button" onclick="addFaqProducts();" data-toggle="tooltip" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+				</tr>
+				</tfoot>
+			</table>
+			</div>
+		</div>
+		]]></add>
+	</operation>
+</file>
+<file path="admin/view/template/catalog/category_form.twig">
+<operation error="skip">
+		<search><![CDATA[<li><a href="#tab-design" data-toggle="tab">{{ tab_design }}</a></li>]]></search>
+		<add position="after"><![CDATA[{% if sp_auto_seo_faq_status %}<li><a href="#tab-faq" data-toggle="tab">{{ tab_faq }}</a></li>{% endif %}]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[{{ footer }}]]></search>
+		<add position="before"><![CDATA[
+<script type="text/javascript"><!--
+var faq_row = {{ faq_row }};
+function addFaq() {
+html = '<tr id="faq-row' + faq_row + '">';
+html += '<td class="text-center">';
+{% for language in languages %}
+html += '<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <input type="text" name="faq[' + faq_row + '][faq_data][{{ language.language_id }}][question]" value="" class="form-control" style="display:inline-block;width:80%;" /><br>';
+{% endfor %}
+html += '</td>';
+html += '<td class="text-center">';
+{% for language in languages %}
+html += ' <img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <textarea rows="3" name="faq[' + faq_row + '][faq_data][{{ language.language_id }}][answer]" class="form-control" style="display:inline-block;width:80%;"></textarea><br>';
+{% endfor %}
+html += '</td>';
+html += '<td class="text-center" style="width:10%"><input type="text" name="faq[' + faq_row + '][link]" value="" class="form-control" /></td>';
+html += '<td class="text-center" style="width:10%"><input type="text" name="faq[' + faq_row + '][sort_order]" value="" class="form-control" /></td>';
+html += '<td class="text-center"><button type="button" onclick="$(\'#faq-row' + faq_row + '\').remove();" data-toggle="tooltip" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+html += '</tr>';
+$('#faq tbody').append(html);
+faq_row++;
+}
+
+var p_faq_row = {{ p_faq_row }};
+function addFaqProducts() {
+html = '<tr id="faq-product-row' + p_faq_row + '">';
+html += '<td class="text-center">';
+{% for language in languages %}
+html += '<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <input type="text" name="faq_products[' + p_faq_row + '][faq_data][{{ language.language_id }}][question]" value="" class="form-control" style="display:inline-block;width:80%;" /><br>';
+{% endfor %}
+html += '</td>';
+html += '<td class="text-center">';
+{% for language in languages %}
+html += ' <img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <textarea rows="3" name="faq_products[' + p_faq_row + '][faq_data][{{ language.language_id }}][answer]" class="form-control" style="display:inline-block;width:80%;"></textarea><br>';
+{% endfor %}
+html += '</td>';
+html += '<td class="text-center" style="width:10%"><input type="text" name="faq_products[' + p_faq_row + '][sort_order]" value="" class="form-control" /></td>';
+html += '<td class="text-center"><button type="button" onclick="$(\'#faq-product-row' + p_faq_row + '\').remove();" data-toggle="tooltip" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+html += '</tr>';
+$('#faq-product tbody').append(html);
+p_faq_row++;
+}
+//--></script>
+		]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[</form>]]></search>
+		<add position="before" offset="1"><![CDATA[
+			<div class="tab-pane" id="tab-faq">
+			<legend>{{ text_auto_category_help }}</legend>
+			<div class="form-group">
+			<div class="table-responsive">
+			<table id="faq" class="table table-striped table-bordered table-hover">
+				<thead>
+				<tr>
+					<td class="text-center">{{ column_question }}</td>
+					<td class="text-center">{{ column_faq }}</td>
+					<td class="text-center" style="width:10%">{{ column_link }}</td>
+					<td class="text-center" style="width:10%">{{ column_sort_order }}</td>
+					<td class="text-center" style="width:10%"></td>
+				</tr>
+				</thead>
+				<tbody>
+				{% set faq_row = 0 %}
+					{% for faq in category_faq %}
+				<tr id="faq-row{{ faq_row }}">
+					
+					<td class="text-center">
+					{% for language in languages %}
+					<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <input type="text" name="faq[{{ faq_row }}][faq_data][{{ language.language_id }}][question]" value="{{ faq.faq_data[language.language_id].question }}" class="form-control" style="display:inline-block;width:80%;" /><br>
+					{% endfor %}
+					</td>
+					<td class="text-center">
+					{% for language in languages %}
+					<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <textarea rows="3" name="faq[{{ faq_row }}][faq_data][{{ language.language_id }}][answer]" class="form-control" style="display:inline-block;width:80%;">{{ faq.faq_data[language.language_id].answer }}</textarea><br>
+					{% endfor %}
+					</td>
+					<td class="text-center"><input type="text" name="faq[{{ faq_row }}][link]" value="{{ faq['link'] }}" class="form-control" /></td>
+					<td class="text-center"><input type="text" name="faq[{{ faq_row }}][sort_order]" value="{{ faq['sort_order'] }}" class="form-control" /></td>
+					<td class="text-center"><button type="button" onclick="$('#faq-row{{ faq_row }}').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>
+				</tr>
+				{% set faq_row = faq_row + 1 %}
+				{% endfor %}
+				</tbody>
+				<tfoot>
+				<tr> 
+					<td colspan="4"></td>
+					<td class="text-center"><button type="button" onclick="addFaq();" data-toggle="tooltip" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+				</tr>
+				</tfoot>
+			</table>
+			</div>
+			</div>
+			<legend>{{ text_auto_category_products }}</legend>
+			<div class="form-group">
+			<div class="table-responsive">
+			<table id="faq-product" class="table table-striped table-bordered table-hover">
+				<thead>
+				<tr>
+					<td class="text-center">{{ column_question }}</td>
+					<td class="text-center">{{ column_faq }}</td>
+					<td class="text-center" style="width:10%">{{ column_sort_order }}</td>
+					<td class="text-center" style="width:10%"></td>
+				</tr>
+				</thead>
+				<tbody>
+				{% set p_faq_row = 0 %}
+					{% for faq in category_faq_products %}
+				<tr id="faq-product-row{{ p_faq_row }}">
+					<td class="text-center">
+					{% for language in languages %}
+					<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <input type="text" name="faq_products[{{ p_faq_row }}][faq_data][{{ language.language_id }}][question]" value="{{ faq.faq_data[language.language_id].question }}" class="form-control" style="display:inline-block;width:80%;" /><br>
+					{% endfor %}
+					</td>
+					<td class="text-center">
+					{% for language in languages %}
+					<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <textarea rows="3" name="faq_products[{{ p_faq_row }}][faq_data][{{ language.language_id }}][answer]" class="form-control" style="display:inline-block;width:80%;">{{ faq.faq_data[language.language_id].answer }}</textarea><br>
+					{% endfor %}
+					</td>
+					<td class="text-center"><input type="text" name="faq_products[{{ p_faq_row }}][sort_order]" value="{{ faq['sort_order'] }}" class="form-control" /></td>
+					<td class="text-center"><button type="button" onclick="$('#faq-product-row{{ p_faq_row }}').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>
+				</tr>
+				{% set p_faq_row = p_faq_row + 1 %}
+				{% endfor %}
+				</tbody>
+				<tfoot>
+				<tr> 
+					<td colspan="3"></td>
+					<td class="text-center"><button type="button" onclick="addFaqProducts();" data-toggle="tooltip" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+				</tr>
+				</tfoot> 
+			</table>
+			</div>
+		</div>
+		</div>
+		]]></add>
+	</operation>
+</file>
+<file path="admin/controller/catalog/product.php">
+	<operation error="skip">
+		<search><![CDATA[if (isset($this->request->post['product_layout'])) {]]></search>
+		<add position="before"><![CDATA[
+ 		if (isset($this->request->post['faq'])) {
+			$faq = $this->request->post['faq'];
+		} elseif (isset($this->request->get['product_id'])) {
+			$faq = $this->model_catalog_product->getProductFaq($this->request->get['product_id']);
+		} else {
+			$faq = [];
+		}
+		$data['product_faq'] = [];
+		foreach ($faq as $product_faq) {
+			$data['product_faq'][] = [
+				'faq_data' => $product_faq['faq_data'],
+				'sort_order' => $product_faq['sort_order']
+			];
+		}
+		]]></add>
+	</operation>
+</file>
+<file path="admin/model/catalog/product.php">
+	<operation error="skip">
+		<search><![CDATA[public function getTotalProductsByLayoutId($layout_id) {]]></search>
+		<add position="before"><![CDATA[
+		public function getProductFaq($product_id) {
+			$faq = [];
+			$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "seo_faq WHERE product_id = '" . (int)$product_id . "' AND type = 'product' ORDER BY sort_order ASC");
+			foreach($query->rows as $row) {
+				$faq_data = [];
+				$description_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "seo_faq_description WHERE faq_id = '" . (int)$row['faq_id'] . "'");
+					foreach ($description_query->rows as $result) {
+						$faq_data[$result['language_id']] = [
+							'question' => $result['question'],
+							'answer' => $result['answer']
+						];
+					}
+					
+				$faq[] = [ 
+					'sort_order' => $row['sort_order'],
+					'data' => $row,
+					'faq_data' => $faq_data
+				];	
+			}
+		 
+			return $faq;
+		}
+		]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[if (isset($data['product_store'])) {]]></search>
+		<add position="before"><![CDATA[
+		$this->db->query("DELETE FROM " . DB_PREFIX . "seo_faq WHERE product_id = '" . (int)$product_id . "' AND type = 'product'");
+		$this->db->query("DELETE FROM " . DB_PREFIX . "seo_faq_description WHERE product_id = '" . (int)$product_id . "' AND type = 'product'");
+		if (isset($data['faq'])) {
+			foreach ($data['faq'] as $product_faq) {
+				$this->db->query("INSERT INTO " . DB_PREFIX . "seo_faq SET product_id = '" . (int)$product_id . "', `sort_order` = '" . (int)$product_faq['sort_order'] . "', type = 'product'");
+				$faq_id = $this->db->getLastId(); 
+				foreach ($product_faq['faq_data'] as $language_id => $value) {
+					$this->db->query("INSERT INTO " . DB_PREFIX . "seo_faq_description SET faq_id = '" . (int)$faq_id . "', product_id = '" . (int)$product_id . "', language_id = '" . (int)$language_id . "', question = '" . $this->db->escape($value['question']) . "', answer = '" . $this->db->escape($value['answer']) . "', type = 'product'");
+				}
+			}
+		} 
+		]]></add>
+	</operation>
+</file>
+<file path="admin/view/template/catalog/product_form.tpl">
+	<operation error="skip">
+		<search><![CDATA[<li><a href="#tab-design" data-toggle="tab"><?php echo $tab_design; ?></a></li>]]></search>
+		<add position="after"><![CDATA[<?php if ($sp_auto_seo_faq_status) { ?><li><a href="#tab-faq" data-toggle="tab"><?php echo $tab_faq; ?></a></li><?php } ?>]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[<?php echo $footer; ?>]]></search>
+		<add position="before"><![CDATA[
+<script type="text/javascript"><!--
+var faq_row = <?php echo $faq_row; ?>;
+function addFaq() {
+html = '<tr id="faq-row' + faq_row + '">';
+html += '<td class="text-center">';
+<?php foreach($languages as $language) { ?>
+html += '<img src="language/<?php echo $language['code']; ?>/<?php echo $language['code']; ?>.png" style="display:inline-block;"/> <input type="text" name="faq[' + faq_row + '][faq_data][<?php echo $language['language_id']; ?>][question]" value="" class="form-control" style="display:inline-block;width:80%;" /><br>';
+<?php } ?>
+html += '</td>';
+html += '<td class="text-center">';
+<?php foreach($languages as $language) { ?>
+html += ' <img src="language/<?php echo $language['code']; ?>/<?php echo $language['code']; ?>.png" style="display:inline-block;"/> <textarea rows="3" name="faq[' + faq_row + '][faq_data][<?php echo $language['language_id']; ?>][answer]" value="" class="form-control" style="display:inline-block;width:80%;"></textarea><br>';
+<?php } ?>
+html += '</td>';
+html += '<td class="text-center" style="width:10%"><input type="text" name="faq[' + faq_row + '][sort_order]" value="" class="form-control" /></td>';
+html += '<td class="text-center"><button type="button" onclick="$(\'#faq-row' + faq_row + '\').remove();" data-toggle="tooltip" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+html += '</tr>';
+
+$('#faq tbody').append(html);
+
+faq_row++;
+}
+//--></script>
+		]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[</form>]]></search>
+		<add position="before" offset="1"><![CDATA[
+			<div class="tab-pane" id="tab-faq">
+			<legend><?php echo $text_auto_product_help; ?></legend>
+			<div class="table-responsive">
+			<table id="faq" class="table table-striped table-bordered table-hover">
+				<thead>
+				<tr>
+					<td class="text-center"><?php echo $column_question; ?></td>
+					<td class="text-center"><?php echo $column_faq; ?></td>
+					<td class="text-center" style="width:10%"><?php echo $column_sort_order; ?></td>
+					<td class="text-center" style="width:10%"></td>
+				</tr>
+				</thead>
+				<tbody>
+				<?php $faq_row = 0; ?>
+				<?php foreach ($product_faq as $faq) { ?>
+				<tr id="faq-row<?php echo $faq_row; ?>">
+					<td class="text-center">
+					<?php foreach($languages as $language) { ?>
+					<img src="language/<?php echo $language['code']; ?>/<?php echo $language['code']; ?>.png" style="display:inline-block;"/> <input type="text" name="faq[<?php echo $faq_row; ?>][faq_data][<?php echo $language['language_id']; ?>][question]" value="<?php if (!empty($faq['faq_data'][$language['language_id']]['question'])) echo $faq['faq_data'][$language['language_id']]['question']; ?>" class="form-control" style="display:inline-block;width:80%;" /><br>
+					<?php } ?>
+					</td>
+					<td class="text-center">
+					<?php foreach($languages as $language) { ?>
+					<img src="language/<?php echo $language['code']; ?>/<?php echo $language['code']; ?>.png" style="display:inline-block;"/> <textarea rows="3" name="faq[<?php echo $faq_row; ?>][faq_data][<?php echo $language['language_id']; ?>][answer]" class="form-control" style="display:inline-block;width:80%;"><?php if (!empty($faq['faq_data'][$language['language_id']]['answer'])) echo $faq['faq_data'][$language['language_id']]['answer']; ?></textarea><br>
+					<?php } ?> 
+					</td>
+					<td class="text-center"><input type="text" name="faq[<?php echo $faq_row; ?>][sort_order]" value="<?php echo $faq['sort_order']; ?>" class="form-control" /></td>
+					<td class="text-center"><button type="button" onclick="$('#faq-row<?php echo $faq_row; ?>').remove();" data-toggle="tooltip" title="<?php echo $button_remove; ?>" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>
+				</tr> 
+				<?php $faq_row++; ?>
+				<?php } ?>
+				</tbody>
+				<tfoot>
+				<tr>
+					<td colspan="3"></td>
+					<td class="text-center"><button type="button" onclick="addFaq();" data-toggle="tooltip" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+				</tr>
+				</tfoot>
+			</table>
+			</div>
+		</div> 
+		]]></add>
+	</operation>
+</file>
+<file path="admin/view/template/catalog/product_form.twig">
+<operation error="skip">
+		<search><![CDATA[<li><a href="#tab-design" data-toggle="tab">{{ tab_design }}</a></li>]]></search>
+		<add position="after"><![CDATA[{% if sp_auto_seo_faq_status %}<li><a href="#tab-faq" data-toggle="tab">{{ tab_faq }}</a></li>{% endif %}]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[{{ footer }}]]></search>
+		<add position="before"><![CDATA[
+<script type="text/javascript"><!--
+var faq_row = {{ faq_row }};
+function addFaq() {
+html = '<tr id="faq-row' + faq_row + '">';
+html += '<td class="text-center">';
+{% for language in languages %}
+html += ' <img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <input type="text" name="faq[' + faq_row + '][faq_data][{{ language.language_id }}][question]" value="" class="form-control" style="display:inline-block;width:80%;" /><br>';
+{% endfor %}
+html += '</td>';
+html += '<td class="text-center">';
+{% for language in languages %}
+html += '<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <textarea rows="3" name="faq[' + faq_row + '][faq_data][{{ language.language_id }}][answer]" class="form-control" style="display:inline-block;width:80%;"></textarea><br>';
+{% endfor %}
+html += '</td>';
+html += '<td class="text-center" style="width:10%"><input type="text" name="faq[' + faq_row + '][sort_order]" value="" class="form-control" /></td>';
+html += '<td class="text-center"><button type="button" onclick="$(\'#faq-row' + faq_row + '\').remove();" data-toggle="tooltip" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+html += '</tr>';
+$('#faq tbody').append(html);
+faq_row++;
+}
+//--></script>
+		]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[</form>]]></search>
+		<add position="before" offset="1"><![CDATA[
+			<div class="tab-pane" id="tab-faq">
+			<legend>{{ text_auto_product_help }}</legend>
+			<div class="table-responsive">
+			<table id="faq" class="table table-striped table-bordered table-hover">
+				<thead>
+				<tr>
+					<td class="text-center">{{ column_question }}</td>
+					<td class="text-center">{{ column_faq }}</td>
+					<td class="text-center" style="width:10%">{{ column_sort_order }}</td>
+					<td class="text-center" style="width:10%"></td>
+				</tr>
+				</thead>
+				<tbody>
+					{% set faq_row = 0 %}
+					{% for faq in product_faq %}
+				<tr id="faq-row{{ faq_row }}">
+					
+					<td class="text-center">
+					{% for language in languages %}
+					<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <input type="text" name="faq[{{ faq_row }}][faq_data][{{ language.language_id }}][question]" value="{{ faq.faq_data[language.language_id].question }}" class="form-control" style="display:inline-block;width:80%;" /><br>
+					{% endfor %}
+					</td>
+					<td class="text-center">
+					{% for language in languages %}
+					<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <textarea rows="3" name="faq[{{ faq_row }}][faq_data][{{ language.language_id }}][answer]" class="form-control" style="display:inline-block;width:80%;">{{ faq.faq_data[language.language_id].answer }}</textarea><br>
+					{% endfor %}
+					</td>
+					<td class="text-center"><input type="text" name="faq[{{ faq_row }}][sort_order]" value="{{ faq['sort_order'] }}" class="form-control" /></td>
+					<td class="text-center"><button type="button" onclick="$('#faq-row{{ faq_row }}').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>
+				</tr>
+				{% set faq_row = faq_row + 1 %}
+				{% endfor %}
+				</tbody>
+				<tfoot>
+				<tr> 
+					<td colspan="3"></td>
+					<td class="text-center"><button type="button" onclick="addFaq();" data-toggle="tooltip" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+				</tr>
+				</tfoot>
+			</table>
+			</div>
+		</div>
+		]]></add>
+	</operation>
+</file>
+<file path="admin/controller/catalog/manufacturer.php">
+	<operation error="skip">
+		<search><![CDATA[if (isset($this->request->post['sort_order'])) {]]></search>
+		<add position="before"><![CDATA[
+		if (isset($this->request->post['faq'])) {
+			$faq = $this->request->post['faq'];
+		} elseif (isset($this->request->get['manufacturer_id'])) {
+			$faq = $this->model_catalog_manufacturer->getManufacturerFaq($this->request->get['manufacturer_id']);
+		} else {
+			$faq = [];
+		}
+		$data['manufacturer_faq'] = [];
+		foreach ($faq as $manufacturer_faq) {
+			$data['manufacturer_faq'][] = [
+				'faq_data' => $manufacturer_faq['faq_data'],
+				'sort_order' => $manufacturer_faq['sort_order']
+			];
+		}
+		
+		if (isset($this->request->post['faq_products'])) {
+			$faq_products = $this->request->post['faq_products'];
+		} elseif (isset($this->request->get['manufacturer_id'])) {
+			$faq_products = $this->model_catalog_manufacturer->getManufacturerFaq($this->request->get['manufacturer_id'], true);
+		} else {
+			$faq_products = [];
+		}
+		$data['manufacturer_faq_products'] = [];
+		foreach ($faq_products as $manufacturer_faq) {
+			$data['manufacturer_faq_products'][] = [
+				'faq_data' => $manufacturer_faq['faq_data'],
+				'sort_order' => $manufacturer_faq['sort_order']
+			];
+		}
+		]]></add>
+	</operation>
+</file>
+<file path="admin/model/catalog/manufacturer.php">
+	<operation error="skip">
+		<search><![CDATA[public function getManufacturerStores($manufacturer_id) {]]></search>
+		<add position="before"><![CDATA[
+		public function getManufacturerFaq($manufacturer_id, $products = false) {
+			$faq = [];
+			$type = 'manufacturer';
+			if ($products) {
+				$type = 'manufacturer_products';
+			}
+			$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "seo_faq WHERE manufacturer_id = '" . (int)$manufacturer_id . "' AND type = '" . $type . "' ORDER BY sort_order ASC");
+			foreach($query->rows as $row) {
+				$faq_data = [];
+				$description_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "seo_faq_description WHERE faq_id = '" . (int)$row['faq_id'] . "'");
+					foreach ($description_query->rows as $result) {
+						$faq_data[$result['language_id']] = [
+							'question' => $result['question'],
+							'answer' => $result['answer']
+						];
+					}
+				$faq[] = [ 
+					'sort_order' => $row['sort_order'],
+					'data' => $row,
+					'faq_data' => $faq_data,
+				];	
+			}
+			return $faq;
+		}
+		]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[if (isset($data['manufacturer_store'])) {]]></search>
+		<add position="before"><![CDATA[
+		$this->db->query("DELETE FROM " . DB_PREFIX . "seo_faq WHERE manufacturer_id = '" . (int)$manufacturer_id . "' AND type = 'manufacturer'");
+		$this->db->query("DELETE FROM " . DB_PREFIX . "seo_faq_description WHERE manufacturer_id = '" . (int)$manufacturer_id . "' AND type = 'manufacturer'");
+		$this->db->query("DELETE FROM " . DB_PREFIX . "seo_faq WHERE manufacturer_id = '" . (int)$manufacturer_id . "' AND type = 'manufacturer_products'");
+		$this->db->query("DELETE FROM " . DB_PREFIX . "seo_faq_description WHERE manufacturer_id = '" . (int)$manufacturer_id . "' AND type = 'manufacturer_products'");
+		if (isset($data['faq'])) {
+			foreach ($data['faq'] as $manufacturer_faq) {
+				$this->db->query("INSERT INTO " . DB_PREFIX . "seo_faq SET manufacturer_id = '" . (int)$manufacturer_id . "', `sort_order` = '" . (int)$manufacturer_faq['sort_order'] . "', type = 'manufacturer'");
+				$faq_id = $this->db->getLastId(); 
+				foreach ($manufacturer_faq['faq_data'] as $language_id => $value) {
+					$this->db->query("INSERT INTO " . DB_PREFIX . "seo_faq_description SET faq_id = '" . (int)$faq_id . "', manufacturer_id = '" . (int)$manufacturer_id . "', language_id = '" . (int)$language_id . "', question = '" . $this->db->escape($value['question']) . "', answer = '" . $this->db->escape($value['answer']) . "', type = 'manufacturer'");
+				}
+			}
+		} 
+		if (isset($data['faq_products'])) {
+			foreach ($data['faq_products'] as $manufacturer_faq) {
+				$this->db->query("INSERT INTO " . DB_PREFIX . "seo_faq SET manufacturer_id = '" . (int)$manufacturer_id . "', `sort_order` = '" . (int)$manufacturer_faq['sort_order'] . "', type = 'manufacturer_products'");
+				$faq_id = $this->db->getLastId(); 
+				foreach ($manufacturer_faq['faq_data'] as $language_id => $value) {
+					$this->db->query("INSERT INTO " . DB_PREFIX . "seo_faq_description SET faq_id = '" . (int)$faq_id . "', manufacturer_id = '" . (int)$manufacturer_id . "', language_id = '" . (int)$language_id . "', question = '" . $this->db->escape($value['question']) . "', answer = '" . $this->db->escape($value['answer']) . "', type = 'manufacturer_products'");
+				}
+			}
+		}
+		]]></add>
+	</operation>
+</file>
+<file path="admin/view/template/catalog/manufacturer_form.tpl">
+	<operation error="skip">
+		<search><![CDATA[<?php echo $footer; ?>]]></search>
+		<add position="before"><![CDATA[
+<script type="text/javascript"><!--
+var faq_row = <?php echo $faq_row; ?>;
+function addFaq() {
+html = '<tr id="faq-row' + faq_row + '">';
+html += '<td class="text-center">';
+<?php foreach($languages as $language) { ?>
+html += '<img src="language/<?php echo $language['code']; ?>/<?php echo $language['code']; ?>.png" style="display:inline-block;"/> <input type="text" name="faq[' + faq_row + '][faq_data][<?php echo $language['language_id']; ?>][question]" value="" class="form-control" style="display:inline-block;width:80%;" /><br>';
+<?php } ?>
+html += '</td>';
+html += '<td class="text-center">';
+<?php foreach($languages as $language) { ?>
+html += '<img src="language/<?php echo $language['code']; ?>/<?php echo $language['code']; ?>.png" style="display:inline-block;"/> <textarea rows="3" name="faq[' + faq_row + '][faq_data][<?php echo $language['language_id']; ?>][answer]" value="" class="form-control" style="display:inline-block;width:80%;"></textarea><br>';
+<?php } ?>
+html += '</td>';
+html += '<td class="text-center" style="width:10%"><input type="text" name="faq[' + faq_row + '][sort_order]" value="" class="form-control" /></td>';
+html += '<td class="text-center"><button type="button" onclick="$(\'#faq-row' + faq_row + '\').remove();" data-toggle="tooltip" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+html += '</tr>';
+$('#faq tbody').append(html);
+faq_row++;
+}
+
+var p_faq_row = <?php echo $p_faq_row; ?>;
+function addFaqProducts() {
+html = '<tr id="faq-row' + p_faq_row + '">';
+html += '<td class="text-center">';
+<?php foreach($languages as $language) { ?>
+html += '<img src="language/<?php echo $language['code']; ?>/<?php echo $language['code']; ?>.png" style="display:inline-block;"/> <input type="text" name="faq_products[' + p_faq_row + '][faq_data][<?php echo $language['language_id']; ?>][question]" value="" class="form-control" style="display:inline-block;width:80%;" /><br>';
+<?php } ?>
+html += '</td>';
+html += '<td class="text-center">';
+<?php foreach($languages as $language) { ?>
+html += ' <img src="language/<?php echo $language['code']; ?>/<?php echo $language['code']; ?>.png" style="display:inline-block;"/> <textarea rows="3" name="faq_products[' + p_faq_row + '][faq_data][<?php echo $language['language_id']; ?>][answer]" value="" class="form-control" style="display:inline-block;width:80%;"></textarea><br>';
+<?php } ?>
+html += '</td>';
+html += '<td class="text-center" style="width:10%"><input type="text" name="faq_products[' + p_faq_row + '][sort_order]" value="" class="form-control" /></td>';
+html += '<td class="text-center"><button type="button" onclick="$(\'#faq-product-row' + p_faq_row + '\').remove();" data-toggle="tooltip" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+html += '</tr>';
+$('#faq-product tbody').append(html);
+p_faq_row++;
+}
+//--></script>
+ ]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[</form>]]></search>
+		<add position="before"><![CDATA[
+			<div class="" id="tab-faq">
+			<legend><?php echo $text_auto_manufacturer_help; ?></legend>
+			<div class="table-responsive">
+			<table id="faq" class="table table-striped table-bordered table-hover">
+				<thead>
+				<tr>
+					<td class="text-center"><?php echo $column_question; ?></td>
+					<td class="text-center"><?php echo $column_faq; ?></td>
+					<td class="text-center" style="width:10%"><?php echo $column_sort_order; ?></td>
+					<td class="text-center" style="width:10%"></td>
+				</tr>
+				</thead>
+				<tbody>
+				<?php $faq_row = 0; ?>
+				<?php foreach ($manufacturer_faq as $faq) { ?>
+				<tr id="faq-row<?php echo $faq_row; ?>">
+					<td class="text-center">
+					<?php foreach($languages as $language) { ?>
+					<img src="language/<?php echo $language['code']; ?>/<?php echo $language['code']; ?>.png" style="display:inline-block;"/> <input type="text" name="faq[<?php echo $faq_row; ?>][faq_data][<?php echo $language['language_id']; ?>][question]" value="<?php if (!empty($faq['faq_data'][$language['language_id']]['question'])) echo $faq['faq_data'][$language['language_id']]['question']; ?>" class="form-control" style="display:inline-block;width:80%;" /><br>
+					<?php } ?>
+					</td>
+					<td class="text-center">
+					<?php foreach($languages as $language) { ?>
+					<img src="language/<?php echo $language['code']; ?>/<?php echo $language['code']; ?>.png" style="display:inline-block;"/> <textarea rows="3" name="faq[<?php echo $faq_row; ?>][faq_data][<?php echo $language['language_id']; ?>][answer]" class="form-control" style="display:inline-block;width:80%;"><?php if (!empty($faq['faq_data'][$language['language_id']]['answer'])) echo $faq['faq_data'][$language['language_id']]['answer']; ?></textarea><br>
+					<?php } ?> 
+					</td>
+					<td class="text-center"><input type="text" name="faq[<?php echo $faq_row; ?>][sort_order]" value="<?php echo $faq['sort_order']; ?>" class="form-control" /></td>
+					<td class="text-center"><button type="button" onclick="$('#faq-row<?php echo $faq_row; ?>').remove();" data-toggle="tooltip" title="<?php echo $button_remove; ?>" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>
+				</tr> 
+				<?php $faq_row++; ?>
+				<?php } ?>
+				</tbody>
+				<tfoot>
+				<tr>
+					<td colspan="3"></td>
+					<td class="text-center"><button type="button" onclick="addFaq();" data-toggle="tooltip" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+				</tr>
+				</tfoot>
+			</table>
+			</div>
+			<legend><?php echo $text_auto_manufacturer_products; ?></legend>
+			<div class="table-responsive">
+			<table id="faq-product" class="table table-striped table-bordered table-hover">
+				<thead>
+				<tr>
+					<td class="text-center"><?php echo $column_question; ?></td>
+					<td class="text-center"><?php echo $column_faq; ?></td>
+					<td class="text-center" style="width:10%"><?php echo $column_sort_order; ?></td>
+					<td class="text-center" style="width:10%"></td>
+				</tr>
+				</thead>
+				<tbody>
+				<?php $p_faq_row = 0; ?>
+				<?php foreach ($manufacturer_faq_products as $faq) { ?>
+				<tr id="faq-product-row<?php echo $p_faq_row; ?>">
+					<td class="text-center">
+					<?php foreach($languages as $language) { ?>
+					<img src="language/<?php echo $language['code']; ?>/<?php echo $language['code']; ?>.png" style="display:inline-block;"/> <input type="text" name="faq_products[<?php echo $p_faq_row; ?>][faq_data][<?php echo $language['language_id']; ?>][question]" value="<?php if (!empty($faq['faq_data'][$language['language_id']]['question'])) echo $faq['faq_data'][$language['language_id']]['question']; ?>" class="form-control" style="display:inline-block;width:80%;" /><br>
+					<?php } ?>
+					</td> 
+					<td class="text-center"> 
+					<?php foreach($languages as $language) { ?>
+					<img src="language/<?php echo $language['code']; ?>/<?php echo $language['code']; ?>.png" style="display:inline-block;"/> <textarea rows="3" name="faq_products[<?php echo $p_faq_row; ?>][faq_data][<?php echo $language['language_id']; ?>][answer]" class="form-control" style="display:inline-block;width:80%;"><?php if (!empty($faq['faq_data'][$language['language_id']]['answer'])) echo $faq['faq_data'][$language['language_id']]['answer']; ?></textarea><br>
+					<?php } ?> 
+					</td>
+					<td class="text-center"><input type="text" name="faq_products[<?php echo $p_faq_row; ?>][sort_order]" value="<?php echo $faq['sort_order']; ?>" class="form-control" /></td>
+					<td class="text-center"><button type="button" onclick="$('#faq-product-row<?php echo $p_faq_row; ?>').remove();" data-toggle="tooltip" title="<?php echo $button_remove; ?>" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>
+				</tr> 
+				<?php $p_faq_row++; ?>
+				<?php } ?>
+				</tbody>
+				<tfoot>
+				<tr>
+					<td colspan="3"></td>
+					<td class="text-center"><button type="button" onclick="addFaqProducts();" data-toggle="tooltip" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+				</tr>
+				</tfoot>
+			</table>
+			</div>
+		</div> 
+		]]></add> 
+	</operation>
+</file>
+<file path="admin/view/template/catalog/manufacturer_form.twig">
+	<operation error="skip">
+		<search><![CDATA[<li><a href="#tab-design" data-toggle="tab">{{ tab_design }}</a></li>]]></search>
+		<add position="after"><![CDATA[{% if sp_auto_seo_faq_status %}<li><a href="#tab-faq" data-toggle="tab">{{ tab_faq }}</a></li>{% endif %}]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[{{ footer }}]]></search>
+		<add position="before"><![CDATA[
+<script type="text/javascript"><!--
+var faq_row = {{ faq_row }};
+function addFaq() {
+html = '<tr id="faq-row' + faq_row + '">';
+html += '<td class="text-center">';
+{% for language in languages %}
+html += '<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <input type="text" name="faq[' + faq_row + '][faq_data][{{ language.language_id }}][question]" value="" class="form-control" style="display:inline-block;width:80%;" /><br>';
+{% endfor %}
+html += '</td>';
+html += '<td class="text-center">';
+{% for language in languages %}
+html += '<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <textarea rows="3" name="faq[' + faq_row + '][faq_data][{{ language.language_id }}][answer]" class="form-control" style="display:inline-block;width:80%;"></textarea><br>';
+{% endfor %}
+html += '</td>';
+html += '<td class="text-center" style="width:10%"><input type="text" name="faq[' + faq_row + '][sort_order]" value="" class="form-control" /></td>';
+html += '<td class="text-center"><button type="button" onclick="$(\'#faq-row' + faq_row + '\').remove();" data-toggle="tooltip" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+html += '</tr>';
+$('#faq tbody').append(html);
+faq_row++;
+}
+
+var p_faq_row = {{ p_faq_row }};
+function addFaqProducts() {
+html = '<tr id="faq-product-row' + p_faq_row + '">';
+html += '<td class="text-center">';
+{% for language in languages %}
+html += '<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <input type="text" name="faq_products[' + p_faq_row + '][faq_data][{{ language.language_id }}][question]" value="" class="form-control" style="display:inline-block;width:80%;" /><br>';
+{% endfor %}
+html += '</td>';
+html += '<td class="text-center">';
+{% for language in languages %}
+html += '<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <textarea rows="3" name="faq_products[' + p_faq_row + '][faq_data][{{ language.language_id }}][answer]" class="form-control" style="display:inline-block;width:80%;"></textarea><br>';
+{% endfor %}
+html += '</td>';
+html += '<td class="text-center" style="width:10%"><input type="text" name="faq_products[' + p_faq_row + '][sort_order]" value="" class="form-control" /></td>';
+html += '<td class="text-center"><button type="button" onclick="$(\'#faq-product-row' + p_faq_row + '\').remove();" data-toggle="tooltip" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+html += '</tr>';
+$('#faq-product tbody').append(html);
+p_faq_row++;
+}
+//--></script>
+		]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[</form>]]></search>
+		<add position="before" offset="1"><![CDATA[
+			<div class="tab-pane" id="tab-faq">
+			<legend>{{ text_auto_manufacturer_help }}</legend>
+			<div class="table-responsive">
+			<table id="faq" class="table table-striped table-bordered table-hover">
+				<thead>
+				<tr>
+					<td class="text-center">{{ column_question }}</td>
+					<td class="text-center">{{ column_faq }}</td>
+					<td class="text-center" style="width:10%">{{ column_sort_order }}</td>
+					<td class="text-center" style="width:10%"></td>
+				</tr>
+				</thead>
+				<tbody>
+					{% set faq_row = 0 %}
+					{% for faq in manufacturer_faq %}
+				<tr id="faq-row{{ faq_row }}">
+					<td class="text-center">
+					{% for language in languages %}
+					<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <input type="text" name="faq[{{ faq_row }}][faq_data][{{ language.language_id }}][question]" value="{{ faq.faq_data[language.language_id].question }}" class="form-control" style="display:inline-block;width:80%;" /><br>
+					{% endfor %}
+					</td>
+					<td class="text-center">
+					{% for language in languages %}
+					<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <textarea rows="3" name="faq[{{ faq_row }}][faq_data][{{ language.language_id }}][answer]" class="form-control" style="display:inline-block;width:80%;">{{ faq.faq_data[language.language_id].answer }}</textarea><br>
+					{% endfor %}
+					</td>
+					<td class="text-center"><input type="text" name="faq[{{ faq_row }}][sort_order]" value="{{ faq['sort_order'] }}" class="form-control" /></td>
+					<td class="text-center"><button type="button" onclick="$('#faq-row{{ faq_row }}').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>
+				</tr>
+				{% set faq_row = faq_row + 1 %}
+				{% endfor %}
+				</tbody>
+				<tfoot>
+				<tr> 
+					<td colspan="3"></td>
+					<td class="text-center"><button type="button" onclick="addFaq();" data-toggle="tooltip" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+				</tr>
+				</tfoot>
+			</table>
+			</div>
+			</div>
+			<legend>{{ text_auto_manufacturer_products }}</legend>
+			<div class="table-responsive">
+			<table id="faq-product" class="table table-striped table-bordered table-hover">
+				<thead>
+				<tr>
+					<td class="text-center">{{ column_question }}</td>
+					<td class="text-center">{{ column_faq }}</td>
+					<td class="text-center" style="width:10%">{{ column_sort_order }}</td>
+					<td class="text-center" style="width:10%"></td>
+				</tr>
+				</thead>
+				<tbody>
+					{% set p_faq_row = 0 %}
+					{% for faq in manufacturer_faq_products %} 
+				<tr id="faq-product-row{{ p_faq_row }}">
+					<td class="text-center">
+					{% for language in languages %}
+					<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <input type="text" name="faq_products[{{ p_faq_row }}][faq_data][{{ language.language_id }}][question]" value="{{ faq.faq_data[language.language_id].question }}" class="form-control" style="display:inline-block;width:80%;" /><br>
+					{% endfor %}
+					</td>
+					<td class="text-center">
+					{% for language in languages %}
+					<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <textarea rows="3" name="faq_products[{{ p_faq_row }}][faq_data][{{ language.language_id }}][answer]" class="form-control" style="display:inline-block;width:80%;">{{ faq.faq_data[language.language_id].answer }}</textarea><br>
+					{% endfor %}
+					</td>
+					<td class="text-center"><input type="text" name="faq_products[{{ p_faq_row }}][sort_order]" value="{{ faq['sort_order'] }}" class="form-control" /></td>
+					<td class="text-center"><button type="button" onclick="$('#faq-product-row{{ p_faq_row }}').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>
+				</tr>
+				{% set p_faq_row = p_faq_row + 1 %}
+				{% endfor %}
+				</tbody>
+				<tfoot>
+				<tr> 
+					<td colspan="3"></td>
+					<td class="text-center"><button type="button" onclick="addFaqProducts();" data-toggle="tooltip" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+				</tr>
+				</tfoot>
+			</table>
+			</div>
+		</div>
+		]]></add>
+	</operation>
+</file>
+<file path="admin/controller/catalog/information.php">
+	<operation error="skip">
+		<search><![CDATA[if (isset($this->request->post['sort_order'])) {]]></search>
+		<add position="before"><![CDATA[
+		if (isset($this->request->post['faq'])) {
+			$faq = $this->request->post['faq'];
+		} elseif (isset($this->request->get['information_id'])) {
+			$faq = $this->model_catalog_information->getInformationFaq($this->request->get['information_id']);
+		} else {
+			$faq = [];
+		}
+		$data['information_faq'] = [];
+		foreach ($faq as $information_faq) {
+			$data['information_faq'][] = [
+				'faq_data' => $information_faq['faq_data'],
+				'sort_order' => $information_faq['sort_order']
+			];
+		}
+		]]></add>
+	</operation>
+</file>
+<file path="admin/model/catalog/information.php">
+	<operation error="skip">
+		<search><![CDATA[public function getInformationStores($information_id) {]]></search>
+		<add position="before"><![CDATA[
+		public function getInformationFaq($information_id) {
+			$faq = [];
+			$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "seo_faq WHERE information_id = '" . (int)$information_id . "' AND type = 'information' ORDER BY sort_order ASC");
+			foreach($query->rows as $row) {
+				$faq_data = [];
+				$description_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "seo_faq_description WHERE faq_id = '" . (int)$row['faq_id'] . "'");
+					foreach ($description_query->rows as $result) {
+						$faq_data[$result['language_id']] = [
+							'question' => $result['question'],
+							'answer' => $result['answer']
+						];
+					}
+				$faq[] = [ 
+					'sort_order' => $row['sort_order'],
+					'data' => $row,
+					'faq_data' => $faq_data,
+				];	
+			}
+			return $faq;
+		}
+		]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[if (isset($data['information_store'])) {]]></search>
+		<add position="before"><![CDATA[
+		$this->db->query("DELETE FROM " . DB_PREFIX . "seo_faq WHERE information_id = '" . (int)$information_id . "' AND type = 'information'");
+		$this->db->query("DELETE FROM " . DB_PREFIX . "seo_faq_description WHERE information_id = '" . (int)$information_id . "' AND type = 'information'");
+		if (isset($data['faq'])) {
+			foreach ($data['faq'] as $information_faq) {
+				$this->db->query("INSERT INTO " . DB_PREFIX . "seo_faq SET information_id = '" . (int)$information_id . "', `sort_order` = '" . (int)$information_faq['sort_order'] . "', type = 'information'");
+				$faq_id = $this->db->getLastId();
+				foreach ($information_faq['faq_data'] as $language_id => $value) {
+					$this->db->query("INSERT INTO " . DB_PREFIX . "seo_faq_description SET faq_id = '" . (int)$faq_id . "', information_id = '" . (int)$information_id . "', language_id = '" . (int)$language_id . "', question = '" . $this->db->escape($value['question']) . "', answer = '" . $this->db->escape($value['answer']) . "', type = 'information'");
+				}
+			}
+		} 
+		]]></add>
+	</operation>
+</file>
+<file path="admin/view/template/catalog/information_form.tpl">
+	<operation error="skip">
+		<search><![CDATA[<li><a href="#tab-design" data-toggle="tab"><?php echo $tab_design; ?></a></li>]]></search>
+		<add position="after"><![CDATA[<?php if ($sp_auto_seo_faq_status) { ?><li><a href="#tab-faq" data-toggle="tab"><?php echo $tab_faq; ?></a></li><?php } ?>]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[<?php echo $footer; ?>]]></search>
+		<add position="before"><![CDATA[
+<script type="text/javascript"><!--
+var faq_row = <?php echo $faq_row; ?>;
+function addFaq() {
+html = '<tr id="faq-row' + faq_row + '">';
+html += '<td class="text-center">';
+<?php foreach($languages as $language) { ?>
+html += '<img src="language/<?php echo $language['code']; ?>/<?php echo $language['code']; ?>.png" style="display:inline-block;"/> <input type="text" name="faq[' + faq_row + '][faq_data][<?php echo $language['language_id']; ?>][question]" value="" class="form-control" style="display:inline-block;width:80%;" /><br>';
+<?php } ?>
+html += '</td>';
+html += '<td class="text-center">';
+<?php foreach($languages as $language) { ?>
+html += '<img src="language/<?php echo $language['code']; ?>/<?php echo $language['code']; ?>.png" style="display:inline-block;"/> <textarea rows="3" name="faq[' + faq_row + '][faq_data][<?php echo $language['language_id']; ?>][answer]" value="" class="form-control" style="display:inline-block;width:80%;"></textarea><br>';
+<?php } ?>
+html += '</td>';
+html += '<td class="text-center" style="width:10%"><input type="text" name="faq[' + faq_row + '][sort_order]" value="" class="form-control" /></td>';
+html += '<td class="text-center"><button type="button" onclick="$(\'#faq-row' + faq_row + '\').remove();" data-toggle="tooltip" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+html += '</tr>';
+$('#faq tbody').append(html);
+faq_row++;
+}
+//--></script>
+		]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[<div class="tab-pane" id="tab-design">]]></search>
+		<add position="before"><![CDATA[
+			<div class="tab-pane" id="tab-faq">
+			<legend><?php echo $text_auto_information_help; ?></legend>
+			<div class="table-responsive">
+			<table id="faq" class="table table-striped table-bordered table-hover">
+				<thead>
+				<tr>
+					<td class="text-center"><?php echo $column_question; ?></td>
+					<td class="text-center"><?php echo $column_faq; ?></td>
+					<td class="text-center" style="width:10%"><?php echo $column_sort_order; ?></td>
+					<td class="text-center" style="width:10%"></td>
+				</tr>
+				</thead>
+				<tbody>
+				<?php $faq_row = 0; ?>
+				<?php foreach ($information_faq as $faq) { ?>
+				<tr id="faq-row<?php echo $faq_row; ?>">
+					<td class="text-center">
+					<?php foreach($languages as $language) { ?>
+					<img src="language/<?php echo $language['code']; ?>/<?php echo $language['code']; ?>.png" style="display:inline-block;"/> <input type="text" name="faq[<?php echo $faq_row; ?>][faq_data][<?php echo $language['language_id']; ?>][question]" value="<?php if (!empty($faq['faq_data'][$language['language_id']]['question'])) echo $faq['faq_data'][$language['language_id']]['question']; ?>" class="form-control" style="display:inline-block;width:80%;" /><br>
+					<?php } ?>
+					</td>
+					<td class="text-center">
+					<?php foreach($languages as $language) { ?>
+					<img src="language/<?php echo $language['code']; ?>/<?php echo $language['code']; ?>.png" style="display:inline-block;"/> <textarea rows="3" name="faq[<?php echo $faq_row; ?>][faq_data][<?php echo $language['language_id']; ?>][answer]" class="form-control" style="display:inline-block;width:80%;"><?php if (!empty($faq['faq_data'][$language['language_id']]['answer'])) echo $faq['faq_data'][$language['language_id']]['answer']; ?></textarea><br>
+					<?php } ?> 
+					</td>
+					<td class="text-center"><input type="text" name="faq[<?php echo $faq_row; ?>][sort_order]" value="<?php echo $faq['sort_order']; ?>" class="form-control" /></td>
+					<td class="text-center"><button type="button" onclick="$('#faq-row<?php echo $faq_row; ?>').remove();" data-toggle="tooltip" title="<?php echo $button_remove; ?>" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>
+				</tr> 
+				<?php $faq_row++; ?>
+				<?php } ?>
+				</tbody>
+				<tfoot>
+				<tr>
+					<td colspan="3"></td>
+					<td class="text-center"><button type="button" onclick="addFaq();" data-toggle="tooltip" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+				</tr>
+				</tfoot>
+			</table>
+			</div>
+		</div> 
+		]]></add>
+	</operation>
+</file>
+<file path="admin/view/template/catalog/information_form.twig">
+	<operation error="skip">
+		<search><![CDATA[<li><a href="#tab-design" data-toggle="tab">{{ tab_design }}</a></li>]]></search>
+		<add position="after"><![CDATA[{% if sp_auto_seo_faq_status%}<li><a href="#tab-faq" data-toggle="tab">{{ tab_faq }}</a></li>{% endif %}]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[{{ footer }}]]></search>
+		<add position="before"><![CDATA[
+<script type="text/javascript"><!--
+var faq_row = {{ faq_row }};
+function addFaq() {
+html = '<tr id="faq-row' + faq_row + '">';
+html += '<td class="text-center">';
+{% for language in languages %}
+html += '<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <input type="text" name="faq[' + faq_row + '][faq_data][{{ language.language_id }}][question]" value="" class="form-control" style="display:inline-block;width:80%;" /><br>';
+{% endfor %}
+html += '</td>';
+html += '<td class="text-center">';
+{% for language in languages %}
+html += '<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <textarea rows="3" name="faq[' + faq_row + '][faq_data][{{ language.language_id }}][answer]" class="form-control" style="display:inline-block;width:80%;"></textarea><br>';
+{% endfor %}
+html += '</td>';
+html += '<td class="text-center" style="width:10%"><input type="text" name="faq[' + faq_row + '][sort_order]" value="" class="form-control" /></td>';
+html += '<td class="text-center"><button type="button" onclick="$(\'#faq-row' + faq_row + '\').remove();" data-toggle="tooltip" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+html += '</tr>';
+$('#faq tbody').append(html);
+faq_row++;
+}
+//--></script>
+		]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[</form>]]></search>
+		<add position="before" offset="1"><![CDATA[
+			<div class="tab-pane" id="tab-faq">
+			<legend>{{ text_auto_information_help }}</legend> 
+			<div class="table-responsive">
+			<table id="faq" class="table table-striped table-bordered table-hover">
+				<thead>
+				<tr>
+					<td class="text-center">{{ column_question }}</td>
+					<td class="text-center">{{ column_faq }}</td>
+					<td class="text-center" style="width:10%">{{ column_sort_order }}</td>
+					<td class="text-center" style="width:10%"></td>
+				</tr>
+				</thead>
+				<tbody>
+					{% set faq_row = 0 %}
+					{% for faq in information_faq %}
+				<tr id="faq-row{{ faq_row }}">
+					<td class="text-center">
+					{% for language in languages %}
+					<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <input type="text" name="faq[{{ faq_row }}][faq_data][{{ language.language_id }}][question]" value="{{ faq.faq_data[language.language_id].question }}" class="form-control" style="display:inline-block;width:80%;" /><br>
+					{% endfor %}
+					</td>
+					<td class="text-center">
+					{% for language in languages %}
+					<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <textarea rows="3" name="faq[{{ faq_row }}][faq_data][{{ language.language_id }}][answer]" class="form-control" style="display:inline-block;width:80%;">{{ faq.faq_data[language.language_id].answer }}</textarea><br>
+					{% endfor %}
+					</td>
+					<td class="text-center"><input type="text" name="faq[{{ faq_row }}][sort_order]" value="{{ faq['sort_order'] }}" class="form-control" /></td>
+					<td class="text-center"><button type="button" onclick="$('#faq-row{{ faq_row }}').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>
+				</tr>
+				{% set faq_row = faq_row + 1 %}
+				{% endfor %}
+				</tbody>
+				<tfoot>
+				<tr> 
+					<td colspan="3"></td>
+					<td class="text-center"><button type="button" onclick="addFaq();" data-toggle="tooltip" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+				</tr>
+				</tfoot>
+			</table>
+			</div>
+		</div>
+		]]></add>
+	</operation>
+</file>
+<file path="admin/language/{ru-ru,russian}*/octemplates/blog/*.php"> 
+	<operation error="skip">
+		<search><![CDATA[// Entry]]></search>
+		<add position="before"><![CDATA[
+		$_['column_faq'] = 'Ответ (можно HTML)';
+		$_['column_question'] = 'Вопрос (можно HTML)';
+		$_['column_sort_order'] = 'Порядок сортировки';
+		$_['column_link'] = 'Ссылка на которой выводить блок';
+		$_['tab_faq'] = 'Вопрос-ответ';
+		$_['button_remove'] = 'Удалить';
+		$_['faq_name'] = 'Название блока вопрос-ответ';
+		]]></add>
+	</operation>
+</file>
+<file path="admin/language/{uk-ua,ukrainian}*/octemplates/blog/*.php"> 
+	<operation error="skip">
+		<search><![CDATA[// Entry]]></search>
+		<add position="before"><![CDATA[
+		$_['column_faq'] = 'Ответ (можно HTML)';
+		$_['column_question'] = 'Вопрос (можно HTML)';
+		$_['column_sort_order'] = 'Порядок сортировки';
+		$_['column_link'] = 'Ссылка на которой выводить блок';
+		$_['tab_faq'] = 'Вопрос-ответ';
+		$_['button_remove'] = 'Удалить';
+		$_['faq_name'] = 'Название блока вопрос-ответ';
+		]]></add>
+	</operation>
+</file>
+<file path="admin/language/{en-gb,english}*/octemplates/blog/*.php">
+	<operation error="skip">
+		<search><![CDATA[// Entry]]></search>
+		<add position="before"><![CDATA[
+		$_['column_faq'] = 'Answer (HTML allowed)';
+		$_['column_question'] = 'Question (HTML allowed)';
+		$_['column_sort_order'] = 'Sort Order';
+		$_['column_link'] = 'Link to display the block on';
+		$_['tab_faq'] = 'FAQ';
+		$_['button_remove'] = 'Remove';
+		$_['faq_name'] = 'FAQ Block Name';
+		]]></add>
+	</operation>
+</file>
+<file path="admin/controller/octemplates/blog/oct_blogcategory.php">
+	<operation error="skip">
+		<search><![CDATA[if (isset($this->request->post['sort_order'])) {]]></search>
+		<add position="before"><![CDATA[
+		if (isset($this->request->post['faq'])) {
+			$faq = $this->request->post['faq'];
+		} elseif (isset($this->request->get['blogcategory_id'])) {
+			$faq = $this->model_octemplates_blog_oct_blogcategory->getBlogCategoryFaq($this->request->get['blogcategory_id']);
+		} else {
+			$faq = [];
+		}
+		$data['blog_category_faq'] = [];
+		foreach ($faq as $information_faq) {
+			$data['blog_category_faq'][] = [
+				'faq_data' => $information_faq['faq_data'],
+				'sort_order' => $information_faq['sort_order']
+			];
+		}
+		]]></add>
+	</operation>
+</file>
+<file path="admin/controller/octemplates/blog/oct_blogarticle.php">
+	<operation error="skip">
+		<search><![CDATA[if (isset($this->request->post['sort_order'])) {]]></search>
+		<add position="before"><![CDATA[
+		if (isset($this->request->post['faq'])) {
+			$faq = $this->request->post['faq'];
+		} elseif (isset($this->request->get['blogarticle_id'])) {
+			$faq = $this->model_octemplates_blog_oct_blogarticle->getBlogArticleFaq($this->request->get['blogarticle_id']);
+		} else {
+			$faq = [];
+		}
+		$data['blog_article_faq'] = [];
+		foreach ($faq as $information_faq) {
+			$data['blog_article_faq'][] = [
+				'faq_data' => $information_faq['faq_data'],
+				'sort_order' => $information_faq['sort_order']
+			];
+		}
+		]]></add>
+	</operation>
+</file>
+<file path="admin/model/octemplates/blog/oct_blogcategory.php">
+	<operation error="skip">
+		<search><![CDATA[public function getBlogCategoryStores($blogcategory_id) {]]></search>
+		<add position="before"><![CDATA[
+		public function getBlogCategoryFaq($blogcategory_id) {
+			$faq = [];
+			$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "seo_faq WHERE category_id = '" . (int)$blogcategory_id . "' AND type = 'oct_blog_category' ORDER BY sort_order ASC");
+			foreach($query->rows as $row) {
+				$faq_data = [];
+				$description_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "seo_faq_description WHERE faq_id = '" . (int)$row['faq_id'] . "'");
+					foreach ($description_query->rows as $result) {
+						$faq_data[$result['language_id']] = [
+							'question' => $result['question'],
+							'answer' => $result['answer']
+						];
+					}
+				$faq[] = [
+					'sort_order' => $row['sort_order'],
+					'data' => $row,
+					'faq_data' => $faq_data,
+				];	
+			}
+			return $faq;
+		}
+		]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[if (isset($data['category_store'])) {]]></search>
+		<add position="before"><![CDATA[
+		$this->db->query("DELETE FROM " . DB_PREFIX . "seo_faq WHERE category_id = '" . (int)$blogcategory_id . "' AND type = 'oct_blog_category'");
+		$this->db->query("DELETE FROM " . DB_PREFIX . "seo_faq_description WHERE category_id = '" . (int)$blogcategory_id . "' AND type = 'oct_blog_category'");
+		if (isset($data['faq'])) {
+			foreach ($data['faq'] as $information_faq) {
+				$this->db->query("INSERT INTO " . DB_PREFIX . "seo_faq SET category_id = '" . (int)$blogcategory_id . "', `sort_order` = '" . (int)$information_faq['sort_order'] . "', type = 'oct_blog_category'");
+				$faq_id = $this->db->getLastId();
+				foreach ($information_faq['faq_data'] as $language_id => $value) {
+					$this->db->query("INSERT INTO " . DB_PREFIX . "seo_faq_description SET faq_id = '" . (int)$faq_id . "', category_id = '" . (int)$blogcategory_id . "', language_id = '" . (int)$language_id . "', question = '" . $this->db->escape($value['question']) . "', answer = '" . $this->db->escape($value['answer']) . "', type = 'oct_blog_category'");
+				}
+			}
+		}
+		]]></add>
+	</operation>
+</file>
+<file path="admin/model/octemplates/blog/oct_blogarticle.php">
+	<operation error="skip">
+		<search><![CDATA[public function getArticleStores($blogarticle_id) {]]></search>
+		<add position="before"><![CDATA[
+		public function getBlogArticleFaq($blogarticle_id) {
+			$faq = [];
+			$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "seo_faq WHERE category_id = '" . (int)$blogarticle_id . "' AND type = 'oct_blog_article' ORDER BY sort_order ASC");
+			foreach($query->rows as $row) {
+				$faq_data = [];
+				$description_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "seo_faq_description WHERE faq_id = '" . (int)$row['faq_id'] . "'");
+					foreach ($description_query->rows as $result) {
+						$faq_data[$result['language_id']] = [
+							'question' => $result['question'],
+							'answer' => $result['answer']
+						];
+					}
+				$faq[] = [ 
+					'sort_order' => $row['sort_order'],
+					'data' => $row,
+					'faq_data' => $faq_data,
+				];	
+			}
+			return $faq;
+		}
+		]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[if (isset($data['article_store'])) {]]></search>
+		<add position="before"><![CDATA[
+		$this->db->query("DELETE FROM " . DB_PREFIX . "seo_faq WHERE category_id = '" . (int)$blogarticle_id . "' AND type = 'oct_blog_article'");
+		$this->db->query("DELETE FROM " . DB_PREFIX . "seo_faq_description WHERE category_id = '" . (int)$blogarticle_id . "' AND type = 'oct_blog_article'");
+		if (isset($data['faq'])) {
+			foreach ($data['faq'] as $information_faq) {
+				$this->db->query("INSERT INTO " . DB_PREFIX . "seo_faq SET category_id = '" . (int)$blogarticle_id . "', `sort_order` = '" . (int)$information_faq['sort_order'] . "', type = 'oct_blog_article'");
+				$faq_id = $this->db->getLastId(); 
+				foreach ($information_faq['faq_data'] as $language_id => $value) {
+					$this->db->query("INSERT INTO " . DB_PREFIX . "seo_faq_description SET faq_id = '" . (int)$faq_id . "', category_id = '" . (int)$blogarticle_id . "', language_id = '" . (int)$language_id . "', question = '" . $this->db->escape($value['question']) . "', answer = '" . $this->db->escape($value['answer']) . "', type = 'oct_blog_article'");
+				}
+			}
+		} 
+		]]></add>
+	</operation>
+</file>
+<file path="admin/view/template/octemplates/blog/oct_blogcategory_form.twig">
+	<operation error="skip">
+		<search><![CDATA[<li><a href="#tab-design" data-toggle="tab">{{ tab_design }}</a></li>]]></search>
+		<add position="after"><![CDATA[<li><a href="#tab-faq" data-toggle="tab">{{ tab_faq }}</a></li>]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[{{ footer }}]]></search>
+		<add position="before"><![CDATA[
+<script type="text/javascript"><!--
+var faq_row = {{ faq_row }};
+function addFaq() {
+html = '<tr id="faq-row' + faq_row + '">';
+html += '<td class="text-center">';
+{% for language in languages %}
+html += '<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <input type="text" name="faq[' + faq_row + '][faq_data][{{ language.language_id }}][question]" value="" class="form-control" style="display:inline-block;width:80%;" /><br>';
+{% endfor %}
+html += '</td>';
+html += '<td class="text-center">';
+{% for language in languages %}
+html += '<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <textarea rows="3" name="faq[' + faq_row + '][faq_data][{{ language.language_id }}][answer]" class="form-control" style="display:inline-block;width:80%;"></textarea><br>';
+{% endfor %}
+html += '</td>';
+html += '<td class="text-center" style="width:10%"><input type="text" name="faq[' + faq_row + '][sort_order]" value="" class="form-control" /></td>';
+html += '<td class="text-center"><button type="button" onclick="$(\'#faq-row' + faq_row + '\').remove();" data-toggle="tooltip" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+html += '</tr>';
+$('#faq tbody').append(html);
+faq_row++;
+}
+//--></script>
+]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[</form>]]></search>
+		<add position="before" offset="1"><![CDATA[
+<div class="tab-pane" id="tab-faq">
+<div class="form-group">
+<div class="table-responsive">
+<table id="faq" class="table table-striped table-bordered table-hover">
+<thead>
+<tr>
+<td class="text-center">{{ column_question }}</td>
+<td class="text-center">{{ column_faq }}</td>
+<td class="text-center" style="width:10%">{{ column_sort_order }}</td>
+<td class="text-center" style="width:10%"></td>
+</tr>
+</thead>
+<tbody>
+{% set faq_row = 0 %}
+{% for faq in blog_category_faq %}
+<tr id="faq-row{{ faq_row }}">
+<td class="text-center">
+{% for language in languages %}
+<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <input type="text" name="faq[{{ faq_row }}][faq_data][{{ language.language_id }}][question]" value="{{ faq.faq_data[language.language_id].question }}" class="form-control" style="display:inline-block;width:80%;" /><br>
+{% endfor %}
+</td>
+<td class="text-center">
+{% for language in languages %}
+<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <textarea rows="3" name="faq[{{ faq_row }}][faq_data][{{ language.language_id }}][answer]" class="form-control" style="display:inline-block;width:80%;">{{ faq.faq_data[language.language_id].answer }}</textarea><br>
+{% endfor %}
+</td>
+<td class="text-center"><input type="text" name="faq[{{ faq_row }}][sort_order]" value="{{ faq['sort_order'] }}" class="form-control" /></td>
+<td class="text-center"><button type="button" onclick="$('#faq-row{{ faq_row }}').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>
+</tr>
+{% set faq_row = faq_row + 1 %}
+{% endfor %}
+</tbody>
+<tfoot>
+<tr> 
+<td colspan="3"></td>
+<td class="text-center"><button type="button" onclick="addFaq();" data-toggle="tooltip" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+</tr>
+</tfoot>
+</table>
+</div>
+</div>
+		]]></add>
+	</operation>
+</file> 
+<file path="admin/view/template/octemplates/blog/oct_blogarticle_form.twig">
+	<operation error="skip">
+		<search><![CDATA[<li><a href="#tab-design" data-toggle="tab">{{ tab_design }}</a></li>]]></search>
+		<add position="after"><![CDATA[<li><a href="#tab-faq" data-toggle="tab">{{ tab_faq }}</a></li>]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[{{ footer }}]]></search>
+		<add position="before"><![CDATA[
+<script type="text/javascript"><!--
+var faq_row = {{ faq_row }};
+function addFaq() {
+html = '<tr id="faq-row' + faq_row + '">';
+html += '<td class="text-center">';
+{% for language in languages %}
+html += '<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <input type="text" name="faq[' + faq_row + '][faq_data][{{ language.language_id }}][question]" value="" class="form-control" style="display:inline-block;width:80%;" /><br>';
+{% endfor %}
+html += '</td>';
+html += '<td class="text-center">';
+{% for language in languages %}
+html += '<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <textarea rows="3" name="faq[' + faq_row + '][faq_data][{{ language.language_id }}][answer]" class="form-control" style="display:inline-block;width:80%;"></textarea><br>';
+{% endfor %}
+html += '</td>';
+html += '<td class="text-center" style="width:10%"><input type="text" name="faq[' + faq_row + '][sort_order]" value="" class="form-control" /></td>';
+html += '<td class="text-center"><button type="button" onclick="$(\'#faq-row' + faq_row + '\').remove();" data-toggle="tooltip" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+html += '</tr>';
+$('#faq tbody').append(html);
+faq_row++;
+}
+//--></script>
+		]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[</form>]]></search>
+		<add position="before" offset="1"><![CDATA[
+ <div class="tab-pane" id="tab-faq">
+<div class="form-group">
+<div class="table-responsive">
+<table id="faq" class="table table-striped table-bordered table-hover">
+<thead>
+<tr>
+<td class="text-center">{{ column_question }}</td>
+<td class="text-center">{{ column_faq }}</td>
+<td class="text-center" style="width:10%">{{ column_sort_order }}</td>
+<td class="text-center" style="width:10%"></td>
+</tr>
+</thead>
+<tbody>
+{% set faq_row = 0 %}
+{% for faq in blog_article_faq %}
+<tr id="faq-row{{ faq_row }}">
+<td class="text-center">
+{% for language in languages %}
+<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <input type="text" name="faq[{{ faq_row }}][faq_data][{{ language.language_id }}][question]" value="{{ faq.faq_data[language.language_id].question }}" class="form-control" style="display:inline-block;width:80%;" /><br>
+{% endfor %}
+</td>
+ <td class="text-center">
+{% for language in languages %}
+<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <textarea rows="3" name="faq[{{ faq_row }}][faq_data][{{ language.language_id }}][answer]" class="form-control" style="display:inline-block;width:80%;">{{ faq.faq_data[language.language_id].answer }}</textarea><br>
+{% endfor %}
+</td>
+<td class="text-center"><input type="text" name="faq[{{ faq_row }}][sort_order]" value="{{ faq['sort_order'] }}" class="form-control" /></td>
+<td class="text-center"><button type="button" onclick="$('#faq-row{{ faq_row }}').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>
+</tr>
+{% set faq_row = faq_row + 1 %}
+{% endfor %}
+</tbody>
+<tfoot>
+<tr> 
+<td colspan="3"></td>
+<td class="text-center"><button type="button" onclick="addFaq();" data-toggle="tooltip" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+</tr>
+</tfoot>
+</table>
+</div>
+</div>
+		]]></add>
+	</operation>
+</file>
+<file path="admin/controller/blog/category.php">
+	<operation error="skip">
+		<search><![CDATA[if (isset($this->request->post['status'])) {]]></search>
+		<add position="before"><![CDATA[
+		if (isset($this->request->post['faq'])) {
+			$faq = $this->request->post['faq'];
+		} elseif (isset($this->request->get['blog_category_id'])) {
+			$faq = $this->model_blog_category->getCategoryFaq($this->request->get['blog_category_id']);
+		} else {
+			$faq = [];
+		}
+		
+		$data['category_faq'] = [];
+		foreach ($faq as $category_faq) {
+			$data['category_faq'][] = [
+				'faq_data' => $category_faq['faq_data'],
+				'sort_order' => $category_faq['sort_order']
+			];
+		}
+		]]></add>
+	</operation>
+</file>
+<file path="admin/model/blog/category.php">
+	<operation error="skip">
+		<search><![CDATA[public function getCategoriesByParentId(]]></search>
+		<add position="before"><![CDATA[
+		public function getCategoryFaq($category_id) {
+			$faq = [];
+			$type = 'blog_category';
+			
+			$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "seo_faq WHERE category_id = '" . (int)$category_id . "' AND type = '" . $type . "' ORDER BY sort_order ASC");
+			foreach ($query->rows as $row) {
+				$faq_data = [];
+				$description_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "seo_faq_description WHERE faq_id = '" . (int)$row['faq_id'] . "'");
+					foreach ($description_query->rows as $result) {
+						$faq_data[$result['language_id']] = [
+							'question' => $result['question'],
+							'answer' => $result['answer']
+						];
+					}
+				$faq[] = [ 
+					'sort_order' => $row['sort_order'],
+					'data' => $row,
+					'faq_data' => $faq_data
+				];
+			}
+		 
+			return $faq;
+		}
+		]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[if (isset($data['category_store'])) {]]></search>
+		<add position="before"><![CDATA[
+		$this->db->query("DELETE FROM " . DB_PREFIX . "seo_faq WHERE category_id = '" . (int)$blog_category_id . "' AND type = 'blog_category'");
+		$this->db->query("DELETE FROM " . DB_PREFIX . "seo_faq_description WHERE category_id = '" . (int)$blog_category_id . "' AND type = 'blog_category'");
+		if (isset($data['faq'])) {
+			foreach ($data['faq'] as $category_faq) {
+				$this->db->query("INSERT INTO " . DB_PREFIX . "seo_faq SET category_id = '" . (int)$blog_category_id . "', `link` = '" . $this->db->escape($category_faq['link']) . "', `sort_order` = '" . (int)$category_faq['sort_order'] . "', type = 'blog_category'");
+				$faq_id = $this->db->getLastId();
+				foreach ($category_faq['faq_data'] as $language_id => $value) {
+					$this->db->query("INSERT INTO " . DB_PREFIX . "seo_faq_description SET faq_id = '" . (int)$faq_id . "', category_id = '" . (int)$blog_category_id . "', language_id = '" . (int)$language_id . "', question = '" . $this->db->escape($value['question']) . "', answer = '" . $this->db->escape($value['answer']) . "', type = 'blog_category'");
+				}
+			}
+		}
+		]]></add>
+	</operation>
+</file>
+<file path="admin/view/template/blog/category_form.twig">
+<operation error="skip">
+		<search><![CDATA[<li><a href="#tab-design" data-toggle="tab">{{ tab_design }}</a></li>]]></search>
+		<add position="after"><![CDATA[{% if sp_auto_seo_faq_status %}<li><a href="#tab-faq" data-toggle="tab">{{ tab_faq }}</a></li>{% endif %}]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[{{ footer }}]]></search>
+		<add position="before"><![CDATA[
+<script type="text/javascript"><!--
+var faq_row = {{ faq_row }};
+function addFaq() {
+html = '<tr id="faq-row' + faq_row + '">';
+html += '<td class="text-center">';
+{% for language in languages %}
+html += '<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <input type="text" name="faq[' + faq_row + '][faq_data][{{ language.language_id }}][question]" value="" class="form-control" style="display:inline-block;width:80%;" /><br>';
+{% endfor %}
+html += '</td>';
+html += '<td class="text-center">';
+{% for language in languages %}
+html += ' <img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <textarea rows="3" name="faq[' + faq_row + '][faq_data][{{ language.language_id }}][answer]" class="form-control" style="display:inline-block;width:80%;"></textarea><br>';
+{% endfor %}
+html += '</td>';
+html += '<td class="text-center" style="width:10%"><input type="text" name="faq[' + faq_row + '][sort_order]" value="" class="form-control" /></td>';
+html += '<td class="text-center"><button type="button" onclick="$(\'#faq-row' + faq_row + '\').remove();" data-toggle="tooltip" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+html += '</tr>';
+$('#faq tbody').append(html);
+faq_row++;
+}
+//--></script>
+		]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[</form>]]></search>
+		<add position="before" offset="1"><![CDATA[
+			<div class="tab-pane" id="tab-faq">
+			<legend>{{ text_auto_category_help }}</legend>
+			<div class="form-group">
+			<div class="table-responsive">
+			<table id="faq" class="table table-striped table-bordered table-hover">
+				<thead>
+				<tr>
+					<td class="text-center">{{ column_question }}</td>
+					<td class="text-center">{{ column_faq }}</td>
+					<td class="text-center" style="width:10%">{{ column_sort_order }}</td>
+					<td class="text-center" style="width:10%"></td>
+				</tr>
+				</thead>
+				<tbody>
+				{% set faq_row = 0 %}
+				{% for faq in category_faq %}
+				<tr id="faq-row{{ faq_row }}">
+					
+					<td class="text-center">
+					{% for language in languages %}
+					<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <input type="text" name="faq[{{ faq_row }}][faq_data][{{ language.language_id }}][question]" value="{{ faq.faq_data[language.language_id].question }}" class="form-control" style="display:inline-block;width:80%;" /><br>
+					{% endfor %}
+					</td>
+					<td class="text-center">
+					{% for language in languages %}
+					<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <textarea rows="3" name="faq[{{ faq_row }}][faq_data][{{ language.language_id }}][answer]" class="form-control" style="display:inline-block;width:80%;">{{ faq.faq_data[language.language_id].answer }}</textarea><br>
+					{% endfor %}
+					</td>
+					<td class="text-center"><input type="text" name="faq[{{ faq_row }}][sort_order]" value="{{ faq['sort_order'] }}" class="form-control" /></td>
+					<td class="text-center"><button type="button" onclick="$('#faq-row{{ faq_row }}').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>
+				</tr>
+				{% set faq_row = faq_row + 1 %}
+				{% endfor %}
+				</tbody>
+				<tfoot>
+				<tr>
+					<td colspan="3"></td>
+					<td class="text-center"><button type="button" onclick="addFaq();" data-toggle="tooltip" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+				</tr>
+				</tfoot>
+			</table>
+			</div>
+			</div>
+		]]></add>
+	</operation>
+</file>
+<file path="admin/controller/blog/article.php">
+	<operation error="skip">
+		<search><![CDATA[if (isset($this->request->post['sort_order'])) {]]></search>
+		<add position="before"><![CDATA[
+		if (isset($this->request->post['faq'])) {
+			$faq = $this->request->post['faq'];
+		} elseif (isset($this->request->get['article_id'])) {
+			$faq = $this->model_blog_article->getCategoryFaq($this->request->get['article_id']);
+		} else {
+			$faq = [];
+		}
+		
+		$data['category_faq'] = [];
+		foreach ($faq as $category_faq) {
+			$data['category_faq'][] = [
+				'faq_data' => $category_faq['faq_data'],
+				'sort_order' => $category_faq['sort_order']
+			];
+		}
+		]]></add>
+	</operation>
+</file>
+<file path="admin/model/blog/article.php">
+	<operation error="skip">
+		<search><![CDATA[public function getTotalArticlesByLayoutId(]]></search>
+		<add position="before"><![CDATA[
+		public function getCategoryFaq($category_id) {
+			$faq = [];
+			$type = 'blog_article';
+			
+			$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "seo_faq WHERE category_id = '" . (int)$category_id . "' AND type = '" . $type . "' ORDER BY sort_order ASC");
+			foreach ($query->rows as $row) {
+				$faq_data = [];
+				$description_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "seo_faq_description WHERE faq_id = '" . (int)$row['faq_id'] . "'");
+					foreach ($description_query->rows as $result) {
+						$faq_data[$result['language_id']] = [
+							'question' => $result['question'],
+							'answer' => $result['answer']
+						];
+					}
+				$faq[] = [ 
+					'sort_order' => $row['sort_order'],
+					'data' => $row,
+					'faq_data' => $faq_data
+				];
+			}
+		 
+			return $faq;
+		}
+		]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[if (isset($data['article_store'])) {]]></search>
+		<add position="before"><![CDATA[
+		$this->db->query("DELETE FROM " . DB_PREFIX . "seo_faq WHERE category_id = '" . (int)$article_id . "' AND type = 'blog_article'");
+		$this->db->query("DELETE FROM " . DB_PREFIX . "seo_faq_description WHERE category_id = '" . (int)$article_id . "' AND type = 'blog_article'");
+		if (isset($data['faq'])) {
+			foreach ($data['faq'] as $category_faq) {
+				$this->db->query("INSERT INTO " . DB_PREFIX . "seo_faq SET category_id = '" . (int)$article_id . "', `link` = '" . $this->db->escape($category_faq['link']) . "', `sort_order` = '" . (int)$category_faq['sort_order'] . "', type = 'blog_article'");
+				$faq_id = $this->db->getLastId();
+				foreach ($category_faq['faq_data'] as $language_id => $value) {
+					$this->db->query("INSERT INTO " . DB_PREFIX . "seo_faq_description SET faq_id = '" . (int)$faq_id . "', category_id = '" . (int)$article_id . "', language_id = '" . (int)$language_id . "', question = '" . $this->db->escape($value['question']) . "', answer = '" . $this->db->escape($value['answer']) . "', type = 'blog_article'");
+				}
+			}
+		}
+		]]></add>
+	</operation>
+</file>
+<file path="admin/view/template/blog/article_form.twig">
+<operation error="skip">
+		<search><![CDATA[<li><a href="#tab-design" data-toggle="tab">{{ tab_design }}</a></li>]]></search>
+		<add position="after"><![CDATA[{% if sp_auto_seo_faq_status %}<li><a href="#tab-faq" data-toggle="tab">{{ tab_faq }}</a></li>{% endif %}]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[{{ footer }}]]></search>
+		<add position="before"><![CDATA[
+<script type="text/javascript"><!--
+var faq_row = {{ faq_row }};
+function addFaq() {
+html = '<tr id="faq-row' + faq_row + '">';
+html += '<td class="text-center">';
+{% for language in languages %}
+html += '<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <input type="text" name="faq[' + faq_row + '][faq_data][{{ language.language_id }}][question]" value="" class="form-control" style="display:inline-block;width:80%;" /><br>';
+{% endfor %}
+html += '</td>';
+html += '<td class="text-center">';
+{% for language in languages %}
+html += ' <img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <textarea rows="3" name="faq[' + faq_row + '][faq_data][{{ language.language_id }}][answer]" class="form-control" style="display:inline-block;width:80%;"></textarea><br>';
+{% endfor %}
+html += '</td>';
+html += '<td class="text-center" style="width:10%"><input type="text" name="faq[' + faq_row + '][sort_order]" value="" class="form-control" /></td>';
+html += '<td class="text-center"><button type="button" onclick="$(\'#faq-row' + faq_row + '\').remove();" data-toggle="tooltip" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+html += '</tr>';
+$('#faq tbody').append(html);
+faq_row++;
+}
+//--></script>
+		]]></add>
+	</operation>
+	<operation error="skip">
+		<search><![CDATA[</form>]]></search>
+		<add position="before" offset="1"><![CDATA[
+			<div class="tab-pane" id="tab-faq">
+			<legend>{{ text_auto_blog_help }}</legend>
+			<div class="form-group">
+			<div class="table-responsive">
+			<table id="faq" class="table table-striped table-bordered table-hover">
+				<thead>
+				<tr>
+					<td class="text-center">{{ column_question }}</td>
+					<td class="text-center">{{ column_faq }}</td>
+					<td class="text-center" style="width:10%">{{ column_sort_order }}</td>
+					<td class="text-center" style="width:10%"></td>
+				</tr>
+				</thead>
+				<tbody>
+				{% set faq_row = 0 %}
+				{% for faq in category_faq %}
+				<tr id="faq-row{{ faq_row }}">
+					
+					<td class="text-center">
+					{% for language in languages %}
+					<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <input type="text" name="faq[{{ faq_row }}][faq_data][{{ language.language_id }}][question]" value="{{ faq.faq_data[language.language_id].question }}" class="form-control" style="display:inline-block;width:80%;" /><br>
+					{% endfor %}
+					</td>
+					<td class="text-center">
+					{% for language in languages %}
+					<img src="language/{{ language.code }}/{{ language.code }}.png" style="display:inline-block;"/> <textarea rows="3" name="faq[{{ faq_row }}][faq_data][{{ language.language_id }}][answer]" class="form-control" style="display:inline-block;width:80%;">{{ faq.faq_data[language.language_id].answer }}</textarea><br>
+					{% endfor %}
+					</td>
+					<td class="text-center"><input type="text" name="faq[{{ faq_row }}][sort_order]" value="{{ faq['sort_order'] }}" class="form-control" /></td>
+					<td class="text-center"><button type="button" onclick="$('#faq-row{{ faq_row }}').remove();" data-toggle="tooltip" title="{{ button_remove }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>
+				</tr>
+				{% set faq_row = faq_row + 1 %}
+				{% endfor %}
+				</tbody>
+				<tfoot>
+				<tr>
+					<td colspan="3"></td>
+					<td class="text-center"><button type="button" onclick="addFaq();" data-toggle="tooltip" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
+				</tr>
+				</tfoot>
+			</table>
+			</div>
+			</div>
+		]]></add>
+	</operation>
+</file>
+</modification>

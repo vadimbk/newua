@@ -1,0 +1,89 @@
+{% if languages|length > 1 %}
+	<style>
+		.ahreflang {
+			color: rgb(214, 12, 37);
+			padding-left: 8px;
+			padding-right: 8px;
+		}
+		.ahreflang.active,
+		.ahreflang.active:hover {
+			background-color: #F5959D;
+			color: #fff;
+			padding-left: 8px;
+			padding-right: 8px;
+		}
+
+		.ahreflang:hover {
+			color: rgb(214, 12, 37);
+			background-color: #FFE6E8;
+		}
+		.langmark .uf {
+			text-align: center;
+			vertical-align: middle;
+			display: inline-block;
+			width: 16px;
+			height: 16px;
+			border-radius: 50%;
+			margin-right: 6px;
+			margin-top: 0;
+			background-image: linear-gradient(to bottom, #0082D1, #0082D1 50%, #FFD100 50%, #FFD100);
+		}
+	</style>
+
+	<div id="language" class="langmark">
+		<div class="ds-dropdown-title dark-text fsz-14 fw-500">{{ oct_sidebar_language }}:</div>
+		<div class="ds-switcher d-flex align-items-center py-2 br-7" id="form-language">
+			{% for language in languages %}
+				{% if language.main %}
+					<a href="{{ language.url }}" class="ahreflang br-7 d-flex align-items-center justify-content-center language-select{% if language.current %} active{% endif %}" onclick="lm_deleteCookie('languageauto'); window.location = '{{ language.url }}'">
+					{% else %}
+					<a href="{{ language.url }}" class="ahreflang br-7 d-flex align-items-center justify-content-center language-select{% if language.current %} active{% endif %}" onclick="lm_setCookie('languageauto', '1', {expires: 180}); window.location = '{{ language.url }}'">
+						{% endif %}
+						{% if (settings_widget['image_status'] is defined and settings_widget['image_status']) %}
+							{% if language.code_short == 'uk' or language.code_short == 'ua' %}
+								<div class="uf"></div>
+							{% endif %}
+						{% endif %}
+						{% if language.current %}
+							{% if (settings_widget['image_status'] is defined and settings_widget['image_status']) %}
+
+								{% if language.code_short == 'uk' or language.code_short == 'ua' %}
+
+								{% else %}
+										<img src="catalog/language/{{ language.code }}/{{ language.code }}.png" alt="{{ language.name }}" title="{{ language.name }}" class="me-1" width="12" height="10" loading="lazy"/>
+								{% endif %}
+
+							{% endif %}
+						{% endif %}
+						{{ language.name }}
+					</a>
+				{% endfor %}
+
+			</div>
+		</div>
+
+<script>
+function lm_setCookie(name, value, options = {}) {
+	options = {
+				path: '/',
+				...options
+				};
+	let date = new Date(Date.now() + (86400e3 * options.expires));
+	date = date.toUTCString();
+	options.expires = date;
+	let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
+	for (let optionKey in options) {
+		updatedCookie += "; " + optionKey;
+		let optionValue = options[optionKey];
+		if (optionValue !== true) {
+			updatedCookie += "=" + optionValue;
+		}
+	}
+	document.cookie = updatedCookie;
+}
+
+function lm_deleteCookie(name) {
+	lm_setCookie(name, "", {'max-age': -1});
+}
+</script>
+{% endif %}

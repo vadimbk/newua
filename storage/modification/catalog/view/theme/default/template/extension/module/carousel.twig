@@ -1,0 +1,54 @@
+<div class="swiper-viewport">
+  <div id="carousel{{ module }}" class="swiper-container">
+    <div class="swiper-wrapper">{% for banner in banners %}
+      <div class="swiper-slide text-center">{% if banner.link %}<a href="{{ banner.link }}" {% if ee_tracking and ee_promotion %}onclick="ee_promotion.click('{{ banner.ee_banner_id }}', '{{ banner.ee_position }}')"{% endif %}><img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-responsive" /></a>{% else %}<img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-responsive" />{% endif %}</div>
+      {% endfor %}</div>
+  </div>
+  <div class="swiper-pagination carousel{{ module }}"></div>
+  <div class="swiper-pager">
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+  </div>
+</div>
+
+{% if ee_tracking and ee_promotion %}
+    <script type="text/javascript"><!--
+        $(document).ready(function() {
+            setIntervalEE(function() {
+                var ee_data = JSON.parse('{{ ee_data }}');
+                ee_data['url'] = window.location.href;
+                ee_data['title'] = document.title;
+                $.ajax({
+                    url: 'index.php?route=extension/module/ee_tracking/promotion',
+                    type: 'post',
+                    data: ee_data,
+                    dataType: 'json',
+                    success: function(json) {
+                        if (json) {
+                            console.log(json);
+                        }
+                    },
+                    {% if ee_promotion_log %}
+                    error: function(xhr, exc, error) {
+                        $.post('index.php?route=extension/module/ee_tracking/promotionlog', { 'error': error + ' (exc: ' + exc + ' status: ' + xhr.statusText + ')', 'url': window.location.href }, function( logs ) {
+                            console.log(logs);
+                        });
+                    }
+                    {% endif %}
+                });
+            }, {% if ee_ga_callback %}{{ ee_ga_callback }}{% else %}0{% endif %}, {% if ee_generate_cid %}{{ ee_generate_cid }}{% else %}0{% endif %});
+        });
+        //--></script>
+{% endif %}
+<script type="text/javascript"><!--
+$('#carousel{{ module }}').swiper({
+	mode: 'horizontal',
+	slidesPerView: 5,
+	pagination: '.carousel{{ module }}',
+	paginationClickable: true,
+	nextButton: '.swiper-button-next',
+    prevButton: '.swiper-button-prev',
+	autoplay: 2500,
+	loop: true
+});
+--></script>

@@ -1,0 +1,167 @@
+<div id="us-shop-advantages-{{ module }}" class="row row-padding-top">
+	<div class="col-md-6 col-lg-4 us-advantages-item">
+		<div class="us-advantages-box d-flex align-items-center justify-content-start h-100" id="block1">
+			<div class="us-advantages-img">
+				<i class="{{ oct_shop_advantages.tab_icon_block1 }}"></i>
+			</div>
+			<div class="us-advantages-cont">
+				<div class="us-advantages-title">
+					{% if heading_indormation_id_block1 is defined and heading_indormation_id_block1 %}
+					<a href="{{ heading_indormation_id_block1 }}">{{ oct_shop_advantages.heading_block1 }}</a>
+					{% else %}
+					{{ oct_shop_advantages.heading_block1 }}
+					{% endif %}
+				</div>
+				<p class="us-advantages-text">
+					{{ oct_shop_advantages.text_block1 }}
+				</p>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6 col-lg-4 us-advantages-item">
+		<div class="us-advantages-box d-flex align-items-center justify-content-start h-100" id="block2">
+			<div class="us-advantages-img">
+				<i class="{{ oct_shop_advantages.tab_icon_block2 }}"></i>
+			</div>
+			<div class="us-advantages-cont">
+				<div class="us-advantages-title">
+					{% if heading_indormation_id_block2 is defined and heading_indormation_id_block2 %}
+					<a href="{{ heading_indormation_id_block2 }}">{{ oct_shop_advantages.heading_block2 }}</a>
+					{% else %}
+					{{ oct_shop_advantages.heading_block2 }}
+					{% endif %}
+				</div>
+				<p class="us-advantages-text">
+					{{ oct_shop_advantages.text_block2 }}
+				</p>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6 col-lg-4 us-advantages-item">
+		<div class="us-advantages-box d-flex align-items-center justify-content-start h-100" id="block3">
+			<div class="us-advantages-img">
+				<i class="{{ oct_shop_advantages.tab_icon_block3 }}"></i>
+			</div>
+			<div class="us-advantages-cont">
+				<div class="us-advantages-title">
+					{% if heading_indormation_id_block3 is defined and heading_indormation_id_block3 %}
+					<a href="{{ heading_indormation_id_block3 }}">{{ oct_shop_advantages.heading_block3 }}</a>
+					{% else %}
+					{{ oct_shop_advantages.heading_block3 }}
+					{% endif %}
+				</div>
+				<p class="us-advantages-text">
+					{{ oct_shop_advantages.text_block3 }}
+				</p>
+			</div>
+		</div>
+	</div>
+	
+</div>
+<style>
+	{% if oct_shop_advantages.color_icon_block1 %}
+	#block1 .us-advantages-img i {
+		color: {{ oct_shop_advantages.color_icon_block1 }}; /* цвет иконки Блок 1 */
+	}
+	{% endif %}
+	
+	{% if oct_shop_advantages.color_heading_block1 %}
+	#block1 .us-advantages-title {
+		color: {{ oct_shop_advantages.color_heading_block1 }}; /* цвет заголовка Блок 1 */
+	}
+	{% endif %}
+	
+	{% if oct_shop_advantages.color_text_block1 %}
+	#block1 .us-advantages-text {
+		color: {{ oct_shop_advantages.color_text_block1 }}; /* цвет текста Блок 1 */
+	}
+	{% endif %}
+	
+	{% if oct_shop_advantages.background_block_hover_block1 %}
+	#block1.us-advantages-box:hover {
+		border-color: {{ oct_shop_advantages.background_block_hover_block1 }}; /* цвет плашки блока при наведении Блок 1 */
+	}
+	{% endif %}
+	
+	{% if oct_shop_advantages.color_icon_block2 %}
+	#block2 .us-advantages-img i {
+		color: {{ oct_shop_advantages.color_icon_block2 }}; /* цвет иконки Блок 2 */
+	}
+	{% endif %}
+	
+	{% if oct_shop_advantages.color_heading_block2 %}
+	#block2 .us-advantages-title {
+		color: {{ oct_shop_advantages.color_heading_block2 }}; /* цвет заголовка Блок 2 */
+	}
+	{% endif %}
+	
+	{% if oct_shop_advantages.color_text_block2 %}
+	#block2 .us-advantages-text {
+		color: {{ oct_shop_advantages.color_text_block2 }}; /* цвет текста Блок 2 */
+	}
+	{% endif %}
+	
+	{% if oct_shop_advantages.background_block_hover_block2 %}
+	#block2.us-advantages-box:hover {
+		border-color: {{ oct_shop_advantages.background_block_hover_block2 }}; /* цвет плашки блока при наведении Блок 2 */
+	}
+	{% endif %}
+	
+	{% if oct_shop_advantages.color_icon_block3 %}
+	#block3 .us-advantages-img i {
+		color: {{ oct_shop_advantages.color_icon_block3 }}; /* цвет иконки Блок 3 */
+	}
+	{% endif %}
+	
+	{% if oct_shop_advantages.color_heading_block3 %}
+	#block3 .us-advantages-title {
+		color: {{ oct_shop_advantages.color_heading_block3 }}; /* цвет заголовка Блок 3 */
+	}
+	{% endif %}
+	
+	{% if oct_shop_advantages.color_text_block3 %}
+	#block3 .us-advantages-text {
+		color: {{ oct_shop_advantages.color_text_block3 }}; /* цвет текста Блок 3 */
+	}
+	{% endif %}
+	
+	{% if oct_shop_advantages.background_block_hover_block3 %}
+	#block3.us-advantages-box:hover {
+		border-color: {{ oct_shop_advantages.background_block_hover_block3 }}; /* цвет плашки блока при наведении Блок 3 */
+	}
+	{% endif %}
+	
+	{% if oct_shop_advantages.color_icon_block4 %}
+	#block4 .us-advantages-img i {
+		color: {{ oct_shop_advantages.color_icon_block4 }}; /* цвет иконки Блок 4 */
+	}
+	{% endif %}
+	
+	{% if oct_shop_advantages.color_heading_block4 %}
+	#block4 .us-advantages-title {
+		color: {{ oct_shop_advantages.color_heading_block4 }}; /* цвет заголовка Блок 4 */
+	}
+	{% endif %}
+	
+	{% if oct_shop_advantages.color_text_block4 %}
+	#block4 .us-advantages-text {
+		color: {{ oct_shop_advantages.color_text_block4 }}; /* цвет текста Блок 4 */
+	}
+	{% endif %}
+	
+	{% if oct_shop_advantages.background_block_hover_block4 %}
+	#block4.us-advantages-box:hover {
+		border-color: {{ oct_shop_advantages.background_block_hover_block4 }}; /* цвет плашки блока при наведении Блок 4 */
+	}
+	{% endif %}
+	
+.us-advantages-box
+{
+padding:5px;
+box-shadow: 0px 1px 5px rgb(95, 135, 209);
+}	
+.us-content-inform p, .us-content-inform ul, .us-content-inform ol {
+    margin-bottom: 0px;
+}
+	
+</style>

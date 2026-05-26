@@ -1,0 +1,868 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <a href="{{ action }}" form="form-slideshow" data-toggle="tooltip" title="{{ refresh }}" class="btn btn-default" ><i class="fa fa-refresh"></i></a>
+        <a href="{{ cancel_link }}" data-toggle="tooltip" title="{{ cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
+      </div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}
+        </h3>
+      </div>
+      <div class="panel-body">
+        <center>
+          {% if success %}
+          <div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ success }}
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+          </div>
+          {% endif %}
+          {% if errors %}
+           {% for error in errors %}
+            <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error }}
+              <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+           {% endfor %}
+          {% endif %}
+        </center>
+        <div class="box">
+          <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab-all-specials" data-toggle="tab"><i class="fa fa-database"></i> &nbsp; {{ all_specials }}</a></li>
+            <li><a href="#tab-general-settings" data-toggle="tab"><i class="fa fa-cog"></i> &nbsp; {{ general_settins }}</a></li>
+            <li><a href="#tab-additional-settings" data-toggle="tab"><i class="fa fa-puzzle-piece"></i> &nbsp; {{ additional_settings }}</a></li>
+            <li><a href="#tab-specials-groups" data-toggle="tab"><i class="fa fa-th-large"></i> &nbsp; {{ text_special_groups }}</a></li>
+            <li><a href="#tab-set-specials" data-toggle="tab"><i class="fa fa-file-text-o"></i> &nbsp; {{ set_specials }}</a></li>
+            <li><a href="#tab-edit-specials" data-toggle="tab"><i class="fa fa-edit"></i> &nbsp; {{ edit_specials }}</a></li>
+            <li><a href="#tab-delete-specials" data-toggle="tab"><i class="fa fa-trash-o"></i> &nbsp; {{ delete_specials }}</a></li>
+            <li><a href="#tab-support" data-toggle="tab"><i class="fa fa-info-circle"></i> &nbsp; {{ support }}</a></li>
+          </ul>
+
+          <div class="tab-content">
+          <!-- TAB All Specials -->
+            <div class="tab-pane active" id="tab-all-specials">
+            <!-- Filtering -->
+              <!-- <div class="show-hide-filters"><span data-toggle="collapse" data-target=".well">{{ hide_show_filters }}</span></div> -->
+              <div class="well collapse in">
+                <div class="row">
+                  <div class="col-sm-3">
+                    <div class="form-group">
+                      <label class="control-label" for="input-name">{{ name }}</label>
+                      <input type="text" name="filter_name" value="{{ filter_name }}" placeholder="{{ product_name }}" id="input-name" class="form-control" />
+                    </div>
+
+                    <div class="form-group">
+                      <label class="control-label" for="input-model">{{ model }}</label>
+                      <input type="text" name="filter_model" value="{{ filter_model }}" placeholder="{{ model }}" id="input-model" class="form-control" />
+                    </div>
+
+                    {% if additional_admin_settings.show_filter_category is defined %}
+                      <div class="form-group">
+                        <label class="control-label">{{ text_category }}</label>
+                        <select name="filter_category" id="input-status" class="form-control">
+                          <option value="*"></option>
+                          {% for category in categories %}
+                            <option value="{{ category.category_id }}" {{ category.category_id == filter_category ? 'selected="selected"' : '' }}>
+                              {% for i in range(0, category.level) %}
+                                {{ i >= 1 ? "<i>&mdash;</i>" : "" }}
+                              {% endfor %}
+                              {{ category.name }}
+                            </option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    {% endif %}
+                    {% if additional_admin_settings.show_filter_manufacturer is defined %}
+                      <div class="form-group">
+                        <label class="control-label">{{ text_manufacturer }}</label>
+                        <select name="filter_manufacturer" id="input-status" class="form-control">
+                          <option value="*"></option>
+                          {% for manufacturer in manufacturers %}
+                            {% if manufacturer.manufacturer_id == filter_manufacturer %}
+                              <option value="{{ manufacturer.manufacturer_id }}" selected="selected">{{ manufacturer.name }}</option>
+                            {% else %}
+                              <option value="{{ manufacturer.manufacturer_id }}">{{ manufacturer.name }}</option>
+                            {% endif %}
+                          {% endfor %}
+                        </select>
+                      </div>
+                    {% endif %}
+                  </div><!-- First column end !-->
+                  <div class="col-sm-3">
+                    {% if additional_admin_settings.show_filter_customer_groups is defined %}
+                      <div class="form-group">
+                        <label class="control-label">{{ text_customer_groups }}</label>
+                        <select name="filter_customer_groups" multiple="true" class="multiple-select">
+                          {% for customer_group in customer_groups %}
+                            {% if customer_group.customer_group_id in filter_customer_groups %}
+                              <option value="{{ customer_group.customer_group_id }}" selected="selected">{{ customer_group.name }}</option>
+                            {% else %}
+                              <option value="{{ customer_group.customer_group_id }}">{{ customer_group.name }}</option>
+                            {% endif %}
+                          {% endfor %}
+                        </select>
+                      </div>
+                    {% endif %}
+                    {% if additional_admin_settings.show_filter_status is defined %}
+                      <div class="form-group">
+                        <label class="control-label" for="input-status">{{ status }}</label>
+                        <select name="filter_status" id="input-status" class="form-control">
+                          <option value="*"></option>
+                          <option value="0" {{ filter_status is same as('0') ? "selected" : "" }}>{{ off }}</option>
+                          <option value="1" {{ filter_status == 1 ? "selected" : "" }}>{{ on }}</option>
+                        </select>
+                      </div>
+                    {% endif %}
+                    {% if additional_admin_settings.show_filter_quantity is defined %}
+                      <div class="form-group">
+                        <label class="control-label">{{ quantity }}</label><br>
+                        <input type="text" name="filter_quantity_from" value="{{ filter_quantity_from }}" placeholder="{{ from }}" class="form-control from" />
+                        <input type="text" name="filter_quantity_to" value="{{ filter_quantity_to }}" placeholder="{{ to }}" class="form-control to" />
+                      </div>
+                    {% endif %}
+                  </div><!-- Second column end !-->
+                  <div class="col-sm-3">
+                    {% if additional_admin_settings.show_filter_old_price is defined %}
+                      <div class="form-group">
+                        <label class="control-label" for="input-price">{{ old_price }}</label><br>
+                        <input type="text" name="filter_price_from" value="{{ filter_price_from }}" placeholder="{{ from }}" class="form-control from" />
+                        <input type="text" name="filter_price_to" value="{{ filter_price_to }}" placeholder="{{ to }}" class="form-control to" />
+                      </div>
+                    {% endif %}
+                    {% if additional_admin_settings.show_filter_special_price is defined %}
+                      <div class="form-group">
+                        <label class="control-label" for="input-special-price">{{ special_price }}</label><br>
+                        <input type="text" name="filter_special_price_from" value="{{ filter_special_price_from }}" placeholder="{{ from }}" class="form-control from" />
+                        <input type="text" name="filter_special_price_to" value="{{ filter_special_price_to }}" placeholder="{{ to }}" class="form-control to" />
+                      </div>
+                    {% endif %}
+                    {% if additional_admin_settings.show_filter_special_date is defined %}
+                      <div class="form-group">
+                        <label class="control-label">{{ special_date }}</label><br>
+                        <input type="text" name="filter_special_date_from" value="{{ filter_special_date_from }}" placeholder="{{ from }}" class="form-control from date" />
+                        <input type="text" name="filter_special_date_to" value="{{ filter_special_date_to }}" placeholder="{{ to }}" class="form-control to date" />
+                      </div>
+                    {% endif %}
+                  </div><!-- Third column end !-->
+                  <div class="col-sm-3">
+                      <div class="form-group">
+                        <label class="control-label">{{ text_special_group }}</label>
+                        <select name="filter_special_group" id="input-special-group" class="form-control">
+                          <option value="*"></option>
+                          {% for special_group in special_groups %}
+                            {% if special_group.product_special_group_id == filter_special_group %}
+                              <option value="{{ special_group.product_special_group_id }}" selected="selected">{{ special_group.name }}</option>
+                            {% else %}
+                              <option value="{{ special_group.product_special_group_id }}">{{ special_group.name }}</option>
+                            {% endif %}
+                          {% endfor %}
+                          <option value="0" {{ filter_special_group == '0' ? 'selected="selected"' : '' }} >{{ specials_without_special_groups }}</option>
+                        </select>
+                      </div>
+
+                    {% if hours_days_status %}
+                      <div class="form-group">
+                        <label class="control-label">{{ text_weekdays }}</label>
+                        <select name="filter_weekdays" id="input-weekdays" multiple="true" class="weekdays">
+                          {% for weekday in weekdays %}
+                            {% if weekday.id in filter_weekdays %}
+                              <option value="{{ weekday.id }}" selected="true">{{ weekday.name }}</option>
+                            {% else %}
+                              <option value="{{ weekday.id }}">{{ weekday.name }}</option>
+                            {% endif %}
+                          {% endfor %}
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label">{{ text_hours }}</label>
+                        <select name="filter_hours" id="input-hours" multiple="true" class="hours">
+                          {% for hour in hours %}
+                            {% if hour.id in filter_hours %}
+                              <option value="{{ hour.id }}" selected="true">{{ hour.name }}</option>
+                            {% else %}
+                              <option value="{{ hour.id }}">{{ hour.name }}</option>
+                            {% endif %}
+                          {% endfor %}
+                        </select>
+                      </div>
+                    {% endif %}
+                  </div><!-- Fourth column end !-->
+
+
+                  <div class="col-sm-12 text-right">
+                    <hr>
+                    <button type="button" id="reset-filters" class="btn btn-primary pull-right">{{ clear_filters }}</button>
+                    <button type="button" id="button-filter" class="btn btn-primary pull-right"><i class="fa fa-search"></i> {{ filter }}</button>
+                  </div><!-- Fourth column end !-->
+                </div>
+              </div>
+            <!-- Filtering END -->
+
+            <!-- Hidden block for editing selected special -->
+              <div id="modal_edit_selected" class="modal modal-wide fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                      <h4 class="modal-title">{{ edit_selected_specials }}</h4>
+                    </div>
+                    <div class="modal-body">
+                      <form method="post" class="form-horizontal" id="edit_selected_specials" action="{{ action_edit_selected_specials }}">
+                        {{ special_params_for_selected }}
+                        <div class="error-result"></div>
+                        <div class="result"></div>
+                        <input type="hidden" name="specials">
+
+                        <button type="submit" data-toggle="tooltip" class="btn btn-primary">
+                          <i class="fa fa-floppy-o fa-lg"></i> &nbsp; {{ edit_selected_specials }}
+                        </button>
+                      </form>
+                    </div>
+                  </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+              </div>
+
+            <!-- Buttons to delete specials -->
+              <div style="float:right;">
+                <button class="btn btn-primary" data-toggle="modal" data-target="#modal_edit_selected" id="edit_specials">
+                  <i class="fa fa-pencil"></i> {{ edit_selected_specials }}
+                </button>
+
+                <button type="button" data-toggle="tooltip" title="" class="btn btn-danger" onclick="confirm('{{ delete_hint }}') ? $('#all_products_specials').submit() : false;">
+                  <i class="fa fa-trash-o"></i> &nbsp; {{ delete_chosen_specials }}
+                </button>
+              </div>
+            <!-- Buttons to delete specials END -->
+
+            <!-- Output special products -->
+              <br><br><br>
+              <form action="{{ action_delete_selected }}" method="post" id="all_products_specials">
+                <div class="table-responsive" style="overflow-x: visible;">
+                  <table class="table table-bordered table-hover">
+                    <thead>
+                      <tr>
+                        <td class="text-center"><input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" /></td>
+                        {% if additional_admin_settings.show_column_photo is defined %}
+                          <td class="text-center">{{ photo }}</td>
+                        {% endif %}
+                        <td class="text-center">{{ name }}</td>
+                        {% if additional_admin_settings.show_column_category is defined %}
+                          <td class="text-center">{{ text_category }}</td>
+                        {% endif %}
+                        {% if additional_admin_settings.show_column_manufacturer is defined %}
+                          <td class="text-center" style="word-break: break-all;">{{ text_manufacturer }}</td>
+                        {% endif %}
+                        {% if additional_admin_settings.show_column_status is defined %}
+                          <td class="text-center">{{ status }}</td>
+                        {% endif %}
+                        {% if additional_admin_settings.show_column_quantity is defined %}
+                          <td class="text-center">{{ qty }}</td>
+                        {% endif %}
+                        {% if additional_admin_settings.show_column_old_price is defined %}
+                          <td class="text-center">{{ old_price }}</td>
+                        {% endif %}
+                        <td class="text-center">{{ special_price }}</td>
+                        <td class="text-center">{{ date_start }}</td>
+                        <td class="text-center">{{ date_end }}</td>
+
+                        {% if hours_days_status %}
+                          <td class="text-center">{{ text_weekdays }}</td>
+                          <td class="text-center">{{ text_hours }}</td>
+                        {% endif %}
+
+                        <td class="text-center">{{ timer }}</td>
+                        <td class="text-center">{{ text_customer_group }}</td>
+                        <td class="text-center">{{ text_special_group }}</td>
+                        <td class="text-center">{{ priority }}</td>
+                        <td class="text-center">{{ actions }}</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {% for product in product_specials %}
+                      <tr id="special_{{ product.product_special_id }}">
+                        <td class="text-center">
+                          <input type="checkbox" name="selected[]" value="{{ product.product_special_id }}" />
+                        </td>
+                        {% if additional_admin_settings.show_column_photo is defined %}
+                          <td class="text-center">
+                            {% if product.image %}
+                            <img src="{{ product.image }}" alt="{{ product.name }}" class="img-thumbnail" />
+                            {% else %}
+                            <span class="img-thumbnail list"><i class="fa fa-camera fa-2x"></i></span>
+                            {% endif %}
+                          </td>
+                        {% endif %}
+                        <td class="text-left">{{ product.name }}</td>
+                        {% if additional_admin_settings.show_column_category is defined %}
+                          <td class="text-left">
+                            {% for category in categories %}
+                              {% if category.category_id in product.category %}
+                                {{ category.name }}
+                              {% endif %}
+                            {% endfor %}
+                          </td>
+                        {% endif %}
+                        {% if additional_admin_settings.show_column_manufacturer is defined %}
+                          <td class="text-left">
+                            {% for manufacturer in manufacturers %}
+                              {% if manufacturer.manufacturer_id in product.manufacturer %}
+                                {{ manufacturer.name }}
+                              {% endif %}
+                            {% endfor %}
+                          </td>
+                        {% endif %}
+                        {% if additional_admin_settings.show_column_status is defined %}
+                          <td class="text-center">{{ product.status }}</td>
+                        {% endif %}
+                        {% if additional_admin_settings.show_column_quantity is defined %}
+                          <td class="text-center">
+                            {% if product.quantity <= 0 %}
+                            <span class="label label-warning">{{ product.quantity }}</span>
+                            {% elseif product.quantity <= 5 %}
+                            <span class="label label-danger">{{ product.quantity }}</span>
+                            {% else %}
+                            <span class="label label-success">{{ product.quantity }}</span>
+                            {% endif %}
+                          </td>
+                        {% endif %}
+                        {% if additional_admin_settings.show_column_old_price is defined %}
+                          <td class="text-center old_price">{{ product.old_price }}</td>
+                        {% endif %}
+                        <td class="text-center special_price" data-old-price="{{ product.old_price }}">{{ product.special_price }}</td>
+                        <td class="text-center date_start">{{ product.special_date_start }}</td>
+                        <td class="text-center date_end">{{ product.special_date_end }}</td>
+                        {% if hours_days_status %}
+                          <td class="text-center special_weekdays">
+                            {% if product.special_weekdays is not empty %}
+                            <i class="fa fa-bar-chart-o fa-2x" data-toggle="tooltip" title="{{ product.special_weekdays_tooltip }}"></i>
+                            {% endif %}
+                            <input type="hidden" value="{{ product.special_weekdays }}">
+                          </td>
+                          <td class="text-center special_hours">
+                            {% if product.special_hours is not empty %}
+                            <i class="fa fa-clock-o fa-2x" data-toggle="tooltip" title="{{ product.special_hours_tooltip }}"></i>
+                            {% endif %}
+                            <input type="hidden" value="{{ product.special_hours }}">
+                          </td>
+                        {% endif %}
+                        <td class="text-center timer">
+                          {{ product.timer_status == 1 ? on : off }}
+                          <input type="hidden" value="{{ product.timer_status }}">
+                        </td>
+                        <td class="text-center customer_group_id">
+                          {{ product.customer_group_name }}
+                          <input type="hidden" value="{{ product.customer_group_id }}">
+                        </td>
+                        <td class="text-center special_group_id">
+                          {{ product.special_group_name }}
+                          <input type="hidden" value="{{ product.special_group_id }}">
+                        </td>
+                        <td class="text-center priority">{{ product.priority }}</td>
+                        <td class="text-center">
+                          <a href="javascript:void(0);" data-toggle="tooltip" class="btn btn-primary edit" data-original-title="{{ edit }}" onclick="show_ajax_edit_form('{{ product.product_special_id }}'); return false;">
+                            <i class="fa fa-pencil"></i>
+                          </a>
+                          <a href="javascript:void(0);" data-toggle="tooltip" class="btn btn-primary save" style="display:none;" data-original-title="{{ save }}" onclick="saveAjaxData('{{ product.product_special_id }}'); return false;">
+                            <i class="fa fa-save"></i>
+                          </a>
+                          <div class="ajax-loader" style="display: none;"><img src="../catalog/view/javascript/timer/image/loading.gif"></div>
+                          <div class="result"></div>
+                        </td>
+                      </tr>
+                    {% else %}
+                      <tr>
+                        {% set total_colspan = 12 %}
+                        {% set total_colspan = additional_admin_settings.show_column_photo ? total_colspan + 1 : total_colspan %}
+                        {% set total_colspan = additional_admin_settings.show_column_category ? total_colspan + 1 : total_colspan %}
+                        {% set total_colspan = additional_admin_settings.show_column_manufacturer ? total_colspan + 1 : total_colspan %}
+                        {% set total_colspan = additional_admin_settings.show_column_status ? total_colspan + 1 : total_colspan %}
+                        {% set total_colspan = additional_admin_settings.show_column_quantity ? total_colspan + 1 : total_colspan %}
+                        {% set total_colspan = additional_admin_settings.show_column_old_price ? total_colspan + 1 : total_colspan %}
+                        <td class="text-center" colspan="{{ total_colspan }}">{{ no_results }}</td>
+                      </tr>
+                    {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </form>
+              <div class="row">
+                <div class="col-sm-6 text-left">{{ pagination }}</div>
+                <div class="col-sm-6 text-right">{{ results }}</div>
+              </div>
+            <!-- Output special products END -->
+            </div>
+          <!-- TAB All Specials END -->
+
+          <!-- TAB General Settings -->
+            <div class="tab-pane" id="tab-general-settings">
+              <form method="post" id="general-settings" class="form-horizontal">
+                <h3>{{ h3_timer_on_pages }}</h3>
+                <div class="form-group">
+                  <label class="col-sm-5 control-label">{{ timer_category_status }}</label>
+                  <div class="col-sm-3">
+                    <input type="checkbox" name="timer_category_page_status" value='1' {{ general_settings.timer_category_page_status is defined ? "checked" : "" }} />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-5 control-label">{{ timer_special_status }}</label>
+                  <div class="col-sm-3">
+                    <input type="checkbox" name="timer_special_page_status" value='1' {{ general_settings.timer_special_page_status is defined ? "checked" : "" }} />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-5 control-label">{{ timer_search_status }}</label>
+                  <div class="col-sm-3">
+                    <input type="checkbox" name="timer_search_page_status" value='1' {{ general_settings.timer_search_page_status is defined ? "checked" : "" }} />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-5 control-label">{{ timer_manufacturer_status }}</label>
+                  <div class="col-sm-3">
+                    <input type="checkbox" name="timer_manufacturer_page_status" value='1' {{ general_settings.timer_manufacturer_page_status is defined ? "checked" : "" }} />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-5 control-label">{{ timer_product_status }}</label>
+                  <div class="col-sm-3">
+                    <input type="checkbox" name="timer_product_page_status" value='1' {{ general_settings.timer_product_page_status is defined ? "checked" : "" }} />
+                  </div>
+                </div>
+
+                <h3>{{ h3_timer_in_modules }}</h3>
+                <div class="form-group">
+                  <label class="col-sm-5 control-label">{{ timer_in_featured_module_status }}</label>
+                  <div class="col-sm-3">
+                    <input type="checkbox" name="timer_in_featured_module_status" value='1' {{ general_settings.timer_in_featured_module_status is defined ? "checked" : "" }} />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-5 control-label">{{ timer_in_latest_module_status }}</label>
+                  <div class="col-sm-3">
+                    <input type="checkbox" name="timer_in_latest_module_status" value='1' {{ general_settings.timer_in_latest_module_status is defined ? "checked" : "" }} />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-5 control-label">{{ timer_in_special_module_status }}</label>
+                  <div class="col-sm-3">
+                    <input type="checkbox" name="timer_in_special_module_status" value='1' {{ general_settings.timer_in_special_module_status is defined ? "checked" : "" }} />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-5 control-label">{{ timer_in_bestseller_module_status }}</label>
+                  <div class="col-sm-3">
+                    <input type="checkbox" name="timer_in_bestseller_module_status" value='1' {{ general_settings.timer_in_bestseller_module_status is defined ? "checked" : "" }} />
+                  </div>
+                </div>
+
+                <hr>
+                <br>
+                <div class="form-group">
+                  <label class="col-sm-5 control-label">{{ timer_product_discount_label_status }}</label>
+                  <div class="col-sm-3">
+                    <input type="checkbox" name="timer_product_page_discount_label_status" value='1' {{ general_settings.timer_product_page_discount_label_status is defined ? "checked" : "" }} />
+                  </div>
+                </div>
+
+                <br>
+                <div class="ajax-loader" style="display: none;"><img src="../catalog/view/javascript/timer/image/loading.gif"></div>
+                <div class="error-result"></div>
+                <div class="result"></div>
+                <button type="button" data-toggle="tooltip" class="btn btn-primary" onclick="save_settings($(this).parent());">
+                <i class="fa fa-floppy-o fa-lg"></i> &nbsp; {{ save_settings }}
+                </button>
+              </form>
+            </div>
+          <!-- TAB General Settings END -->
+
+          <!-- TAB Additional Settings -->
+            <div class="tab-pane" id="tab-additional-settings">
+              <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab-additional-catalog-settings" data-toggle="tab">{{ additional_settings_catalog }}</a></li>
+                <li><a href="#tab-additional-admin-settings" data-toggle="tab">{{ additional_settings_admin }}</a></li>
+              </ul>
+
+              <div class="tab-content">
+              <!-- Additional settings in the catalog -->
+                <div class="tab-pane active" id="tab-additional-catalog-settings">
+                  {{ additional_catalog_settings_form }}
+                </div>
+              <!-- Additional settings in the catalog END -->
+
+              <!-- Additional settings in the admin panel -->
+                <div class="tab-pane" id="tab-additional-admin-settings">
+                  <form method="post" id="additional-admin-settings" class="form-horizontal">
+                    <h4>{{ display_columns }}</h4>
+                    <input type="hidden" name="admin" value="1"><!-- to recognize action in controller -->
+                    <div class="form-group">
+                      <label class="col-sm-4 control-label">{{ photo }}</label>
+                      <div class="col-sm-3">
+                        <input type="checkbox" name="show_column_photo" value='1' {{ additional_admin_settings.show_column_photo ? "checked" : "" }} />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-4 control-label">{{ text_categories }}</label>
+                      <div class="col-sm-3">
+                        <input type="checkbox" name="show_column_category" value='1' {{ additional_admin_settings.show_column_category ? "checked" : "" }} />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-4 control-label">{{ text_manufacturer }}</label>
+                      <div class="col-sm-3">
+                        <input type="checkbox" name="show_column_manufacturer" value='1' {{ additional_admin_settings.show_column_manufacturer ? "checked" : "" }} />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-4 control-label">{{ status }}</label>
+                      <div class="col-sm-3">
+                        <input type="checkbox" name="show_column_status" value='1' {{ additional_admin_settings.show_column_status ? "checked" : "" }} />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-4 control-label">{{ quantity }}</label>
+                      <div class="col-sm-3">
+                        <input type="checkbox" name="show_column_quantity" value='1' {{ additional_admin_settings.show_column_quantity ? "checked" : "" }} />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-4 control-label">{{ old_price }}</label>
+                      <div class="col-sm-3">
+                        <input type="checkbox" name="show_column_old_price" value='1' {{ additional_admin_settings.show_column_old_price ? "checked" : "" }} />
+                      </div>
+                    </div>
+
+                    <h4>{{ display_filters }}</h4>
+                    <div class="form-group">
+                      <label class="col-sm-4 control-label">{{ text_category }}</label>
+                      <div class="col-sm-3">
+                        <input type="checkbox" name="show_filter_category" value='1' {{ additional_admin_settings.show_filter_category ? "checked" : "" }} />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-4 control-label">{{ text_manufacturer }}</label>
+                      <div class="col-sm-3">
+                        <input type="checkbox" name="show_filter_manufacturer" value='1' {{ additional_admin_settings.show_filter_manufacturer ? "checked" : "" }} />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-4 control-label">{{ text_customer_groups }}</label>
+                      <div class="col-sm-3">
+                        <input type="checkbox" name="show_filter_customer_groups" value='1' {{ additional_admin_settings.show_filter_customer_groups ? "checked" : "" }} />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-4 control-label">{{ status }}</label>
+                      <div class="col-sm-3">
+                        <input type="checkbox" name="show_filter_status" value='1' {{ additional_admin_settings.show_filter_status ? "checked" : "" }} />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-4 control-label">{{ special_date }}</label>
+                      <div class="col-sm-3">
+                        <input type="checkbox" name="show_filter_special_date" value='1' {{ additional_admin_settings.show_filter_special_date ? "checked" : "" }} />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-4 control-label">{{ old_price }}</label>
+                      <div class="col-sm-3">
+                        <input type="checkbox" name="show_filter_old_price" value='1' {{ additional_admin_settings.show_filter_old_price ? "checked" : "" }} />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-4 control-label">{{ special_price }}</label>
+                      <div class="col-sm-3">
+                        <input type="checkbox" name="show_filter_special_price" value='1' {{ additional_admin_settings.show_filter_special_price ? "checked" : "" }} />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-4 control-label">{{ quantity }}</label>
+                      <div class="col-sm-3">
+                        <input type="checkbox" name="show_filter_quantity" value='1' {{ additional_admin_settings.show_filter_quantity ? "checked" : "" }} />
+                      </div>
+                    </div>
+
+                    <div class="ajax-loader" style="display: none;"><img src="../catalog/view/javascript/timer/image/loading.gif"></div>
+                    <div class="error-result"></div>
+                    <div class="result"></div>
+                    <button type="button" data-toggle="tooltip" class="btn btn-primary" onclick="save_settings($(this).parent());">
+                      <i class="fa fa-floppy-o fa-lg"></i> &nbsp; {{ save_settings }}
+                    </button>
+                  </form>
+                </div>
+              <!-- Additional settings in the admin panel END -->
+              </div>
+            </div>
+          <!-- TAB Additional Settings END -->
+
+
+
+          <!-- TAB Specials Groups -->
+            <div class="tab-pane" id="tab-specials-groups">
+              <form method="post" class="form-horizontal">
+                <div class="form-group"><!-- id="specials-groups-block" -->
+                  <label class="col-sm-3 control-label">{{ label_group_name }}</label>
+                  <div class="col-sm-6">
+                    <input type="text" name="new_special_group" value="" placeholder="{{ group_name }}" id="new-special-group" class="form-control" />
+                  </div>
+                  <div class="col-sm-3">
+                    <button type="button" data-toggle="tooltip" class="btn btn-primary" onclick="add_special_group();" data-original-title="" title=""><i class="fa fa-plus"></i> &nbsp; {{ add_group }}</button>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="col-sm-2"></div>
+                  <div class="col-sm-8">
+                    <div id="special-groups" class="well well-sm">
+                      <div class="header">
+                        <div>{{ group_name }}</div>
+                      </div>
+                      {% for special_group in special_groups %}
+                        <div id="special_group{{ special_group.product_special_group_id }}" class="special-group">
+                            <input type="hidden" name="special_groups[]" value="{{ special_group.product_special_group_id }}" class="id"/>
+                            <input type="text" name="special_group_names[]" value="{{ special_group.name }}" class="form-control name">
+                            &nbsp;&nbsp;
+                            <i class="fa fa-minus-circle" data-toggle="tooltip" data-original-title="{{ delete_selected_group }}"></i>
+                        </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="ajax-loader" style="display: none;"><img src="../catalog/view/javascript/timer/image/loading.gif"></div>
+                  <div class="error-result"></div>
+                  <div class="result"></div>
+                </div>
+
+              </form>
+            </div>
+          <!-- TAB Specials Groups END -->
+
+          <!-- TAB Set Specials -->
+            <div class="tab-pane" id="tab-set-specials">
+              <form method="post" class="form-horizontal" action="{{ url_path_to_module }}/getPossibleProducts&user_token={{ user_token }}" id="form_set_specials">
+                <h3><span>{{ filter_by_products_parameters }}</span></h3>
+
+                <!-- Categories -->
+                <div class="form-group ajax-update">
+                  <label class="col-sm-4 control-label">{{ text_categories }}</label>
+                  <div class="col-sm-5">
+                    {{ category_list }}
+                    <a onclick="$(this).parent().find(':checkbox').prop('checked', true);" class="select-all">{{ select_all }}</a> /
+                    <a onclick="$(this).parent().find(':checkbox').prop('checked', false);" class="unselect-all">{{ unselect_all }}</a>
+                  </div>
+                </div>
+
+                <!-- Manufacturers -->
+                <div class="form-group ajax-update">
+                  <label class="col-sm-4 control-label">{{ text_manufacturers }}</label>
+                  <div class="col-sm-5">
+                  {{ manufacturer_list }}
+                  <a onclick="$(this).parent().find(':checkbox').prop('checked', true);" class="select-all">{{ select_all }}</a> /
+                  <a onclick="$(this).parent().find(':checkbox').prop('checked', false);" class="unselect-all">{{ unselect_all }}</a>
+                  </div>
+                </div>
+
+                <!-- Attributes -->
+                <div class="form-group">
+                  <label class="col-sm-4 control-label text-right">{{ filter_by_attribute_name_or_value }}</label>
+                  <div class="col-sm-7">
+                    <input type="text" value="" placeholder="{{ placeholder_attribute_name_or_value }}" class="form-control attribute-text" />
+                  </div>
+                  <div class="col-sm-1"></div>
+
+                  <br><br><br>
+                  <div class="col-sm-4"></div>
+                  <div class="col-sm-7">
+                    <div id="chosen_attributes" class="well well-sm" style="height: 150px; overflow: auto;">
+                    </div>
+                  </div>
+                  <div class="col-sm-1"></div>
+                </div>
+                <!-- Attributes END-->
+
+                <!-- Options -->
+                <div class="form-group">
+                  <label class="col-sm-4 control-label text-right">{{ filter_by_option_name_or_value }}</label>
+                  <div class="col-sm-7">
+                    <input type="text" value="" placeholder="{{ placeholder_option_name_or_value }}" class="form-control option-text" />
+                  </div>
+                  <div class="col-sm-1"></div>
+
+                  <br><br><br>
+                  <div class="col-sm-4"></div>
+                  <div class="col-sm-7">
+                    <div id="chosen_options" class="well well-sm" style="height: 150px; overflow: auto;">
+                    </div>
+                  </div>
+                  <div class="col-sm-1"></div>
+                </div>
+                <!-- Options END-->
+
+                <!-- Select additional products -->
+                {{ include_products_html }}
+                <!-- Select additional products END -->
+
+                <!-- Ignore specials that already exists -->
+                <div class="form-group ajax-update">
+                    <label class="col-sm-4 control-label" for="input-name">{{ ignore_creation_if_special_exists }}</label>
+                    <div class="col-sm-3">
+                      <input type="checkbox" name="ignore_creation_if_special_exists" value='1' checked />
+                    </div>
+                </div>
+
+                <hr>
+                <h4 class="text-center text-found-products">
+                    {{ found_products }}
+                    <div class="total-found-products">...</div>
+                </h4>
+
+                <div class="block-show-possible-products">
+                  <a class="show-found-products">{{ show_found_products }}</a>
+
+                  <div class="block-products">
+                    <a class="close-block-products">x</a>
+                    <table class="found-products" class="table table-bordered table-hover">
+                      <thead>
+                        <tr>
+                          <td class="text-center">#</td>
+                          <td class="text-center">{{ photo }}</td>
+                          <td class="text-center">{{ name }}</td>
+                          <td class="text-center">{{ price }}</td>
+                          <td class="text-center">{{ status }}</td>
+                          <td class="text-center">{{ qty }}</td>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <hr>
+                <h3><span>{{ special_parameters }}</span></h3>
+                {{ special_params }}
+
+                <div class="ajax-loader" style="display: none;"><img src="../catalog/view/javascript/timer/image/loading.gif"></div>
+                <div class="error-result"></div>
+                <div class="result"></div>
+                <button type="button" data-toggle="tooltip" class="btn btn-primary" onclick="set_specials($(this).parent());">
+                  <i class="fa fa-plus"></i> &nbsp; {{ set_specials_on_products }}
+                </button>
+
+                <!-- Don't allow to send empty form (avoid problems with parsing params) -->
+                <input type="hidden" name="random_val" value="0"></input>
+              </form>
+            </div>
+          <!-- TAB Set Specials END -->
+
+          <!-- TAB Edit Specials -->
+            <div class="tab-pane" id="tab-edit-specials">
+              <form method="post" action="{{ url_path_to_module }}/ajaxUpdateSpecials&user_token={{ user_token }}" class="form-horizontal" id="form_edit_specials">
+                <!-- Load filters by which user can filter specials + see found specials by these filters -->
+                {{ filters_edit_delete_specials_html }}
+
+                <hr>
+                <h3><span>{{ special_parameters }}</span></h3>
+                {{ special_params_for_selected }}
+
+                <div class="ajax-loader" style="display: none;"><img src="../catalog/view/javascript/timer/image/loading.gif"></div>
+                <div class="error-result"></div>
+                <div class="result"></div>
+                <button type="button" data-toggle="tooltip" class="btn btn-primary" onclick="ajax_edit_or_delete_specials($(this).closest('form'));">
+                  <i class="fa fa-edit fa-lg"></i> &nbsp; {{ edit_specials }}
+                </button>
+
+              </form>
+            </div>
+          <!-- TAB Edit Specials END -->
+
+          <!-- TAB Delete Specials -->
+            <div class="tab-pane" id="tab-delete-specials">
+              <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab-delete-specials-by-parameters" data-toggle="tab">{{ by_parameters }}</a></li>
+                <li><a href="#tab-delete-all-specials" data-toggle="tab">{{ delete_all_specials }}</a></li>
+              </ul>
+
+              <div class="tab-content">
+              <!-- Delete Specilas by Parameters -->
+                <div class="tab-pane active" id="tab-delete-specials-by-parameters" >
+                  <form method="post" class="form-horizontal" action="{{ url_path_to_module }}/ajaxDeleteSpecials&user_token={{ user_token }}" id="form_delete_specials_by_parameters">
+                    <!-- Load filters by which user can filter specials + see found specials by these filters -->
+                    {{ filters_edit_delete_specials_html }}
+                    <hr>
+
+                    <div class="text-center">
+                      <div class="ajax-loader" style="display: none;"><img src="../catalog/view/javascript/timer/image/loading.gif"></div>
+                      <div class="error-result"></div>
+                      <div class="result"></div>
+                      <button type="button" data-toggle="tooltip" class="btn btn-danger btn-lg submit" onclick="ajax_edit_or_delete_specials($(this).closest('form'));">
+                        <i class="fa fa-trash-o fa-lg"></i> &nbsp; {{ delete_specials }}
+                      </button>
+                    </div>
+
+                    <!-- Don't allow to send empty form (avoid problems with parsing params) -->
+                    <input type="hidden" name="random_val" value="0"/>
+                  </form>
+                </div>
+              <!-- Delete Specilas by Parameters END -->
+
+              <!-- Delete All Specilas -->
+                <div class="tab-pane" id="tab-delete-all-specials">
+                  <button type="button" data-toggle="tooltip" class="btn btn-danger" onclick="confirm('{{ delete_hint }}') ? location='{{ action_delete_all_specials }}' : false;">
+                    <i class="fa fa-trash-o fa-lg"></i> &nbsp; {{ delete_all_specials }}
+                  </button>
+                </div>
+              <!-- Delete All Specilas END -->
+              </div><!-- END TAB #5/#3 -->
+            </div>
+          <!-- TAB Delete Specials END -->
+
+          <!-- TAB Support -->
+            <div class="tab-pane" id="tab-support">
+              <iframe src="{{ link_to_support }}" frameborder="0" style="height: 100vh;" height="100%" width="100%"></iframe>
+            </div>
+          <!-- TAB Support END -->
+          </div><!-- End tab-content -->
+
+        </div><!-- End class="box" -->
+      </div> <!-- End  class="panel-body" -->
+    </div><!-- End  class="panel panel-default" -->
+  </div><!-- End  class="container-fluid" -->
+</div>
+<script>
+  $('.colorpicker').each(function(index) {
+     $(this).attr('id', 'colorpicker_'+index );
+         var colorpicker = new Array();
+         colorpicker[index] = $('#colorpicker_'+index).val();
+        $('#colorpicker_'+index).css('border-left-color', colorpicker[index]);
+
+    $('#colorpicker_' + index).colpick({
+      layout:'rgbhex',
+      submit:0,
+      color: colorpicker[index],
+      onChange:function(hsb,hex,rgb,el,bySetColor) {
+        if(!bySetColor) {
+          $(el).val('#'+hex);
+          $('#colorpicker_'+index).val('#'+hex );
+        }
+        $(el).css('border-left-color','#'+hex);
+        // $(this+' .colpick_current_color').css('background-color', colorpicker[index] );
+        $('.colpick_current_color').css('display', 'none' );
+
+      }
+    }).keyup(function(){
+      $(this).colpickSetColor(this.value);
+    });
+  });
+</script>
+
+{{ js_part }}
+{{ footer }}

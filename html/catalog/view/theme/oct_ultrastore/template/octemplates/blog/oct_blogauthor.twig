@@ -1,0 +1,118 @@
+{{ header }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "image": "{{ thumb }}",
+  "jobTitle": "Author",
+  "name": "{{ author_name }}",
+  "url": "{{ author_url }}"
+}
+</script>
+<style>
+.us-main-shop-title{
+
+}
+@media (min-width:768px){
+.us-blog-post-shot-text{
+    margin-top: 50px;
+}
+}
+.us-author-social-item{
+margin-right: 15px;
+}
+.us-author-social-link{
+font-size: 16px;
+    padding: 7px 0 7px 0;
+    background-color: rgba(203, 207, 212, 0.22);
+    transition: all .15sease .05s;
+    width: 40px;
+    display: block;
+    text-align: center;
+    border-radius: 1px;
+}
+.author-social{
+    margin-top: 30px;
+}
+</style>
+<div class="container">
+	{{ oct_breadcrumbs }}
+	<div class="content-top-box">{{ content_top }}</div>
+	<div class="us-blog-category-row">
+		{{ column_left }}
+		{% if column_left and column_right %}
+		{% set class = 'col-md-6' %}
+		{% elseif column_left or column_right %}
+		{% set class = 'col-md-9' %}
+		{% else %}
+		{% set class = 'col-md-12' %}
+		{% endif %}
+		<div class="{{ class }}">
+				<div class="us-blog-post-cont-top">
+					<div class="row">
+					{% if thumb %}
+					<div class="col-sm-4">
+						<img src="{{ thumb }}" alt="{{ author_name }}">
+					</div>
+					{% endif %}
+					<div class="us-blog-post-shot-text col-sm-8">
+					<h1 class="us-main-shop-title">{{ author_name }}</h1>
+					{{ shot_description }}
+					<ul class="d-flex list-unstyled author-social">
+{% if facebook %}
+                        <li class="us-author-social-item"><a rel="noindex, nofollow" href="{{ facebook }}" class="us-author-social-link us-author-social-link-fa-facebook-f" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
+{% endif %}
+{% if youtube %}					
+					<li class="us-author-social-item"><a rel="noindex, nofollow" href="{{ youtube }}" class="us-author-social-link us-author-social-link-fa-youtube" target="_blank"><i class="fab fa-youtube"></i></a></li>
+{% endif %}  
+{% if instagram %} 
+						<li class="us-author-social-item"><a rel="noindex, nofollow" href="{{ instagram }}" class="us-author-social-link us-author-social-link-fa-instagram" target="_blank"><i class="fab fa-instagram"></i></a></li>
+{% endif %} 
+{% if linkedin %}						
+						<li class="us-author-social-item"><a rel="noindex, nofollow" href="{{ linkedin }}" class="us-author-social-link us-author-social-link-fa-linkedin" target="_blank"><i class="fab fa-linkedin"></i></a></li>
+{% endif %} 
+				   </ul>
+					</div>
+					
+					</div>
+					<div class="us-blog-post-text">
+					{{ description }}
+					</div>
+				</div>
+			</div>
+
+	</div>
+	{% if articles %}
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="us-main-shop-title">
+				{{ text_related_articles_author }}
+			</div>
+		</div>
+	</div>
+	<div class="row">
+{% for article in articles %}
+		<div class="col-lg-4 us-news-block-inner">
+			<div class="us-news-block h-100 d-flex flex-column">
+				<div class="us-news-block-photo">
+					<div class="us-news-stickers-date">
+						{{ article.date_added }}
+					</div>
+					<a href="{{ article.href }}" title="{{ article.name }}" class="h-100 w-100"><img src="{{ article.thumb }}" class="w-100" alt="{{ article.name }}"></a>
+				</div>
+				<div class="us-news-block-cont d-flex flex-column justify-content-start h-100">
+					<a href="{{ article.href }}" class="us-news-block-title">
+						{{ article.name }}
+					</a>
+					<div class="us-news-block-text">
+						{{ article.description }}
+					</div>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+	{% endif %}
+	{{ content_bottom }}
+</div>
+{{ footer }}

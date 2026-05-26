@@ -1,0 +1,65 @@
+{{ header }} 
+<div class="container">
+  <div class="row">{{ column_left }} 
+    {% if (column_left and column_right) %} 
+    {% set class = 'col-sm-6' %} 
+    {% elseif (column_left or column_right) %} 
+    {% set class = 'col-sm-9' %} 
+    {% else %} 
+    {% set class = 'col-sm-12' %} 
+    {% endif %} 
+    <div id="content" class="{{ class }}">{{ content_top }} 
+      <h1>{{ heading_title }}</h1> 
+      <form action="" id="form" method="POST">
+      {% if (payment_methods) %} 
+      <input type="hidden" name="payment_code" value="{{ fpay_currency_code }}" /> 
+          <div class="form-group">
+              <label for="psum">{{ text_fpay_sum }}</label>
+              <input class="form-control" type="text" id="psum" name="payment_sum" value="" placeholder="{{ entry_fpay_sum }}" required="required" />
+          </div>
+          <div class="form-group">
+              <label for="email">{{ text_fpay_email }}</label>
+              <input class="form-control" type="email" id="email" name="email" value="" required="required" />
+          </div>
+          <div class="form-group">
+              <label for="phone">{{ text_fpay_phone }}</label>
+              <input class="form-control" type="tel" id="phone" name="phone" value="" />
+          </div>
+          <div class="form-group">
+              <label for="comment">{{ text_fpay_comment }}</label>
+              <textarea class="form-control" id="comment" name="comment" /></textarea>
+          </div>
+          <div class="form-group">
+      <p>{{ text_fpay_method }}</p>
+      {% for payment_method in payment_methods %} 
+      <div class="radio">
+        <label>
+          {% if (code is not defined) %} 
+          {% set code = payment_method['code'] %} 
+          <input type="radio" name="payment_method" data-item="{{ payment_method['href'] }}" value="{{ payment_method['code'] }}" checked="checked" />
+          {% else %} 
+          <input type="radio" name="payment_method" data-item="{{ payment_method['href'] }}" value="{{ payment_method['code'] }}" />
+          {% endif %} 
+          {{ payment_method['name'] }} 
+        </label>
+      </div>
+      {% endfor %} 
+      {% endif %} 
+      <div class="buttons">
+        <div class="pull-left">
+          <input type="submit" value="{{ button_continue }}" id="button-payment-method" data-loading-text="{{ text_loading }}" class="btn btn-primary" />
+        </div>
+      </div>
+      </div>
+      </form>
+      {{ content_bottom }} 
+    </div>
+    {{ column_right }} 
+  </div>
+</div>
+<script>
+  $("form").submit(function(){
+    $('#form').attr('action', $('input[name=payment_method]:checked').data('item'));
+  });
+</script>
+{{ footer }}

@@ -1,0 +1,19 @@
+{% if prices_tabl %}
+<h2 class="head-cat">{{ heading_title }} {{ text_before_table }} {{ brand_domain }}</h2>
+<div class="table_min_price">
+       
+      <table border="1" cellpadding="1" cellspacing="1" style="width:700px">
+        <tbody>
+		<tr><td style="font-weight:bold;">{{ text_table_product_name }}</td><td style="font-weight:bold;">{{ text_table_product_price }}</td></tr>
+		{% for product in products %}
+            <tr><td>{{ product.name }}</td><td>
+			{% if not product.special %}
+          {{ product.price }}
+          {% else %} {{ product.special }}{% endif %}
+			</td></tr>
+			{% endfor %}
+        </tbody>
+      </table>
+    </div>
+{% endif %}
+

@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<!--[if IE 8 ]><html dir="{{ direction }}" lang="{{ lang }}" class="ie8"><![endif]-->
+<!--[if IE 9 ]><html dir="{{ direction }}" lang="{{ lang }}" class="ie9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html dir="{{ direction }}" lang="{{ lang }}">
+<!--<![endif]-->
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+            {% if oct_analytics_google_webmaster_code is defined and oct_analytics_google_webmaster_code is not empty %}
+            	<meta name="google-site-verification" content="{{ oct_analytics_google_webmaster_code }}" />
+            {% endif %}
+            
+            {% if oct_analytics_yandex_webmaster_code is defined and oct_analytics_yandex_webmaster_code is not empty %}
+            	<meta name="yandex-verification" content="{{ oct_analytics_yandex_webmaster_code }}" />
+            {% endif %}
+			
+<title>{{ title }}</title>
+
+{% if robots %}
+<!-- Limit, Sort, Filter_category_id -->
+<meta name="robots" content="{{ robots }}" />
+<!-- Limit, Sort, Filter_category_id -->
+<style>
+body{margin-top:-23px;}
+</style>
+{% endif %}
+
+
+
+{% if noindex %}
+<!-- OCFilter Start -->
+<meta name="robots" content="noindex,nofollow" />
+<!-- OCFilter End -->
+{% endif %}
+      
+<base href="{{ base }}" />
+{% if description %}
+<meta name="description" content="{{ description }}" />
+{% endif %}
+{% if keywords %}
+<meta name="keywords" content="{{ keywords }}" />
+{% endif %}
+{% for style in styles %}
+<link href="{{ style.href }}" type="text/css" rel="{{ style.rel }} preload" media="{{ style.media }}" />
+{% endfor %}
+{% if lang == "uk" %}
+<style>
+#oct-menu-dropdown-menu .oct-menu-li-else, #oct-menu-dropdown-menu .oct-menu-li-main:nth-child(2),
+#us_menu_mobile_content .oct-menu-li-else, #us_menu_mobile_content .oct-menu-li-main:nth-child(1), #us_menu_mobile_content .oct-menu-li-main:nth-child(2), #us_menu_mobile_content .oct-menu-li-main:nth-child(3)
+{
+	display:none;
+}
+</style>
+{% endif %}
+{% if ee_js_position == 1 %}
+<script src="catalog/view/javascript/ee_tracking.min.js?eetv=2.2.1{% if ee_js_version %}.{{ ee_js_version }}{% endif %}" type="text/javascript"></script>
+{% endif %}
+{% for script in scripts %}
+<script rel="preload" src="{{ script }}"></script>
+{% endfor %}
+<link rel="preload" href="/catalog/view/theme/oct_ultrastore/stylesheet/fontawesome-free-5.6.1-web/webfonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin>
+<meta name="facebook-domain-verification" content="xz1ou9n6fe32y8kqejmcmjerc4bgwd"/>
+
+<!--<script src="catalog/view/javascript/cloudzoom/cloud-zoom.1.0.2.min.js" ></script>
+<script src="catalog/view/javascript/cloudzoom/zoom.js" ></script>-->
+<script type="application/ld+json">
+// 
+   {
+      "@context": "http://schema.org",
+      "@type": "WebSite",
+      "url": "https://radio-shop.com.ua/",
+        "potentialAction": {
+        "@type": "SearchAction",
+        "target": "index.php?category_id=0&search={query}&submit_search=&route=product%2Fsearch",
+        "query-input": "required name=query"
+        }
+      }
+// ]]>
+</script>
+
+
+<!-- Google Tag Manager -->
+<!-- 
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-NQRL27G');</script>
+-->
+<!-- End Google Tag Manager -->
+
+<!-- Google Tag Manager коментуємо 28.08.23 -->
+<!--<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-TFJ7ZN5');</script> -->
+<!-- End Google Tag Manager -->
+
+
+{% for link in links %}
+<link href="{{ link.href }}" rel="{{ link.rel }}" />
+{% endfor %}
+<link rel="apple-touch-icon" sizes="180x180" href="/image/apple/apple-touch-icon.png" />
+{% for analytic in analytics %}
+{{ analytic }}
+{% endfor %}
+
+<!-- Закомментрировал при добавлении расширенной торговли 14.09.2020
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-43715484-1', 'auto');
+  ga('send', 'pageview');
+  ga('require', 'ecommerce');
+</script>-->
+
+
+<meta name="it-rating" content="it-rat-a285ebd387a522b9103962ba22cd57b1" />
+
+<!-- Global site tag (gtag.js) - Google Ads: 791988078 -->
+
+<!--Закомментрировал при добавлении расширенной торговли 14.09.2020
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-791988078"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'AW-791988078');
+</script>-->
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-R71HBSG29T"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-R71HBSG29T');
+</script>
+
+<!-- Facebook Pixel Code -->
+<script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '140152403368942');
+  fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=140152403368942&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Facebook Pixel Code -->
+
+<!-- TikTok Pixel Code Start -->
+<script>
+!function (w, d, t) {
+  w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
+var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
+;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
+
+
+  ttq.load('D17V6VBC77UEHH7Q2N2G');
+  ttq.page();
+}(window, document, 'ttq');
+</script>
+<!-- TikTok Pixel Code End -->
+
+ 
+
+{# // remarketing #}			
+{% if remarketing_head %}
+{{ remarketing_head }} 
+{% endif %}
+			
+
+                {{ advtags }}
+            
+{% if ee_js_position == 0 %}
+<script rel="preload" src="catalog/view/javascript/ee_tracking.min.js?eetv=2.2.1{% if ee_js_version %}.{{ ee_js_version }}{% endif %}" type="text/javascript"></script>
+{% endif %}
+
+<meta property="og:title" content="{{ title }}" >
+<meta property="og:description" content="{{ description ? description : '' }}" >
+{% if class == 'common-home' %}
+<meta property="og:url" content="{{ base }}" >
+{% endif %}
+{% if ('product-product' not in class) and ('product-category' not in class) and ('product-manufacturer-info' not in class) %}
+<meta property="og:image" content="{{ logo_meta }}" >
+<meta property="og:image:width" content="300" >
+<meta property="og:image:height" content="300" >
+{% endif %}
+<meta property="og:site_name" content="{{ name }}" >
+{% for meta_tag in ogmeta %}
+<meta {{ meta_tag.meta_name}} content="{{ meta_tag.content }}" >
+{% endfor %}
+                
+
+				<script rel="preload" src="catalog/view/javascript/popup_loader.js"></script>
+			
+</head>
+<body>
+
+{% if remarketing_body %}
+{{ remarketing_body }}
+{% endif %}
+
+{% if ecommerce_ga4_identifier %}
+<input type="hidden" value="{{ ecommerce_ga4_identifier }}" class="ecommerce_ga4_identifier" />
+{% endif %}
+
+{% if ecommerce_currency %}
+<input type="hidden" value="{{ ecommerce_currency }}" class="currency_ecommerce_code" />
+{% endif %}
+
+
+			{% if oct_bar_data.status is defined and oct_bar_data.status  %}
+			<div class="oct-fixed-bar fixed-{{ bar_position }}">
+				{% if oct_bar_data.show_wishlist is defined and oct_bar_data.show_wishlist %}
+				<div class="oct-fixed-bar-item oct-fixed-bar-wishlist">
+					<a href="{{ wishlist_link }}" class="oct-fixed-bar-link" title="{{ fixed_bar_wishlist }}"><i class="fas fa-heart"></i><span id="oct-wishlist-quantity" class="oct-fixed-bar-quantity">{{ wishlist_total }}</span></a>
+				</div>
+				{% endif %}
+				{% if oct_bar_data.show_compare is defined and oct_bar_data.show_compare %}
+				<div class="oct-fixed-bar-item oct-fixed-bar-compare">
+					<a href="{{ compare_link }}" class="oct-fixed-bar-link" title="{{ fixed_bar_compare }}"><i class="fas fa-chart-bar"></i><span id="oct-compare-quantity" class="oct-fixed-bar-quantity">{{ compare_total }}</span></a>
+				</div>
+				{% endif %}
+				{% if oct_bar_data.show_cart is defined and oct_bar_data.show_cart %}
+				<div class="oct-fixed-bar-item oct-fixed-bar-cart">
+					{% if oct_popup_cart_status is defined and oct_popup_cart_status %}
+					<a href="javascript:;" onclick="octPopupCart()" class="oct-fixed-bar-link" title="{{ fixed_bar_cart }}">
+					{% else %}
+					<a href="{{ shopping_cart }}" class="oct-fixed-bar-link" title="{{ fixed_bar_cart }}">
+					{% endif %}
+					<i class="fas fa-shopping-cart"></i><span id="oct-cart-quantity" class="oct-fixed-bar-quantity">{{ cart_total_bar }}</span></a>
+				</div>
+				{% endif %}
+			</div>
+			{% endif %}
+			
+
+<!-- Google Tag Manager (noscript) коментуємо 28.08.23 -->
+<!--<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TFJ7ZN5"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript> -->
+<!-- End Google Tag Manager (noscript) -->
+
+
+
+<div id="us_menu_mobile_box" class="d-lg-none">
+	<div id="us_menu_mobile_title" class="modal-header">
+		<span class="modal-title">{{ oct_menu }}</span>
+		<button id="us_menu_mobile_close" type="button" class="us-close">
+			<span aria-hidden="true" class="us-modal-close-icon us-modal-close-left"></span>
+			<span aria-hidden="true" class="us-modal-close-icon us-modal-close-right"></span>
+		</button>
+	</div>
+	<div id="us_menu_mobile_content"></div>
+</div>
+<nav id="top">
+  <div class="container d-flex h-100">
+		<div id="us_menu_mobile_button" class="us-menu-mobile d-lg-none h-100">
+			<img src="catalog/view/theme/oct_ultrastore/img/burger.svg" class="us-navbar-toggler" alt="" />
+		</div>
+		<div id="dropdown_menu_info" class="us-top-mobile-item us-top-mobile-item-info d-lg-none dropdown h-100">
+			<img src="catalog/view/theme/oct_ultrastore/img/mobile-info.svg" class="us-navbar-info" alt="" />
+			<div id="us_info_mobile" class="nav-dropdown-menu">
+				<div class="modal-header">
+			        <h5 class="modal-title">{{ oct_information }}</h5>
+			        <button id="us_info_mobile_close" type="button" class="us-close">
+						<span aria-hidden="true" class="us-modal-close-icon us-modal-close-left"></span>
+						<span aria-hidden="true" class="us-modal-close-icon us-modal-close-right"></span>
+			        </button>
+			    </div>
+				<div class="nav-dropdown-menu-content">
+					{% if mobile_informations is not empty %}
+					<ul class="list-unstyled mobile-information-box">
+						<li class="mobile-info-title"><span class="str">{{ oct_information }}</span></li>
+						{% for information in mobile_informations %}
+						<li class="oct-menu-information-li"><a href="{{ information.href }}" class="oct-menu-a">{{ information.title }}</a></li>
+						{% endfor %}
+						{% if lang == "uk" %}
+						<li class="oct-menu-information-li"><a href="/uk/blog" class="oct-menu-a">Блог</a></li>
+						{% else %}
+						<li class="oct-menu-information-li"><a href="/blog" class="oct-menu-a">Блог</a></li>
+						{% endif %}
+						
+					</ul>
+					{% endif %}
+					{% if oct_contact_opens is defined and oct_contact_opens is not empty %}
+					<ul class="list-unstyled mobile-shedule-box">
+						<li class="mobile-info-title"><span class="str">{{ oct_working_hours }}:</span></li>
+					</ul>
+					{% endif %}
+					{% if oct_ultrastore_data.contact_address[oct_lang_id] is defined and oct_ultrastore_data.contact_address[oct_lang_id] %}
+					<ul class="list-unstyled mobile-address-box">
+						<li class="mobile-info-title test"><span class="str">{{ oct_our_address }}:</span></li>
+					</ul>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+		<div id="top-left" class="mr-auto d-flex align-items-center">
+			{% if oct_ultrastore_data.contact_address[oct_lang_id] is defined and oct_ultrastore_data.contact_address[oct_lang_id] %}
+			<div class="dropdown h-100">
+				<a class="btn top-address btn-link dropdown-toggle d-flex align-items-center h-100" href="javascript:;" role="button" id="dropdownMenuAddress" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-map-marker-alt"></i> <span>{{ oct_our_address }}</span> <i class="fas fa-chevron-down"></i></a>
+				
+				<ul class="dropdown-menu nav-dropdown-menu address-dropdown-menu" aria-labelledby="dropdownMenuAddress">
+				    <li class="dropdown-item us-dropdown-item">{{ text_office }} <br> {{ address_office }}</li>
+				    <li class="us-mobile-map-box">
+					<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2541.4900786914795!2d30.446648215943547!3d50.431971596576915!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40d4cea5cdf185d9%3A0xc5358e32048e19a6!2zMTNBLCDRg9C7LiDQo9GI0LjQvdGB0LrQvtCz0L4sIDEz0JAsINCa0LjQtdCyLCAwMjAwMA!5e0!3m2!1sru!2sua!4v1619121261588!5m2!1sru!2sua" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" class="respon-contact"></iframe>
+					</li>
+				</ul>
+				
+				<!--<ul class="dropdown-menu nav-dropdown-menu address-dropdown-menu" aria-labelledby="dropdownMenuAddress">
+				    <li class="dropdown-item us-dropdown-item">{{ text_shop }} <br>
+					{{ oct_ultrastore_data.contact_address[oct_lang_id] }}</li>
+				    {% if contact_map is defined and contact_map %}
+				    <li class="us-mobile-map-box">{{ contact_map }}</li>
+				    {% endif %}
+				</ul>-->
+			</div>
+			{% endif %}
+			{% if oct_contact_opens is defined and oct_contact_opens is not empty %}
+			<div class="dropdown h-100">
+			  	<a class="btn btn-shedule btn-link dropdown-toggle d-flex align-items-center h-100" href="javascript:;" role="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i> <span>{{ oct_working_hours }}</span> <i class="fas fa-chevron-down"></i></a>
+				<ul class="dropdown-menu nav-dropdown-menu shedule-dropdown-menu" aria-labelledby="dropdownMenu1">
+					{{ time_work_submenu }} 	
+				</ul>
+			</div>
+			{% endif %}
+			{% if header_informations is defined and header_informations is not empty %}
+				<ul class="top-info-ul">
+				{% for header_link in header_informations %}
+					<li><a href="{{ header_link.href }}" class="btn-link btn-block h-100 hidden-xs">{{ header_link.title }}</a></li>
+				{% endfor %}
+				</ul>
+			{% endif %}
+		</div>
+		<div id="top-links" class="nav ml-auto d-flex">
+		<div class="phone-linii"><span class="phone-l-b">{{ tetx_besp }}</div>			
+			<div class="dropdown" id="us-account-dropdown">
+				{% if logged %}
+				<a href="{{ account }}" title="{{ text_account }}" class="btn btn-user btn-link btn-block h-100" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="catalog/view/theme/oct_ultrastore/img/user-mobile.svg" class="us-navbar-account" alt="" /><i class="far fa-user"></i> <span class="hidden-xs">{{ text_account }}</span> <i class="fas fa-chevron-down" ></i></a>
+				<ul class="dropdown-menu nav-dropdown-menu user-dropdown-menu dropdown-menu-right">
+		            <li class="dropdown-item us-dropdown-item"><a href="{{ account }}">{{ text_account }}</a></li>
+		            <li class="dropdown-item us-dropdown-item"><a href="{{ order }}">{{ text_order }}</a></li>
+		            <li class="dropdown-item us-dropdown-item"><a href="{{ transaction }}">{{ text_transaction }}</a></li>
+		            <li class="dropdown-item us-dropdown-item"><a href="{{ download }}">{{ text_download }}</a></li>
+		            <li class="dropdown-item us-dropdown-item"><a href="{{ logout }}">{{ text_logout }}</a></li>
+				</ul>
+				{% else %}
+				<a href="javascript:;" onclick="octPopupLogin();" title="{{ text_account }}" class="btn btn-user btn-link btn-block h-100" role="button" aria-haspopup="true"><img src="catalog/view/theme/oct_ultrastore/img/user-mobile.svg" class="us-navbar-account" alt="" /><i class="far fa-user"></i> <span class="hidden-xs">{{ text_account }}</span></a>
+				{% endif %}
+	        </div>
+			{{ language }}
+		</div>
+		{{ cart_mobile }}
+	</div>
+</nav>
+<header>
+  <div class="container">
+    <div class="row align-items-center">
+    	<div id="logo" class="col-6 col-lg-3 col-md-3 us-logo-box text-center">
+			{% if logo %}
+				{% if oct_home is defined and oct_home %}
+				<a href="{{ home }}">
+					<img src="{{ logo }}" title="радиомагазин Radio-Shop" alt="Фото - 'радиомагазин Radio-Shop'" class="us-logo-img" />
+					</a>
+				{% else %}
+					<a href="{{ home }}">
+						<img src="{{ logo }}" title="радиомагазин Radio-Shop" alt="Фото - 'радиомагазин Radio-Shop'" class="us-logo-img" />
+					</a>
+				{% endif %}
+			{% else %}
+				<h1><a href="{{ home }}">{{ name }}</a></h1>
+			{% endif %}
+		</div>
+		<div class="col-12 col-lg-12 col-md-12 message-mobile">{{ tetx_besp }}</div>
+		<div class="col-12 col-lg-4 col-md-6 us-search-box">{{ search }}</div>
+		{% if oct_contact_telephones is defined and oct_contact_telephones is not empty %}
+		<div class="col-6 col-lg-3 col-md-3 us-phone-box d-flex align-items-center">
+			<div class="us-phone-img">
+				<img src="catalog/view/theme/oct_ultrastore/img/pnone-icon.svg" alt="phone-icon">
+			</div>
+			<div class="us-phone-content">
+				{% if oct_contact_telephones|length > 1 %}
+				<a class="btn top-phone-btn dropdown-toggle" href="tel:{{ oct_contact_telephones[0]|replace({" " : "", "-" : "", "(" : "", ")" : ""}) }}" role="button" id="us-phones-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>{{ oct_contact_telephones[0] }}</span> <i class="fas fa-chevron-down"></i></a>
+				<ul class="dropdown-menu header-dropdown-menu" aria-labelledby="us-phones-dropdown">
+					{% for oct_contact_telephone in oct_contact_telephones %}
+					<li><a href="tel:{{ oct_contact_telephone|replace({" " : "", "-" : "", "(" : "", ")" : ""}) }}" class="phoneclick"><i class="fas fa-phone-volume"></i> {{ oct_contact_telephone }}</a></li>
+					{% endfor %}
+				</ul>
+				{% else %}
+				<a class="btn top-phone-btn" href="tel:{{ oct_contact_telephones[0]|replace({" " : "", "-" : "", "(" : "", ")" : ""}) }}" role="button" id="us-phones-dropdown"><span>{{ oct_contact_telephones[0] }}</span></a>
+				{% endif %}
+			</div>
+			
+			 <div class="phone-contact"><div class="inner-info"><p><span><i class="fa fa-phone"></i><a href="tel:0 800 33 58 10"><span class="phoneblue">0 800</span> 33 58 10</span></a><br><span><img class="kyiv" src="/image/catalog/kyivstar.png"><a href="tel:+380973435800"><span class="phoneblue">(097)</span> 343 58 00</span></a></p></div>
+							<div class="inner-info phone2"><p><span><img style="margin-bottom: 2px;" src="/image/catalog/vodafone.png"><a href="tel:0996043865"><span class="phoneblue">(099)</span> 604 38 65</span></a><br><span><img style="margin-bottom: 4px;" src="/image/catalog/life.png"><a href="tel:+380931257811"><span class="phoneblue">(093)</span> 125 78 11</span></a></p></div>
+							 </div>
+
+			{% if oct_popup_call_phone_status is defined and oct_popup_call_phone_status %}
+			<a href="javascript:;" class="us-phone-link" onclick="octPopupCallPhone()">{{ oct_call_phone }}</a>
+			{% endif %}
+			
+			
+		</div>
+		{% endif %}
+		{{ cart }}
+    </div>
+  </div>
+</header>
+<div class="menu-row sticky-top">
+	<div class="container">
+		<div class="row">
+			{{ menu }}
+		</div>
+	</div>
+</div>

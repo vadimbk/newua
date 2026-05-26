@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+<name>FIX text_empty event lang</name>
+<code>FIX text_empty event lang</code>
+<version>3.0.2.0</version>
+<author>Slasoft</author>
+
+
+<file path="system/config/catalog.php">
+	<operation>
+		<search><![CDATA['event/debug/after']]></search>
+		<add position="replace"><![CDATA[
+				0=>'event/language/after',
+				1=>'event/debug/after'
+		]]></add>
+	</operation>
+</file>
+</modification>

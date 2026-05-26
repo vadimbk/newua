@@ -1,0 +1,18 @@
+{% if (child2) %}
+	{% if (child_item_class is defined) %}
+		{% set class = child_item_class %}
+	{% else %}
+		{% set class = '' %}
+	{% endif %}
+
+	{% if (child2.active) %}
+		<div class="list-group-item list-group-item-warning {{ class }}">- {{ child2.name }}</div>
+	{% else %}
+		<a href="{{ child2.href }}" class="list-group-item {{ class }} level_3">
+		  -- {{ child2.name }}
+		  {% if (child2.total) %}
+			<small>({{ child2.total }})</small>
+		  {% endif %}
+		</a>
+	{% endif %}
+{% endif %}

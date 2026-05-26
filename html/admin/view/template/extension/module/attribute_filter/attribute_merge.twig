@@ -1,0 +1,124 @@
+	<div id="merge-form" class="table-responsive">
+		<h2>{{ column_head }}</h2>
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<td>{{ column_name }}</td>
+					<td>{{ column_new }}</td>
+					<td>{{ column_action }}</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td id="merge-attr-lists">
+						<div id="merge-attr-list">
+						</div>
+						<input id="attrname" type="text" placeholder="{{ text_autocomplete }}" class="form-control" />
+						<button type="button" class="btn btn-link" onclick="addSelected()"><i class="fa fa-plus-circle"></i><i class="fa fa-check"></i> Добавить выделенное</button>
+					</td>
+					<td>
+					{% for key,language in languages %}
+						<div class="input-group">
+						<span class="input-group-addon"><img title="{{ language['name'] }}" 
+						src="{{ language['image'] }}"></span>
+						<input type="text" class="form-control" value="" name="merge_new[{{ key }}]" />
+						</div>
+						{% endfor %}
+					<div><small>{{ text_new_value }}</small></div>
+					</td>
+					<td>
+					<button type="button" id="merge-save" onclick="startMerge()" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary" ><i class="fa fa-magnet"></i></button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+<script>
+	$('#attrname').autocomplete({
+		'source': function(request, response) {
+			$.ajax({
+				url: '{{ attributeautocomplete }}' + '&filter_name=' +  encodeURIComponent(request),
+				dataType: 'json',
+				success: function(json) {
+					response($.map(json, function(item) {
+						return {
+							category: item.attribute_group,
+							label: item.name,
+							value: item.attribute_id
+						}
+					}));
+				}
+			});
+		},
+		'select': function(item) {
+			addAttribute(item);
+			checkFirst();
+		}
+	});
+
+function addAttribute(item) {
+	var exist = $('#merge-attr-list #m-' + item['value']);
+	if (exist.length) return;
+	var html = '';
+	html += '<div>' + '<i class="fa fa-minus-circle" style="color:red" onclick="$(this).parent().remove();checkFirst();"></i> ';
+	html += '<input id="m-' + item['value'] + '" name="merge_attr_default" type="radio" style="display:none" value="' + item['value'] + '" />';
+	html += '<input name="merge_attr[]" type="hidden" value="' + item['value'] + '" />';
+	html += '<label for="m-' + item['value'] + '">';
+	html += item['label'] + '</label>';
+	html += '</div>';
+	$('#merge-attr-list').append(html);
+}
+function addSelected() {
+	$.ajax({
+		url: '{{ addSelected }}',
+		type: 'post',
+		data: $('#form-attribute input[name="selected\[\]"]:checked'),
+		dataType: 'json',
+		success: function(json) {
+			if (json) {
+				for (var item in json) {
+					addAttribute(json[item]);
+				}
+				checkFirst();
+			}
+		},
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+	});
+}
+function checkFirst(){
+	var checked = $('#merge-attr-list input:checked');
+	if (!checked.length) {
+		$('#merge-attr-list input[type=radio]').eq(0).prop('checked',true);
+	}
+	checked = $('#merge-attr-list input:checked');
+	if (checked.length) {
+		$('#merge-save').prop('disabled',false);
+	} else {
+		$('#merge-save').prop('disabled',true);
+	}
+}
+
+checkFirst();
+
+function startMerge(){
+	$.ajax({
+		url: '{{ startMerge }}' + getFilter(),
+		type: 'post',
+		data: $('#merge-form :input').serialize(),
+		dataType: 'json',
+		success: function(json) {
+			location = json['redirect'];
+		},
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+	});
+}
+
+</script>
+<style>
+#merge-attr-list input[type=radio] ~ label {padding:5px}
+#merge-attr-list input[type=radio]:checked ~ label {border:1px solid #4d90fe}
+</style>

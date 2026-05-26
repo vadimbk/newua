@@ -1,0 +1,8 @@
+<form method="POST" name="form" action="{{ action }}" accept-charset="utf-8"> 
+{% for key,value in form_data %} 
+<input type="hidden" name="{{ key }}" value="{{ value }}">
+{% endfor %} 
+</form> 
+<script>
+document.form.submit();
+</script>

@@ -1,0 +1,111 @@
+{{ header }} 
+<div class="container">
+  <ul class="breadcrumb">
+		{% for breadcrumb in breadcrumbs %} 
+	    <li><a href="{{ breadcrumb['href'] }}">{{ breadcrumb['text'] }}</a></li>
+		{% endfor %} 
+  </ul>
+  <div class="row">{{ column_left }} 
+		{% if (column_left and column_right) %} 
+			{% set class = 'col-sm-6' %} 
+		{% elseif (column_left or column_right) %} 
+			{% set class = 'col-sm-9' %} 
+		{% else %} 
+			{% set class = 'col-sm-12' %} 
+		{% endif %} 
+    <div id="content" class="{{ class }} promotion-page">{{ content_top }} 
+      <div class="row">
+				{% if (column_left or column_right) %} 
+					{% set class = 'col-sm-6' %} 
+				{% else %} 
+					{% set class = 'col-sm-8' %} 
+				{% endif %} 
+        <div class="{{ class }}">
+					{% if (promotion['thumb']) %} 
+						<img src="{{ promotion['thumb'] }}" title="{{ promotion['name'] }}" alt="{{ promotion['name'] }}" />
+					{% endif %}					
+        </div>
+				{% if (column_left or column_right) %} 
+					{% set class = 'col-sm-6' %} 
+				{% else %} 
+					{% set class = 'col-sm-4' %} 
+				{% endif %} 
+        <div class="{{ class }}">
+
+					<h3 class="promotion-name">
+						{{ promotion['name'] }} 
+					</h3>
+
+					{% if (promotion['gifts_left'] is not empty) %} 
+						<div class="gifts-left"> {{ promotion['gifts_left'] }}</div>
+					{% endif %} 
+
+					{% if (promotion['options']['promotion']['timer']['type'] == 'text_period' or not promotion['active']) %} 
+
+						{% if (promotion['text_timer']['text_period'] is not empty) %}						
+							<div class="promotion-text-timer" style="{{promotion['options']['promotion']['timer']['font_size'] is not empty ? 'font-size: ' ~ promotion['options']['promotion']['timer']['font_size'] ~ 'px' : '' }}">
+								<div class="text-timer-text-period">{{ promotion['text_timer']['text_period'] }}</div>
+							</div>		
+						{% endif %} 	
+
+					{% elseif (promotion['options']['promotion']['timer']['type'] != 'disable' and promotion['active'] and not promotion['date_end_empty']) %} 
+
+						<div class="promotion-timer">
+							<div class="timer-title">
+								{{ promotion_valid }} 
+							</div>
+							<div class="timer-counter">
+								<div id="counter{{ promotion['promotion_id'] }}"></div>
+							</div>
+						</div>
+
+						<script>
+	            $(document).ready(function () {
+	              var date = new Date('{{ promotion['date_end'] }}');
+	              //date.setTime(date.getTime() + date.getTimezoneOffset()*60*1000);
+	              $('#counter{{ promotion['promotion_id'] }}').timeTo({
+	              timeTo: date,
+	                      displayCaptions: true,
+	{% if (promotion['options']['promotion']['timer']['theme'] == 'black') %} 
+		              theme: 'black',
+	{% endif %} 
+	{% if (promotion['options']['promotion']['timer']['font_size'] is not empty) %} 
+		              fontSize: {{ promotion['options']['promotion']['timer']['font_size'] }},
+	{% endif %} 
+	{% if (promotion['options']['promotion']['timer']['type'] == 'static') %} 
+		              start: false,
+	{% endif %} 
+
+	              lang: '{{promotion_counter_language is not empty ? promotion_counter_language : 'en' }}'
+	            });
+	            });
+						</script>					  
+
+					{% endif %} 
+
+					<div class="promotion-description">
+						{{ promotion['description_promotion'] }} 
+					</div>
+
+        </div>
+      </div>
+
+			{% if (promotion['products'] is not empty) %} 
+				<div id="products" class="row">
+					{{ promotion['products'] }} 
+				</div>
+				{% if (promotion['products_pagination'] is not empty) %} 
+					<div class="row">
+						{{ promotion['products_pagination'] }}					
+					</div>
+				{% endif %}			
+			{% endif %} 
+
+			{{ content_bottom }} 
+		</div>
+		{{ column_right }} 
+	</div>
+</div>
+<script type="text/javascript"><!--
+//--></script>
+{{ footer }}

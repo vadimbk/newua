@@ -1,0 +1,209 @@
+/* Basic timer output */
+.product-timer-block {
+  margin: 14px 0px 14px 0px;
+  padding: 10px 10px 10px 10px;
+  border: 1px solid #a3a3a3;
+}
+.product-timer-block .timer, 
+.product-timer-block .prices-block {
+  display: inline-block;
+  vertical-align: top;
+  padding: 0px 0px 0px 0px;
+}
+.product-timer-block .special-price, 
+.product-timer-block .old-price {
+  display: inline-block;
+  width: 100%;
+}
+.timer {
+  /*text-align: center;*/
+  width: 60%;
+  margin-top:20px;
+}
+.timer .text {
+  font-size: 17px;
+  color: #121212;
+  /*letter-spacing: 1px;*/
+  margin-bottom: 10px;
+  padding: 0px 0px 0px 0px;
+}
+
+.prices-block {
+  /*padding: 5px 0px;*/
+  width: 38%;
+  line-height: 1.5;
+  text-align: center; 
+}
+.prices-block .special-price {
+  color: #e95144;
+  font-weight: normal;
+  font-size: 33px;
+  /*margin: 10px 0;*/
+  display: inline-block;
+}
+.prices-block .old-price {
+  font-size: 19px;
+  text-decoration: line-through;
+}
+
+
+/* Display on categories/specials, in modules */
+.timer-block .prices-block {
+  width: 100%;
+  margin-bottom: 10px;
+}
+.timer-block .special-price, 
+.timer-block .old-price {
+  display: inline-block;
+  margin: 0px;
+  font-size: 14px;
+}
+.timer-block .special-price {
+  font-weight: bold;
+}
+.timer-block .old-price {
+  margin: 0 3px 0 3px;
+}
+
+
+/* long Label near product special & ordinary price */
+.percentage-discount {
+  /*background: #e95144;
+  color: #fff;
+  font-size: 11px;
+  border-radius: 3px;
+  padding: 2px 4px 2px 4px;
+  margin: 0px 4px 0px 0px;
+  position: relative;
+  z-index: 9;
+  display: inline-block;
+  vertical-align: middle;*/
+      background: #ce1f1f;
+    border-radius: 3px;
+    padding: 2px 4px 2px 4px;
+    margin: 0px 4px 0px 0px;
+    position: relative;
+    z-index: 9;
+    vertical-align: middle;
+    color: #FFFFFF;
+    font-size: 17px;
+    text-align: center;
+    line-height: 20px;
+    border-bottom: 20px solid #ce1f1f;
+    height: 0;
+    width: 50px;
+    position: absolute;
+    left: 5px;
+}
+
+
+/* Discount stiker */
+.discount-sticker {
+  /*background-color: #FF3E30;*/
+  background-color:#ce1f1f;
+  color: #FFFCF7;
+  float: right;
+  font-size: 12pt;
+  font-weight: 700;
+  padding: 4px 8px 4px;
+  position: absolute;
+  text-align: center;
+  top: 50px;
+  z-index: 1;
+  padding-left: 10px;
+  /*right: 15px;*/
+  left:26px;
+}
+.discount-sticker::before {
+  border-style: solid;
+  border-width: 13px 9px;
+  content: "";
+  position: absolute;
+  /*border-color: #FF3E30 #FF3E30 rgb(255, 62, 48) transparent;*/
+  border-color: #ce1f1f #ce1f1f rgb(206, 31, 31) transparent;
+  top: 0px;
+  left: -10px;
+  height: 100%;
+}
+
+
+/* jQuery Countdown styles 2.0.0. */
+.is-opencartCountdown {
+  /*border: 1px solid #ccc;
+  background-color: #eee;*/
+  width: 100%;
+  margin: 0px 0px 0px 0px;
+  padding: 1px 0px 1px 0px;
+  /*display: inline-block;*/
+  background: #666 none repeat scroll 0 0;
+  color: #fff;
+  text-align:center;
+  
+}
+
+.us-product-info .is-opencartCountdown
+{
+width:220px;
+position:inherit;
+}
+
+.opencartCountdown-rtl {
+  direction: rtl;
+}
+.opencartCountdown-holding span {
+  color: #888;
+}
+.opencartCountdown-row {
+  clear: both;
+  width: 100%;
+  padding: 0px 2px;
+  display: block;
+  text-align: center;
+}
+.opencartCountdown-show1 .opencartCountdown-section {
+  width: 98%;
+}
+.opencartCountdown-show2 .opencartCountdown-section {
+  width: 48%;
+}
+.opencartCountdown-show3 .opencartCountdown-section {
+  width: 32.5%;
+}
+.opencartCountdown-show4 .opencartCountdown-section {
+  width: 24.5%;
+}
+.opencartCountdown-show5 .opencartCountdown-section {
+  width: 19.5%;
+}
+.opencartCountdown-show6 .opencartCountdown-section {
+  width: 16.25%;
+}
+.opencartCountdown-show7 .opencartCountdown-section {
+  width: 14%;
+}
+.opencartCountdown-section {
+  display: block;
+  float: left;
+  font-size: 75%;
+  text-align: center;
+  border-right: 1px solid #ccc;
+}
+
+
+
+.product-layout .opencartCountdown-section{
+font-size:10px;
+/*background:rgba(0, 0, 0, 0.7);*/
+}
+
+
+.product-layout .is-opencartCountdown
+{
+background:rgba(0, 0, 0, 0.7);
+    box-shadow: none;
+}
+
+.opencartCountdown-section:last-child {border:none;}
+.opencartCountdown-amount {font-size: 200%;}
+.opencartCountdown-period {display: block; font-size: 100%;}
+.opencartCountdown-descr {display: block; width: 100%;}

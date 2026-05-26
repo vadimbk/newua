@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>{NAME}<div class='uf'></div></name>
+    <code>{MOD}</code>
+    <id>{MOD}</id>
+    <version>{VERSION}</version>
+    <vqmver required="true">2.4.0</vqmver>
+    <author>{AUTHOR}</author>
+    <link>{LINK}</link>
+
+<file path="system/library/cache.php" error="skip">
+    <operation error="skip">
+        <search position="before"><![CDATA[public function __construct]]></search>
+        <add position="before"><![CDATA[
+	//SEO multilang vars
+	private $lm_registry;
+    public $lm_ = true;
+	//End of SEO multilang vars
+    ]]></add>
+    </operation>
+    
+	<operation error="skip">
+        <search position="before"><![CDATA[public function get(]]></search>
+        <add position="before"><![CDATA[
+// SEO langmark code - begin	
+    public function lm_setRegistry($lm_registry) {
+		$this->lm_registry = $lm_registry;
+	}
+
+    private function lm_setKey($lm_key) {
+		if (is_object($this->lm_registry)) {
+			if (isset($this->lm_registry->get('session')->data['langmark_multi_num'])) {
+				$langmark_multi_num = $this->lm_registry->get('session')->data['langmark_multi_num'];
+			} else {
+				$langmark_multi_num = 0;	
+			}
+            if (!$this->lm_registry->get('config')->get('config_language_id')) {
+                $config_language_id = 1;
+            } else {
+                $config_language_id = $this->lm_registry->get('config')->get('config_language_id');
+            }
+            if (!$this->lm_registry->get('config')->get('config_store_id')) {
+                $config_store_id = 0;
+            } else {
+                $config_store_id = $this->lm_registry->get('config')->get('config_store_id');
+            }            
+			$lm_key = $lm_key . '.' . $config_store_id . '.' . $config_language_id . '.' . $langmark_multi_num;	
+		} 
+        return $lm_key;
+    }
+// SEO langmark code - end
+    ]]></add>
+    </operation>
+
+
+
+    <operation error="skip">
+        <search regex="true" position="replace"><![CDATA[~(.*?)function (.*?)[(][\$]key(.*?)\{~]]></search>
+        <add position="replace"><![CDATA[
+$1function $2(\$key$3{
+
+		// SEO langmark code - begin
+		if (is_object($this->lm_registry) && isset($key)) {
+			$key = $this->lm_setKey($key);
+		} 
+		// SEO langmark code - en
+
+]]></add>
+    </operation>
+
+</file>
+
+</modification>

@@ -1,0 +1,76 @@
+{% if (category) %}
+	{% if (parent_item_class is defined) %}
+	{% set class = parent_item_class %}
+{% else %}
+	{% set class = '' %}
+{% endif %}
+
+{% if (category.active) %}
+	<div class="list-group-item list-group-item-warning {{ class }}">
+	  {% if (location == 'category') %}
+		{{ category.name }}<i class="fa fa-plus"></i>
+	  {% else %}
+		<strong>{{ category.name }}</strong><i class="fa fa-plus"></i>
+	  {% endif %}
+	</div>
+{% elseif (category.children) %}
+	<div class="list-group-item {{ class }}{% if category.children_active %} active-item{% endif %}" data-catid="{{ category.category_id }}">
+	  <strong>{{ category.name }}</strong><small>({{ category.total }})</small><i class="fa fa-plus"></i>
+	</div>
+{% else %}
+	<a href="{{ category['href'] }}" class="list-group-item {{ class }}">
+	  {% if (location == 'category') %}
+		{{ category.name }}
+	  {% else %}
+		<strong>{{ category.name }}</strong>
+	  {% endif %}
+	  {% if (category.total) %}
+		<small>({{ category.total }})</small>
+	  {% endif %}
+	</a>
+{% endif %}
+<div class="toggle-wrap hidewrap toggle-cat-{{ category.category_id }}{% if category.children_active %} active{% endif %}">
+{% if (collapse_child and collapse_child_limit > 0 and category.children|length > collapse_child_limit) %}
+	{% set hidden_child_categories = category.children[collapse_child_limit:] %}
+	{% set visible_child_categories = category.children[:collapse_child_limit] %}
+{% else %}
+	{% set hidden_child_categories = [] %}
+	{% set visible_child_categories = category.children %}
+{% endif %}
+
+{% for child in visible_child_categories %}
+	{% include 'default/template/extension/module/ocdepartment/category_child_item.twig' %}
+{% endfor %}
+
+{% if hidden_child_categories|length > 0 %}
+	{% for key,child in hidden_child_categories %}
+	{% if (child.active) %}
+		{% include 'default/template/extension/module/ocdepartment/category_child_item.twig' %}
+		{% set hidden_child_categories = { (key): false } + hidden_child_categories %}
+	{% endif %}
+	{% endfor %}
+{% endif %}
+
+{% if hidden_child_categories|length > 0 %}
+<div id="carousel-categories-{{ category.category_id }}" class="carousel slide ocd-child-carousel" data-ride="carousel" data-interval="false">
+  <div class="carousel-inner" role="listbox">
+    <div class="item active">
+      <a href="#carousel-categories-{{ category.category_id }}" role="button" class="list-group-item active text-center" data-slide="next">
+        {{ button_show }} {{ hidden_child_categories|length }} <span class="badge"><i class="fa fa-arrow-right"></i></span>
+      </a>
+    </div>
+    <div class="item">
+      <div class="collapse ocd-child-collapse" id="ocdepartment-hidden-child-categories-{{ category.category_id }}">
+        {% for child in hidden_child_categories %}
+        {% include 'default/template/extension/module/ocdepartment/category_child_item.twig' %}
+        {% endfor %}
+      </div>
+      <a href="#ocdepartment-hidden-child-categories-{{ category.category_id }}" role="button" class="list-group-item active text-center" data-toggle="collapse">
+        <span class="badge pull-left"><i class="fa fa-arrow-up"></i></span> {{ button_hide }}
+      </a>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endif %}
+</div>

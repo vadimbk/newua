@@ -1,0 +1,28 @@
+<div class="{{ page }}-status {{ page }}-status-{{ status['status_id'] }} {{ options[page]['status_display'] == 'inline' ? 'status-inline' : '' }} {{ status['type'] == 'text' ? "text " ~ status['text_type'] : "" }} " style="{{ status['type'] == 'text' and status['font_color'] is not empty ? " color:" ~ status['font_color'] ~ ";" : "" }}{{ status['type'] == 'text' and status['background_color'] is not empty ? " background-color:" ~ status['background_color'] ~ ";" : "" }}{{ status['type'] == 'text' and status['border_color'] is not empty ? " border: 2px solid " ~ status['border_color'] ~ ";" : "" }}">
+
+	{% set status_name = status['name_attribute'] is not empty ? status['name_attribute']['name'] ~': '~ status['name_attribute']['text'] : status['name'] %}	
+	{% set status_name = status['name_special'] is not empty ? '-' ~ status['name_special'] ~ '%' : status_name %}	
+	
+	{% if (status['url']) %} 
+		<a href="{{ status['url'] }}">
+	{% endif %}	
+    
+	{% if (status['type'] == 'image') %} 
+			
+	  <img src="{{ status['thumb'] }}" data-toggle="tooltip" title="{{ options[page]['name_display'] == 'tip' ? status_name : '' }}" alt="{{ status_name }}" />
+
+	  {% if (options[page]['name_display'] == 'next') %} 
+		  <span class="status-name">			
+		  	{{ status_name }} 
+	  	</span> 
+  	{% endif %} 
+	
+	{% else %}	
+	  {{ status_name }} 
+	{% endif %}	
+	
+	{% if (status['url']) %} 
+		</a>			
+	{% endif %}	
+
+</div>

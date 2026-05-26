@@ -1,0 +1,10 @@
+<div class="scrollbox categories">
+	{% for category in categories %}
+		<label class="level-{{ category.level }}">
+			{% for i in range(0, category.level) %}
+				{{ i >= 1 ? "<i>&mdash;</i>" : "" }}
+			{% endfor %}
+			<input type="checkbox" name="categories[]" value="{{ category.category_id }}" class="category" />{{ category.name }}
+		</label>
+	{% endfor %}
+</div>

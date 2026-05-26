@@ -1,0 +1,138 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-help"><i class="fa fa-info"></i></button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-upload"><i class="fa fa-upload"></i></button>
+<a href="{{ add }}" data-toggle="tooltip"
+			 title="{{ button_add }}" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+        <button type="button" data-toggle="tooltip" title="{{ button_delete }}" class="btn btn-danger" onclick="confirm('{{ text_confirm }}') ? $('#form-attribute').submit() : false;"><i class="fa fa-trash-o"></i></button>
+      </div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    {% if success %}
+    <div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-list"></i> {{ text_list }}</h3>
+      </div>
+      <div class="panel-body">
+
+		{{ filter_form }}
+		{{ getTabs }}
+			
+        <form action="{{ delete }}" method="post" enctype="multipart/form-data" id="form-attribute">
+          <div class="table-responsive">
+
+  <div class="form-group form-inline">
+    <label>{{ text_show }}</label>
+	<select name="filter_limit" class="form-control">
+	<option value=""></option>
+  {% for limita in  limits %}
+		<option value="{{ limita }}" {{ (limit == limita)?'selected="selected"':'' }}>{{ limita }}</option>
+  {% endfor %}
+	</select>
+  </div>
+			
+            <table class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <td style="width: 1px;" class="text-center"><input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" /></td>
+                  <td class="text-left">{% if sort == 'ad.name' %}
+                    <a href="{{ sort_name }}" class="{{ order|lower }}">{{ column_name }}</a>
+                    {% else %}
+                    <a href="{{ sort_name }}">{{ column_name }}</a>
+                    {% endif %}</td>
+<td class="text-left">Количество значений</td>
+			
+                  <td class="text-left">{% if sort == 'attribute_group' %}
+                    <a href="{{ sort_attribute_group }}" class="{{ order|lower }}">{{ column_attribute_group }}</a>
+                    {% else %}
+                    <a href="{{ sort_attribute_group }}">{{ column_attribute_group }}</a>
+                    {% endif %}</td>
+                  <td class="text-right">{% if sort == 'a.sort_order' %}
+                    <a href="{{ sort_sort_order }}" class="{{ order|lower }}">{{ column_sort_order }}</a>
+                    {% else %}
+                    <a href="{{ sort_sort_order }}">{{ column_sort_order }}</a>
+                    {% endif %}</td>
+                  <td class="text-right">{{ column_action }}</td>
+                </tr>
+              </thead>
+              <tbody>
+                {% if attributes %}
+                {% for attribute in attributes %}
+                <tr>
+                  <td class="text-center">{% if attribute.attribute_id in selected %}
+                    <input type="checkbox" name="selected[]" value="{{ attribute.attribute_id }}" checked="checked" />
+                    {% else %}
+                    <input type="checkbox" name="selected[]" value="{{ attribute.attribute_id }}" />
+                    {% endif %}</td>
+                  <td class="text-left">
+				{% for language_id,language in languages %}
+					{% if attribute['names'][language_id] is defined %}
+						<img src="{{ language['image'] }}" alt="{{ language['name'] }}" style="marfin-right:1em" /> 
+						<a class="fast-edit" href="#" data-type="text" data-pk="{{ attribute['attribute_id'] }}" 
+							data-name="name:{{ language_id }}:{{ attribute['names'][language_id] }}" 
+							data-url="{{ url_fast_edit }}" 
+							data-title="{{ column_name }}">{{ attribute['names'][language_id]}}</a>
+						<br>
+					{% endif %}
+				{% endfor %}
+			</td>
+<td class="text-left">
+			{% if attribute['totals'] %}
+				{% for language_id,language in languages %}
+				
+					{% if attribute['totals'][language_id] is defined %}
+						<img src="{{ language['image'] }}" alt="{{ language['name'] }}" style="marfin-right:1em" /> {{ attribute['totals'][language_id] }}<br>
+					{% endif %}
+				{% endfor %}
+			{% endif %}
+			</td>			
+                  <td class="text-left"><a class="fast-edit" href="#" data-type="select" data-pk="{{ attribute['attribute_id'] }}" data-name="attribute_group_id" data-url="{{ url_fast_edit }}" data-value="{{ attribute['attribute_group_id'] }}" data-source="{{ url_fast_get_group }}" data-title="{{ title_form_group }}">{{ attribute['attribute_group'] }}</a></td>
+                  <td class="text-right"><a class="fast-edit" href="#" data-type="text" data-pk="{{ attribute['attribute_id'] }}" data-name="sort_order" data-url="{{ url_fast_edit }}" data-title="{{ column_sort_order }}">{{ attribute['sort_order'] }}</a></td>
+                  <td class="text-right">
+			<button type="button" data-action="{{ attribute['attr_export'] }}" data-toggle="tooltip" title="{{ button_attr_export }}" onclick="window.location.href = '{{  attribute['attr_export'] }}'" class="btn btn-warning"><i class="fa fa-cloud-download"></i></button>
+			<button type="button" data-action="{{ attribute['attr_delete'] }}" data-toggle="tooltip" title="{{ button_attr_delete }}" onclick="confirm('{{ text_confirm_one_delete }}') ? location=$(this).attr('data-action') : false;" class="btn btn-warning"><i class="fa fa-trash-o"></i></button>
+			<a href="{{ attribute.edit }}"
+			 data-toggle="tooltip" title="{{ button_edit }}" class="btn btn-primary"><i class="fa fa-pencil"></i></a></td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                  <td class="text-center" colspan="5">{{ text_no_results }}</td>
+                </tr>
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+        </form>
+        <div class="row">
+          <div class="col-sm-6 text-left">{{ pagination }}</div>
+          <div class="col-sm-6 text-right">{{ results }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+]
+			{{ help }}
+			{{ import_form }}
+			
+{{ footer }}

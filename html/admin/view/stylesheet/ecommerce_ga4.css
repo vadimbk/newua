@@ -1,0 +1,199 @@
+h1 i {
+    color: #00bfff
+}
+
+.e-version {
+    font-size: 12px;
+    float: right
+}
+
+.e-author {
+    position: absolute;
+    font-size: 12px
+}
+
+.e-author a {
+    color: #a9a9a9
+}
+
+#google-translate {
+    float: left;
+    margin: -4px 15px 0px 15px;
+}
+
+.form-group.multi-store {
+    padding: 0px;
+}
+
+.loading-wrapper {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: #e8e8e8;
+    z-index: 99999999;
+    opacity: .6;
+    display: none;
+    left: 0;
+    top: 0
+}
+
+.loading-spinner {
+    font-size: 25px;
+    text-align: center;
+    color: #1c86ee;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    height: 100px
+}
+
+.message-wrapper {
+    position: fixed;
+    width: 100%;
+    z-index: 99999999;
+    top: 0;
+    left: 0;
+}
+
+.message-wrapper .alert {
+    border-radius: unset;
+    padding-top: 18px;
+    padding-bottom: 18px;
+    font-size: 14px;
+}
+.message-wrapper .progress {
+    height: 0.2rem;
+    margin-bottom: 0px;
+}
+
+.message-wrapper .progress .progress-bar {
+    height: 0.2rem;
+}
+
+.tabs-left {
+    border-bottom: none;
+    padding-top: 2px;
+    border-right: 1px solid #ddd
+}
+
+.tabs-left>li {
+    float: none;
+    margin-bottom: 2px;
+    margin-right: -1px
+}
+
+.tabs-left>li.active>a,
+.tabs-left>li.active>a:hover,
+.tabs-left>li.active>a:focus {
+    border-bottom-color: #ddd;
+    border-right-color: transparent
+}
+
+.tabs-left>li>a {
+    border-radius: 4px 0 0 4px;
+    margin-right: 0;
+    display: block
+}
+
+
+li.active .tab-icon {
+    color: #1e91cf
+}
+
+.fa-btn {
+    cursor: pointer;
+    font-size: 1.4em;
+    color: #696969;
+}
+
+.fa-toggle-off {
+    cursor: pointer;
+    color: #a9a9a9
+}
+
+.fa-toggle-on {
+    cursor: pointer;
+    color: #32cd32
+}
+.fa-toggle-on.blue {
+    color: #1c86ee;
+}
+
+.opacity-on {
+    opacity: .4 !important;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+.opacity-off {
+    opacity: 1 !important;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+.multi-store select {
+    background-color: #00bfff;
+    color: #ffffff;
+}
+
+.btn-group-type {
+    color: #666;
+    background-color: #fff;
+    border-color: #ddd;
+}
+
+.btn-group-type:active, .btn-group-type.active {
+    color: #fff;
+    background-color: #1e90ff;
+    border-color: #167ce0;
+}
+
+.form-horizontal .checkbox {
+    float: left;
+    min-width: 150px;
+}
+.form-horizontal .text-center .checkbox {
+    float: initial;
+}
+
+.text-info {
+    color: #333;
+    font-size: 12px;
+}
+
+.btn-group {
+    margin-bottom: 10px;
+}
+
+.input-group-addon label {
+    margin-bottom: 0px;
+}
+
+.well {
+    height: 108px;
+    overflow: auto;
+    margin-bottom: 10px;
+}
+
+textarea.form-control {
+    background-color: #696969;
+    color: #dcdcdc;
+    resize: vertical;
+}
+
+.control-label p {
+    font-size: 12px;
+    font-weight: 400;
+}
+
+fieldset legend p {
+    font-size: 12px;
+}
+
+fieldset legend.sub-legend {
+    font-size: 15px;
+}

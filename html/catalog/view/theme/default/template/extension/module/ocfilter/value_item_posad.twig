@@ -1,0 +1,18 @@
+
+{% if value.count > 4 %}
+{% if value.selected %}
+<label class="posad-selected">
+
+<span>{{ posad_title }}</span> - 
+<span>{{ value.name }}</span>
+
+</label>
+{% else %}
+<label>
+ <a href="{{ value.href }}">
+<span>{{ posad_title }}</span> - 
+<span>{{ value.name }}</span>
+</a>
+</label>
+{% endif %}
+{% endif %}

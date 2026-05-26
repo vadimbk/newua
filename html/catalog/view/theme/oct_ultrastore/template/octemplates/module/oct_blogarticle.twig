@@ -1,0 +1,74 @@
+{% if articles %}
+	{% if position == 'column_left' or position == 'column_right' %}
+	<div  class="us-module-column-box">
+		<div class="panel-heading">{{ heading_title }}</div>
+		<div id="us-blog-column-article{{ module }}" class="d-flex us-module-column-box-content">
+			{% for article in articles %}
+			<div class="us-item us-module-column-item">
+				<div class="us-news-block h-100 d-flex flex-column">
+					<div class="us-news-block-photo">
+						<div class="us-news-stickers-date">
+							{{ article.date_added }}
+						</div>
+						<a href="{{ article.href }}" title="{{ article.name }}" class="h-100 w-100"><img src="{{ article.thumb }}" class="w-100" alt="{{ article.name }}"></a>
+					</div>
+					<div class="us-news-block-cont d-flex flex-column justify-content-start h-100">
+						<a href="{{ article.href }}" class="us-news-block-title">
+							{{ article.name }}
+						</a>
+						<div class="us-news-block-text">
+							{{ article.description }}
+						</div>
+					</div>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+		<button type="button" id="us-blog-button-prev{{ module }}" class="us-column-module-btn us-column-module-prev"><i class="fas fa-chevron-left"></i></button>
+		<button type="button" id="us-blog-button-next{{ module }}" class="us-column-module-btn us-column-module-next"><i class="fas fa-chevron-right"></i></button>
+		<script>
+			octShowColumnProducts("us-blog-button-prev{{ module }}", "us-blog-button-next{{ module }}", "us-blog-column-article{{ module }}");
+		</script>
+	</div>
+	{% else %}
+	<div class="row row-padding-top m-r">
+		<div class="col-lg-12">
+			<div class="us-main-shop-title">
+				{{ heading_title }}
+			</div>
+		</div>
+	</div>
+	<div id="us-blog-article_{{ module }}" class="row us-blog-article-row">
+		{% for article in articles %}
+		<div class="col-lg-4 us-item">
+			<div class="us-news-block h-100 d-flex flex-column">
+				<div class="us-news-block-photo">
+					<div class="us-news-stickers-date">
+						{{ article.date_added }}
+					</div>
+					<a href="{{ article.href }}" title="{{ article.name }}" class="h-100 w-100"><img src="{{ article.thumb }}" class="w-100" alt="{{ article.name }}"></a>
+				</div>
+				<div class="us-news-block-cont d-flex flex-column justify-content-start h-100">
+					<a href="{{ article.href }}" class="us-news-block-title">
+						{{ article.name }}
+					</a>
+					<div class="us-news-block-text">
+						{{ article.description }}
+					</div>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+	<div class="row m-r">
+		<div class="col-lg-12">
+			<div class="us-news-block-button us-module-button">
+				<button id="us-news-block-btn{{ module }}" class="us-module-btn">{{ button_show_more }}</button>
+			</div>
+		</div>
+	</div>
+	<script>
+	octShowProducts("us-news-block-btn{{ module }}", "us-blog-article_{{ module }}", "3", "{{ limit }}");
+	</script>
+	{% endif %}
+{% endif %}

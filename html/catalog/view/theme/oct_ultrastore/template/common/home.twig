@@ -1,0 +1,64 @@
+{{ header }}
+<div id="common-home" class="container">
+    
+	
+	<div class="row">{{ column_left }}
+	    {% if column_left and column_right %}
+	    {% set class = 'col-sm-6' %}
+	    {% elseif column_left or column_right %}
+	    {% set class = 'col-sm-9' %}
+	    {% else %}
+	    {% set class = 'col-sm-12' %}
+	    {% endif %}
+	    <div id="content" class="{{ class }}">
+		
+		    <div class="us-content us-content-inform">
+			
+
+			
+			
+			{{ content_top }}
+			
+			
+			
+		      {{ description }}
+		    </div>
+	    </div>
+	    {{ column_right }}
+    </div>
+	{{ text_contetn_inform2 }}
+    {{ content_bottom }}
+</div>
+<script>
+/*if ($(window).width() < 767) {*/
+    window.onload = function(){
+        blok = document.getElementById('ta');
+        parent = blok.parentNode;
+        blok_height = blok.style.height ? blok.style.height : blok.offsetHeight;
+        
+        if(blok_height > 170){
+            blok.style.maxHeight = '170px';
+            link = parent.getElementsByClassName('read-next')[0];
+            link.style.display = 'inline'; 
+                        
+            link.onclick = function(){
+                                
+                if(blok.style.maxHeight){
+                   blok.style.maxHeight = ''
+                   link.innerHTML = 'Скрыть';
+                } else {
+                   blok.style.maxHeight = '170px';
+                   link.innerHTML = 'Читать далее...';                   
+                }
+                
+                return false;
+            } 
+        
+        }
+    }
+/*}	*/
+</script>
+<script>
+eS('sendEvent', 'MainPage');
+</script>
+{{ footer }}

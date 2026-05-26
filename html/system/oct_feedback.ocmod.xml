@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+	<code>oct_feedback</code>
+	<name>Octemplates - Feedback</name>
+	<version>1.0.0</version>
+	<author>Octemplates</author>
+	<link>https://octemplates.net/</link>
+	
+	<file path="catalog/controller/common/footer.php">
+    	<operation error="skip">
+			<search><![CDATA[$this->load->language('common/footer');]]></search>
+			<add position="after"><![CDATA[
+			if ($this->config->get('theme_oct_ultrastore_feedback_status')) {
+				$data['oct_feedback_data'] = $this->config->get('theme_oct_ultrastore_feedback_data');
+				$data['oct_popup_call_phone_status'] = $this->config->get('oct_popup_call_phone_status');
+			}
+			]]></add>
+    	</operation>
+	</file>
+	<file path="catalog/view/theme/oct_ultrastore/template/common/footer.twig">
+		<operation error="skip">
+			<search><![CDATA[<footer>]]></search>
+			<add position="after"><![CDATA[
+			{% if oct_feedback_data is defined and oct_feedback_data %}
+	        <div id="us_fixed_contact_substrate"></div>
+	        <div id="us_fixed_contact_button" class="d-flex align-items-center justify-content-center">
+		        <div class="us-fixed-contact-pulsation"></div>
+		        <div class="us-fixed-contact-icon d-flex align-items-center justify-content-center"><i class="far fa-comment-dots"></i><i class="fas fa-times d-none"></i></div>
+		        <div class="us-fixed-contact-dropdown d-flex flex-column align-items-start">
+		        	{% if (oct_feedback_data.feedback_messenger is defined and oct_feedback_data.feedback_messenger) and (oct_ultrastore_data.contact_messenger is defined and oct_ultrastore_data.contact_messenger) %}
+		            <a href="https://m.me/{{ oct_ultrastore_data.contact_messenger }}" target="_blank" class="us-fixed-contact-item d-flex align-items-center"><span class="us-fixed-contact-item-icon us-fixed-contact-messenger d-flex align-items-center justify-content-center"><i class="fab fa-facebook-messenger"></i></span><span>Messenger</span></a>
+		            {% endif %}
+		            
+		            {% if (oct_feedback_data.feedback_viber is defined and oct_feedback_data.feedback_viber) and (oct_ultrastore_data.contact_viber is defined and oct_ultrastore_data.contact_viber) %}
+		            <a href="viber://chat?number=+{{ oct_ultrastore_data.contact_viber }}" target="_blank" class="us-fixed-contact-item d-flex align-items-center us-fixed-contact-viber-desktop"><span class="us-fixed-contact-item-icon us-fixed-contact-viber d-flex align-items-center justify-content-center"><i class="fab fa-viber"></i></span><span>Viber</span></a>
+		            <a href="viber://add?number={{ oct_ultrastore_data.contact_viber }}" target="_blank" class="us-fixed-contact-item d-flex align-items-center us-fixed-contact-viber-mobile"><span class="us-fixed-contact-item-icon us-fixed-contact-viber d-flex align-items-center justify-content-center"><i class="fab fa-viber"></i></span><span>Viber</span></a>
+		            {% endif %}
+		            
+		            {% if (oct_feedback_data.feedback_telegram is defined and oct_feedback_data.feedback_telegram) and (oct_ultrastore_data.contact_telegram is defined and oct_ultrastore_data.contact_telegram) %}
+		            <a href="https://t.me/{{ oct_ultrastore_data.contact_telegram }}" target="_blank" class="us-fixed-contact-item d-flex align-items-center"><span class="us-fixed-contact-item-icon us-fixed-contact-telegram d-flex align-items-center justify-content-center"><i class="fab fa-telegram"></i></span><span>Telegram</span></a>
+		            {% endif %}
+		            
+		            {% if (oct_feedback_data.feedback_skype is defined and oct_feedback_data.feedback_skype) and (oct_ultrastore_data.contact_skype is defined and oct_ultrastore_data.contact_skype) %}
+		            <a href="skype:{{ oct_ultrastore_data.contact_skype }}?chat" class="us-fixed-contact-item d-flex align-items-center"><span class="us-fixed-contact-item-icon us-fixed-contact-skype d-flex align-items-center justify-content-center"><i class="fab fa-skype"></i></span><span>Skype</span></a>
+		            {% endif %}
+		            
+		            {% if (oct_feedback_data.feedback_whatsapp is defined and oct_feedback_data.feedback_whatsapp) and (oct_ultrastore_data.contact_whatsapp is defined and oct_ultrastore_data.contact_whatsapp) %}
+		            <a href="https://api.whatsapp.com/send?phone={{ oct_ultrastore_data.contact_whatsapp }}" target="_blank" class="us-fixed-contact-item d-flex align-items-center"><span class="us-fixed-contact-item-icon us-fixed-contact-whatsapp d-flex align-items-center justify-content-center"><i class="fab fa-whatsapp"></i></span><span>WhatsApp</span></a>
+		            {% endif %}
+		            
+		            {% if (oct_feedback_data.feedback_email is defined and oct_feedback_data.feedback_email) and (oct_ultrastore_data.contact_email is defined and oct_ultrastore_data.contact_email) %}
+		            <a href="mailto:{{ oct_ultrastore_data.contact_email }}" class="us-fixed-contact-item d-flex align-items-center"><span class="us-fixed-contact-item-icon us-fixed-contact-email d-flex align-items-center justify-content-center"><i class="far fa-envelope"></i></span><span>{{ oct_ultrastore_data.contact_email }}</span></a>
+		            {% endif %}
+		            
+		            {% if (oct_feedback_data.feedback_callback is defined and oct_feedback_data.feedback_callback) and (oct_popup_call_phone_status is defined and oct_popup_call_phone_status) %}
+		            <a id="uptocall-mini" href="javascript:;" onclick="octPopupCallPhone()" class="us-fixed-contact-item d-flex align-items-center"><span class="us-fixed-contact-item-icon us-fixed-contact-call d-flex align-items-center justify-content-center"><i class="fas fa-phone"></i></span><span>{{ oct_call_phone }}</span></a>
+		            {% endif %}
+		        </div>
+		    </div>
+		    {% endif %}
+			]]></add>
+    	</operation>
+	</file>
+</modification>

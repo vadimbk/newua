@@ -1,0 +1,318 @@
+{{ header }}
+<div id="information-information" class="container flex-container">
+	{{ oct_breadcrumbs }}
+	
+	<div class="content-top-box">{{ content_top }}</div>
+	<div class="row">{{ column_left }}
+	    {% if column_left and column_right %}
+	    {% set class = 'col-sm-6' %}
+	    {% elseif column_left or column_right %}
+	    {% set class = 'col-sm-9' %}
+	    {% else %}
+	    {% set class = 'col-sm-12' %}
+	    {% endif %}
+	    <div id="content" class="{{ class }}">
+		    <div class="us-content us-content-inform">
+		      <!--{{ description }}-->
+			  
+			  
+			  
+			  <div class="row">
+	
+<div class="col-lg-6 col-md-6 about-info">
+{{ company_text_1 }}
+
+<img alt="Radio Shop" src="image/data/design/company2.jpg" />
+<p>&nbsp;</p>
+</div>
+
+	
+		 <div class="col-sm-6 form-z">
+		
+		<form action="{{ action }}" method="post" enctype="multipart/form-data" class="form-horizontal">
+            <fieldset>
+              <legend class="comp-leg">{{ company_text_leg }}</legend>
+              <div class="row">
+			  <div class="form-group required col-sm-6">
+			  <div class="row">
+                <label class="col-sm-4 control-label z-label" for="input-name">{{ entry_name }}<span class="zv">*</span></label>
+                <div class="col-sm-8">
+                  <input type="text" name="name" value="{{ name }}" id="input-name" class="form-control z-input" />
+                  {% if error_name %}
+                  <div class="text-danger">{{ error_name }}</div>
+                  {% endif %}
+				  </div>
+                </div>
+              </div>
+			   
+			                <div class="form-group required col-sm-6">
+							<div class="row">
+                <label class="col-sm-4 control-label z-label" for="input-company">{{ entry_company }}<span class="zv">*</span></label>
+                <div class="col-sm-8">
+                  <input type="text" name="company" value="{{ company }}" id="input-company" class="form-control z-input" />
+                  {% if error_company %}
+                  <div class="text-danger">{{ error_company }}</div>
+                 {% endif %}
+				 </div>
+                </div>
+              </div>
+			  </div>
+			  			              
+				<div class="row">
+              <div class="form-group required col-sm-6">
+			  <div class="row">
+                <label class="col-sm-4 control-label z-label" for="input-email">{{ entry_email }}<span class="zv">*</span></label>
+                <div class="col-sm-8">
+                  <input type="text" name="email" value="{{ email }}" id="input-email" class="form-control z-input" />
+                  {% if error_email %}
+                  <div class="text-danger">{{ error_email }}</div>
+                  {% endif %}
+                </div>
+              </div>
+			  </div>
+			  
+			  
+			    <div class="form-group required col-sm-6">
+				<div class="row">
+                <label class="col-sm-4 control-label z-label" for="input-phone">{{ entry_phone }}<span class="zv">*</span></label>
+                <div class="col-sm-8">
+                  <input type="text" name="phone" value="{{ phone }}" id="input-phone" class="form-control z-input" />
+                  {% if error_phone %}
+                  <div class="text-danger">{{ error_phone }}</div>
+                  {% endif %}
+                </div>
+				</div>
+              </div>
+			  </div>
+			  
+			  
+<script src="catalog/view/javascript/jquery.maskedinput.min.js" type="text/javascript"></script>
+                <script type="text/javascript">
+                    $(document).ready(function() {
+						$("#input-phone").mask("{{ text_one_click_mask }}",{placeholder:" "});
+					});
+                </script>
+			  
+			  
+			  <div class="form-group" style="text-align:center;">
+			   <input type="button" class="button-mes" id="but_1" value="{{ company_but_1 }}" />
+			   <input type="button" class="button-mes" id="but_2" value="{{ company_but_2 }}" />
+			   <input type="button" class="button-mes" id="but_3" value="{{ company_but_3 }}" />
+			   <input type="button" class="button-mes" id="but_4" value="{{ company_but_4 }}" />
+			  </div>			  
+
+              <div class="form-group required">
+                <label class="col-sm-12 control-label z-label" for="input-enquiry">{{ entry_enquiry }}</label>
+                <div class="col-sm-12">
+                  <textarea name="enquiry" rows="8" id="input-enquiry" class="form-control">{{ enquiry }}</textarea>
+                  {% if error_enquiry %}
+                  <div class="text-danger">{{ error_enquiry }}</div>
+                  {% endif %}
+                </div>
+              </div>
+			  
+			  <script>
+$( 'input[type=button]#but_1 ' ).on('click', function(){
+            var cursorPos = $('#input-enquiry').prop('selectionStart');
+            var v = $('#input-enquiry').val();
+            var textBefore = v.substring(0,  cursorPos );
+            var textAfter  = v.substring( cursorPos, v.length );
+            $('#input-enquiry').val( '{{ company_val_1 }}');
+        });
+$( 'input[type=button]#but_2 ' ).on('click', function(){
+            var cursorPos = $('#input-enquiry').prop('selectionStart');
+            var v = $('#input-enquiry').val();
+            var textBefore = v.substring(0,  cursorPos );
+            var textAfter  = v.substring( cursorPos, v.length );
+            $('#input-enquiry').val('{{ company_val_2 }}');
+        });		
+$( 'input[type=button]#but_3 ' ).on('click', function(){
+            var cursorPos = $('#input-enquiry').prop('selectionStart');
+            var v = $('#input-enquiry').val();
+            var textBefore = v.substring(0,  cursorPos );
+            var textAfter  = v.substring( cursorPos, v.length );
+            $('#input-enquiry').val('{{ company_val_3 }}');
+        });		
+$( 'input[type=button]#but_4 ' ).on('click', function(){
+            var cursorPos = $('#input-enquiry').prop('selectionStart');
+            var v = $('#input-enquiry').val();
+            var textBefore = v.substring(0,  cursorPos );
+            var textAfter  = v.substring( cursorPos, v.length );
+            $('#input-enquiry').val('{{ company_val_4 }}');
+        });			
+</script>
+			  
+		   
+
+<div class="form-group">
+
+                    <label class="col-sm-6 control-label z-label" for="input-file">{{ company_text_file_1 }}</label>
+                      <div class="col-sm-6">
+                          <button type="button" id="button-upload" data-loading-text="Загрузка..." class="btn btn-default btn-block">
+                              <i class="fa fa-upload"></i> {{ company_text_file_2 }}
+                          </button>
+                          <input type="hidden" name="file" value="" />    
+                          <span class="success"></span>
+                      </div>    
+                  	</div>
+
+
+					<script type="text/javascript">
+
+            $('button[id^=\'button-upload\']').on('click', function() {
+                    var node = this;
+
+                    $('#form-upload').remove();
+
+                    $('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="file" name="file" /></form>');
+
+                    $('#form-upload input[name=\'file\']').trigger('click');
+
+                    $('#form-upload input[name=\'file\']').on('change', function() {
+                            $.ajax({
+                                    url: 'index.php?route=information/company/upload',
+                                    type: 'post',
+                                    dataType: 'json',
+                                    data: new FormData($(this).parent()[0]),
+                                    cache: false,
+                                    contentType: false,
+                                    processData: false,
+                                    beforeSend: function() {
+                                            $(node).button('loading');
+                                    },
+                                    complete: function() {
+                                            $(node).button('reset');
+                                    },
+                                    success: function(json) {
+                                            $('.text-danger').remove();
+
+                                            if (json['error']) {
+                                                    $(node).parent().find('input').after('<div class="text-danger">' + json['error'] + '</div>');
+                                            }
+
+                                            if (json['success']) {
+                                                    alert(json['success']);
+                                                    $(node).parent().find('.success').html(json['file']);
+                                                    $(node).parent().find('input').attr('value', json['file']);
+                                            }
+                                    },
+                                    error: function(xhr, ajaxOptions, thrownError) {
+                                            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                                    }
+                            });
+                    });
+            });
+            </script>          
+
+			
+			
+
+		    <div class="form-group row">
+                <label class="col-sm-6 control-label z-label" for="input-file">{{ company_text_file_3 }}</label>
+                <div class="col-sm-6" style="font-size:13px;">
+                   <input type="radio" name="option" value="{{ company_text_file_4 }}" checked> {{ company_text_file_4 }}<br> 
+				   <input type="radio" name="option" value="{{ company_text_file_5 }}" > {{ company_text_file_5 }}<br> 
+				   <input type="radio" name="option" value="{{ company_text_file_6 }}" > {{ company_text_file_6 }} 
+
+                </div>
+              </div>
+
+            {# START Custom Challenge Field #}
+              <div class="form-group required">
+                <label class="col-sm-12 control-label z-label" for="input-ua-challenge">Слава Україні!</label>
+                <div class="col-sm-12">
+                  <input type="text" name="ua_challenge" value="{{ ua_challenge }}" id="input-ua-challenge" class="form-control z-input" />
+                  {% if error_ua_challenge %}
+                  <div class="text-danger">{{ error_ua_challenge }}</div>
+                  {% endif %}
+                </div>
+              </div>
+              {# END Custom Challenge Field #}
+
+		  
+              <?php echo $captcha; ?>
+            </fieldset>
+            <div class="buttons" style="padding-top:5px;">
+              <div class="pull-right">
+                <button class="button-acc" type="submit"><span>{{ button_submit }}</span></button>
+              </div>
+            </div>
+          </form>
+		  
+		  
+
+
+
+		  
+</div>
+		
+		
+		
+<!--<div class="col-lg-5 col-md-5 about-image"><img alt="Radio Shop" src="image/data/design/company2.jpg" /></div>-->
+</div>
+
+{{ company_text_2 }}
+<p>&nbsp;</p>
+
+
+
+
+
+
+
+</div>
+		    </div>
+	    </div>
+	    {{ column_right }}
+    </div>
+    {{ content_bottom }}
+</div>
+<style>
+/*ul.spisok li:after {
+    left: 70px;
+}*/
+@media (min-width: 768px)
+{
+.form-horizontal .control-label
+{
+	    text-align: left;
+}
+}
+.zv
+{
+	margin-left: 3px;
+	color: red;
+}
+.form-z
+{
+	border: 2px solid #5f87d1;
+    padding: 8px 28px;
+}
+.buttons
+{
+	border-top: 1px solid #e5e5e5;
+    padding-top: 20px;
+}
+button.button-acc
+{
+	    color: #fff;
+    background: #5f87d1;
+    border: 2px solid #5f87d1;
+
+    padding: 7px;
+}
+button.button-acc:hover
+{
+	    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+.button-acc span
+{
+	font-size:16px;
+}
+.button-mes
+{
+	color: #fff;
+    background: #5f87d1;
+}
+</style> 
+{{ footer }}

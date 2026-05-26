@@ -1,0 +1,448 @@
+{#
+/*
+ * Shoputils
+ *
+ * ПРИМЕЧАНИЕ К ЛИЦЕНЗИОННОМУ СОГЛАШЕНИЮ
+ *
+ * Этот файл связан лицензионным соглашением, которое можно найти в архиве,
+ * вместе с этим файлом. Файл лицензии называется: LICENSE.3.0.x-3.1.x.RUS.TXT
+ * Так же лицензионное соглашение можно найти по адресу:
+ * https://opencart.market/LICENSE.3.0.x-3.1.x.RUS.TXT
+ * 
+ * =================================================================
+ * OPENCART/ocStore 3.0.x-3.1.x ПРИМЕЧАНИЕ ПО ИСПОЛЬЗОВАНИЮ
+ * =================================================================
+ *  Этот файл предназначен для Opencart/ocStore 3.0.x-3.1.x. Shoputils не
+ *  гарантирует правильную работу этого расширения на любой другой 
+ *  версии Opencart/ocStore, кроме Opencart/ocStore 3.0.x-3.1.x. 
+ *  Shoputils не поддерживает программное обеспечение для других 
+ *  версий Opencart/ocStore.
+ * =================================================================
+*/
+#}
+{{ header }}{{ column_left }} 
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form" class="btn btn-primary"><i class="fa fa-save"></i> {{ button_save }}</button>
+        <a href="{{ cancel }}" class="btn btn-default"><i class="fa fa-reply"></i> {{ button_cancel }}</a>
+      </div>
+      <h1><img src="view/image/shoputils_discounts.png"> {{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %} 
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %} 
+      </ul>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    {% if (error_warning) %} 
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }} 
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %} 
+
+    <div class="panel panel-default">
+      <div class="panel-body">
+      <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form" name="form" class="form-horizontal">
+          <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab_general" data-toggle="tab"><i class="fa fa-power-off"></i> {{ tab_general }}</a></li>
+            <li><a href="#tab_discount" data-toggle="tab"><i class="fa fa-superscript"></i> {{ tab_cumulative_discounts }}</a></li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane active" id="tab_general">
+      
+            <fieldset>
+              <legend>{{ text_setting_general }}</legend>
+
+              <div class="form-group required">
+                <label class="col-sm-2 control-label">{{ entry_status }}</label>
+                <div class="col-sm-10">
+                  <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                      <label class="btn btn-success{{ total_shoputils_cumulative_discounts_status ? ' active' : '' }}"><input type="radio" name="total_shoputils_cumulative_discounts_status" value="1"{{ total_shoputils_cumulative_discounts_status ? ' checked="checked"' : '' }} /> {{ text_enabled }}</label>
+                      <label class="btn btn-danger{{ not total_shoputils_cumulative_discounts_status ? ' active' : '' }}"><input type="radio" name="total_shoputils_cumulative_discounts_status" value="0"{{ not total_shoputils_cumulative_discounts_status ? ' checked="checked"' : '' }} /> {{ text_disabled }}</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-sort_order">{{ entry_sort_order }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="total_shoputils_cumulative_discounts_sort_order" value="{{ total_shoputils_cumulative_discounts_sort_order }}" placeholder="{{ entry_sort_order }}" id="input-sort_order" class="form-control" />
+                </div>
+              </div>
+
+              <legend>{{ text_setting_summ }}</legend>
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label">{{ entry_discount_order_statuses }}</label>
+                <div class="col-sm-10">
+                  <div class="scrollbox" style="min-height:250px;width:auto;">
+                    {% set class = 'even' %} 
+                      {% for status in order_statuses %} 
+                        {% set class = class == 'even' ? 'odd' : 'even' %} 
+                        <div class="{{ class }}">
+                          {% if (status.order_status_id in total_shoputils_cumulative_discounts_statuses) %} 
+                            <label><input type="checkbox" name="total_shoputils_cumulative_discounts_statuses[]"
+                                          value="{{ status.order_status_id }}" checked/>
+                              {{ status.name }}</label>
+                          {% else %} 
+                            <label><input type="checkbox" name="total_shoputils_cumulative_discounts_statuses[]"
+                                          value="{{ status.order_status_id }}"/>
+                              {{ status.name }}</label>
+                          {% endif %} 
+                        </div>
+                    {% endfor %} 
+                  </div>
+                  <a onclick="$(this).parent().find(':checkbox').prop('checked', true);">{{ text_select_all }}</a> / <a onclick="$(this).parent().find(':checkbox').prop('checked', false);">{{ text_unselect_all }}</a>
+                  <span class="help-block">{{ help_discount_order_statuses }}</span>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label">{{ entry_discount_totals }}</label>
+                <div class="col-sm-10">
+                  <div class="scrollbox" style="min-height:250px;width:auto;">
+                    {% set class = 'even' %} 
+                      {% for code,total in totals %} 
+                        {% set class = class == 'even' ? 'odd' : 'even' %} 
+                          <div class="{{ class }}">
+                            {% if (code in total_shoputils_cumulative_discounts_totals) %} 
+                              <label><input type="checkbox" name="total_shoputils_cumulative_discounts_totals[]"
+                                            value="{{ code }}" checked/>
+                                {{ total.name }} - {{ code }} ({{ total.status }})</label>
+                            {% else %} 
+                              <label><input type="checkbox" name="total_shoputils_cumulative_discounts_totals[]"
+                                           value="{{ code }}"/>
+                                {{ total.name }} - {{ code }} ({{ total.status }})</label>
+                            {% endif %} 
+                          </div>
+                      {% endfor %} 
+                  </div>
+                  <a onclick="$(this).parent().find(':checkbox').prop('checked', true);">{{ text_select_all }}</a> / <a onclick="$(this).parent().find(':checkbox').prop('checked', false);">{{ text_unselect_all }}</a>
+                  <span class="help-block">{{ help_discount_totals }}</span>
+                </div>
+              </div>
+
+              <legend>{{ text_setting_discount }}</legend>
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label">{{ entry_discount_disallow_categories }}</label>
+                <div class="col-sm-10">
+                  <div class="scrollbox" style="min-height:250px;width:auto;">
+                    {% set class = 'even' %} 
+                      {% for category in categories %} 
+                        {% set class = class == 'even' ? 'odd' : 'even' %} 
+                        <div class="{{ class }}">
+                          {% if (category.category_id in total_shoputils_cumulative_discounts_disallow_categories) %} 
+                            <label><input type="checkbox" name="total_shoputils_cumulative_discounts_disallow_categories[]" value="{{ category.category_id }}" checked="checked" />
+                              {{ category.name }}</label>
+                          {% else %} 
+                            <label><input type="checkbox" name="total_shoputils_cumulative_discounts_disallow_categories[]" value="{{ category.category_id }}" />
+                              {{ category.name }}</label>
+                          {% endif %} 
+                        </div>
+                      {% endfor %} 
+                  </div>
+                  <a onclick="$(this).parent().find(':checkbox').prop('checked', true);">{{ text_select_all }}</a> / <a onclick="$(this).parent().find(':checkbox').prop('checked', false);">{{ text_unselect_all }}</a>
+                  <span class="help-block">{{ help_discount_disallow_categories }}</span>
+                </div>
+              </div>
+
+              <legend>{{ text_setting_other }}</legend>
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label">{{ entry_description_before }}</label>
+                <div class="col-sm-10">
+                  {% for language in languages %} 
+                  <div class="input-group">
+                    {% set language_image = 'language/%1$s/%1$s.png' | format(language.code) %}
+                    <span class="input-group-addon"><img src="{{ language_image }}" title="{{ language.name }}" /></span>
+                    <textarea name="cmsdata[{{ language.language_id }}][description_before]"
+                              id="description_before{{ language.language_id }}"
+                              data-toggle="summernote" data-lang="{{ summernote }}"
+                              class="form-control">{{ cmsdata[language.language_id] is defined ? cmsdata[language.language_id].description_before : '' }}</textarea>
+                  </div>
+                  {% endfor %} 
+                  <span class="help-block">{{ help_description_before }}</span>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label">{{ entry_description_after }}</label>
+                <div class="col-sm-10">
+                  {% for language in languages %} 
+                  <div class="input-group">
+                    {% set language_image = 'language/%1$s/%1$s.png' | format(language.code) %} 
+                    <span class="input-group-addon"><img src="{{ language_image }}" title="{{ language.name }}" /></span>
+                    <textarea name="cmsdata[{{ language.language_id }}][description_after]"
+                              id="description_after{{ language.language_id }}"
+                              data-toggle="summernote" data-lang="{{ summernote }}"
+                              class="form-control">{{ cmsdata[language.language_id] is defined ? cmsdata[language.language_id].description_after : '' }}</textarea>
+                  </div>
+                  {% endfor %} 
+                  <span class="help-block">{{ help_description_after }}</span>
+                </div>
+              </div>
+
+            </fieldset>
+
+            </div><!-- </div id="tab_general"> -->
+            <div class="tab-pane" id="tab_discount">
+
+      <div class="table-responsive">
+        <table id="discount" class="table table-bordered table-hover table-striped">
+            <thead>
+            <tr>
+                <td width="30%" class="text-left" rowspan="2">{{ entry_discount_params }}<br/><span
+                        class="help-block">{{ help_discount_params }}</span></td>
+                <td class="text-left">{{ entry_discount_stores }}<br/><span
+                        class="help-block">{{ help_discount_stores }}</span></td>
+                <td width="15%" class="text-left" rowspan="2">{{ entry_discount_description }}<br/><span
+                        class="help-block">{{ help_discount_description }}</span></td>
+                <td class="text-left" rowspan="2"></td>
+            </tr>
+            <tr>
+                <td class="text-left">{{ entry_discount_customer_groups }}<br/><span
+                        class="help-block">{{ help_discount_customer_groups }}</span></td>
+            </tr>
+            </thead>
+            {% set discount_row = 0 %} 
+            {% for discount in discounts %} 
+               {% set discount_stores = discount.stores %} 
+               {% set discount_customer_groups = discount.customer_groups %} 
+               {% set discount_descriptions = discount.descriptions %} 
+ 
+            <tbody id="discount_row{{ discount_row }}">
+            <tr>
+                <td rowspan="2">
+                  <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <tr>
+                            <td class="text-left">
+                                <label class="control-label">{{ entry_discount_days }}</label>
+                                <input type="text" name="discounts[{{ discount_row }}][days]" value="{{ discount.days }}" class="form-control" />
+                                <span class="help-block">{{ help_discount_days }} 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-left">
+                                <label class="control-label">{{ entry_discount_summ }}</label>
+                                <input type="text" name="discounts[{{ discount_row }}][summ]" value="{{ discount.summ }}" class="form-control" />
+                                <span class="help-block">{{ help_discount_summ }} 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-left">
+                                <label class="control-label">{{ entry_discount_percent }}</label>
+                                <input type="text" name="discounts[{{ discount_row }}][percent]" value="{{ discount.percent }}" class="form-control" />
+                                <span class="help-block">{{ help_discount_percent }} 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-left">
+                                <label class="control-label" style="cursor:pointer;">
+                                <input type="checkbox" name="discounts[{{ discount_row }}][products_special]"
+                                                      {{ discount.products_special is defined and discount.products_special ? 'checked="checked"' : '' }} 
+                                                      value="1" />
+                                &nbsp;{{ entry_discount_products_special }}</label>
+                                <span class="help-block">{{ help_discount_products_special }} 
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-left">
+                                <label class="control-label">
+                                <input type="checkbox" name="discounts[{{ discount_row }}][first_order]"
+                                                      {{ discount.first_order is defined and discount.first_order ? 'checked="checked"' : '' }} 
+                                                      value="1" />
+                                &nbsp;{{ entry_discount_first_order }}</label>
+                                <span class="help-block">{{ help_discount_first_order }} 
+                            </td>
+                        </tr>
+                    </table>
+                  </div><!-- </div class="table-responsive"> -->
+                </td>
+                <td class="text-left">
+                    <div class="scrollbox">
+                        {% set class = 'even' %} 
+                        <div class="{{ class }}">
+                            {% if (0 in discount_stores) %} 
+                            <label><input type="checkbox" name="discounts[{{ discount_row }}][stores][0]"
+                                   value="0" checked/>
+                            {{ text_default }}</label>
+                            {% else %} 
+                            <label><input type="checkbox" name="discounts[{{ discount_row }}][stores][0]"
+                                   value="0"/>
+                            {{ text_default }}</label>
+                            {% endif %} 
+                        </div>
+                        {% for store in stores %} 
+                        {% set class = class == 'even' ? 'odd' : 'even' %} 
+                        <div class="{{ class }}">
+                            {% if (store.store_id in discount_stores) %} 
+                            <label><input type="checkbox" name="discounts[{{ discount_row }}][stores][]"
+                                   value="{{ store.store_id }}" checked/>
+                            {{ store.name }}</label>
+                            {% else %} 
+                            <label><input type="checkbox" name="discounts[{{ discount_row }}][stores][]; ?>"
+                                   value="{{ store.store_id }}"/>
+                            {{ store.name }}</label>
+                            {% endif %} 
+                        </div>
+                        {% endfor %} 
+                    </div>
+                    <a onclick="$(this).parent().find(':checkbox').prop('checked', true);">{{ text_select_all }}</a> / <a onclick="$(this).parent().find(':checkbox').prop('checked', false);">{{ text_unselect_all }}</a></td>
+                </td>
+                <td class="text-left" rowspan="2">
+                    {% for language in languages %} 
+                    {% set language_image = 'language/%1$s/%1$s.png' | format(language.code) %} 
+                    <span class="input-group-addon"><img src="{{ language_image }}" title="{{ language.name }}" /></span>
+                    <textarea type="text" cols="38" rows="4"
+                              name="discounts[{{ discount_row }}][descriptions][{{ language.language_id }}]">{{ discount_descriptions[language.language_id]}}</textarea>
+                    {% endfor %} 
+                </td>
+                <td class="text-center" rowspan="2"><a
+                        onclick="$('#discount_row{{ discount_row }}').remove();"
+                        class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i> {{ button_remove_discount }}</a></td>
+            </tr>
+            <tr>
+                <td class="text-left">
+                    <div class="scrollbox">
+                        {% set class = 'odd' %} 
+                        {% for customer_group in customer_groups %} 
+                        {% set class = class == 'even' ? 'odd' : 'even' %} 
+                        <div class="{{ class }}">
+                            {% if (customer_group.customer_group_id in discount_customer_groups) %} 
+                            <label><input type="checkbox"
+                                   name="discounts[{{ discount_row }}][customer_groups][]"
+                                   value="{{ customer_group.customer_group_id }}" checked/>
+                            {{ customer_group.name }}</label>
+                            {% else %} 
+                            <label><input type="checkbox"
+                                   name="discounts[{{ discount_row }}][customer_groups][]; ?>"
+                                   value="{{ customer_group.customer_group_id }}"/>
+                            {{ customer_group.name }}</label>
+                            {% endif %} 
+                        </div>
+                        {% endfor %} 
+                    </div>
+                    <a onclick="$(this).parent().find(':checkbox').prop('checked', true);">{{ text_select_all }}</a> / <a onclick="$(this).parent().find(':checkbox').prop('checked', false);">{{ text_unselect_all }}</a></td>
+                </td>
+            </tr>
+            </tbody>
+            {% set discount_row = discount_row + 1 %} {% endfor %}
+            <tfoot>
+            <tr>
+                <td colspan="3"><span class="help-block">{{ help_discount }}</span></td>
+                <td class="text-center"><a onclick="addDiscount();"
+                                      class="btn btn-success btn-sm"><i class="fa fa-plus"></i> {{ button_add_discount }}</a></td>
+            </tr>
+            </tfoot>
+        </table>
+      </div><!-- </div class="table-responsive">  -->
+
+            </div><!-- </div id="tab_discount"> -->
+          </div><!-- </div class="tab-content"> -->
+      </form>
+      {{ text_copyright | format(heading_title) }}
+
+
+      </div><!-- </div class="panel-body"> -->
+    </div><!-- </div class="panel panel-default"> -->
+  </div><!-- </div class="container-fluid"> -->
+</div><!-- </div id="content"> -->
+
+<script type="text/javascript"><!--
+  var discount_row = {{ discount_row }};
+
+  function addDiscount() {
+    var html  = '<tbody id="discount_row' + discount_row + '">';
+    html += '<tr>';
+    html += '<td rowspan="2">';
+      html += '<div class="table-responsive">';
+      html += '<table width="100%" class="list">';
+   
+      html += '<tr>';
+      html += '<td class="text-left"><label class="control-label">{{ entry_discount_days }}</label>';
+      html += '<input type="text" name="discounts[' + discount_row + '][days]" value="" class="form-control" />';
+      html += '<span class="help-block">{{ help_discount_days }}</td>';
+      html += '</tr>';
+
+      html += '<tr>';
+      html += '<td class="text-left"><label class="control-label">{{ entry_discount_summ }}</label>';
+      html += '<input type="text" name="discounts[' + discount_row + '][summ]" value="" class="form-control" />';
+      html += '<span class="help-block">{{ help_discount_summ }}</td>';
+      html += '</tr>';
+
+      html += '<tr>';
+      html += '<td class="text-left"><label class="control-label">{{ entry_discount_percent }}</label>';
+      html += '<input type="text" name="discounts[' + discount_row + '][percent]" value="" class="form-control" />';
+      html += '<span class="help-block">{{ help_discount_percent }}</td>';
+      html += '</tr>';
+
+      html += '<tr>';
+      html += '<td class="text-left"><label class="control-label" style="cursor:pointer;">';
+      html += '<input type="checkbox" name="discounts[' + discount_row + '][products_special]" value="1" />';
+      html += '&nbsp;{{ entry_discount_products_special }}</label><span class="help-block">{{ help_discount_products_special }}</td>';
+      html += '</tr>';
+
+      html += '<tr>';
+
+      html += '<td class="text-left"><label class="control-label" style="cursor:pointer;">';
+      html += '<input type="checkbox" name="discounts[' + discount_row + '][first_order]" value="1" />';
+      html += '&nbsp;{{ entry_discount_first_order }}</label><span class="help-block">{{ help_discount_first_order }}</td>';
+      html += '</tr>';
+
+      html += '</table>';
+      html += '</div>';
+    html += '</td>';
+      html += '<td class="text-left">';
+      html += '<div class="scrollbox">';
+      {% set class = 'even' %} 
+      html += '<div class="{{ class }}">';
+      html += '<label><input type="checkbox" name="discounts[' + discount_row + '][stores][]" value="0" checked />' + '{{ text_default }}</label>';
+      html += '</div>';
+      {% for store in stores %} 
+      {% set class = class == 'even' ? 'odd' : 'even' %} 
+      html += '<div class="{{ class }}">';
+      html += '<label><input type="checkbox" name="discounts[' + discount_row + '][stores][]" value="{{ store.store_id }}" />' + '{{ store.name }}</label>';
+      html += '</div>';
+      {% endfor %} 
+      html += '</div>';
+      html += '<a onclick="$(this).parent().find(\':checkbox\').prop(\'checked\', true);">{{ text_select_all }}</a> / <a onclick="$(this).parent().find(\':checkbox\').prop(\'checked\', false);">{{ text_unselect_all }}</a></td>';
+      html += '</td>';
+      html += '<td class="text-left" rowspan="2">';
+      {% for language in languages %} 
+      {% set language_image = 'language/%1$s/%1$s.png' | format(language.code) %} 
+      html += '<span class="input-group-addon"><img src="{{ language_image }}" title="{{ language.name }}" /></span>';
+      html += '<textarea type="text" cols="38" rows="4" name="discounts[' + discount_row + '][descriptions][{{ language.language_id }}]" >{{ entry_discount_description_default}}</textarea>';
+      {% endfor %} 
+      html += '</td>';
+    html += '<td class="text-center" rowspan="2"><a onclick="$(\'#discount_row' + discount_row + '\').remove();" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i> {{ button_remove_discount }}</a></td>';
+    html += '</tr>';
+      html += '<tr>';
+      html += '<td class="text-left">';
+      html += '<div class="scrollbox">';
+      {% set class = 'odd' %} 
+      {% for customer_group in customer_groups %} 
+      {% set class = class == 'even' ? 'odd' : 'even' %} 
+      html += '<div class="{{ class }}">';
+      html += '<label><input type="checkbox" name="discounts[' + discount_row + '][customer_groups][]" value="{{ customer_group.customer_group_id }}" checked />' + '{{ customer_group.name }}</label>';
+      html += '</div>';
+      {% endfor %} 
+      html += '</div>';
+      html += '<a onclick="$(this).parent().find(\':checkbox\').prop(\'checked\', true);">{{ text_select_all }}</a> / <a onclick="$(this).parent().find(\':checkbox\').prop(\'checked\', false);">{{ text_unselect_all }}</a></td>';
+      html += '</td>';
+      html += '</tr>';
+      html += '</tbody>';
+
+    $('#discount tfoot').before(html);
+
+    discount_row++;
+  }
+
+  $('#language a:first').tab('show');
+//--></script>
+{{ footer }}
