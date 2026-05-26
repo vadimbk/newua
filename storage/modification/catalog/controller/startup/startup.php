@@ -229,8 +229,5 @@ $this->url->addRewrite(new Simple\Rewrite($this->config));
 		
 		// Encryption
 		$this->registry->set('encryption', new Encryption($this->config->get('config_encryption')));
-		
-		// OpenBay Pro
-		$this->registry->set('openbay', new Openbay($this->registry));					
 	}
 }
