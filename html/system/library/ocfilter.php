@@ -844,19 +844,19 @@ final class OCFilter {
 		
 		if ((int)$this->getPath() == (int)$ocdepartment->getCatNovinkiId() && isset($this->request->get['filter_category_id'])){
 			if ($this->session->data['language'] == 'uk-ua')
-				return 'https://radio-shop.com.ua/uk/novinki'.(($url == '')?'':'?'.$url);
+				return HTTPS_SERVER.'uk/novinki'.(($url == '')?'':'?'.$url);
 			else	
-				return 'https://radio-shop.com.ua/novinki'.(($url == '')?'':'?'.$url);
+				return HTTPS_SERVER.'novinki'.(($url == '')?'':'?'.$url);
 		}elseif ((int)$this->getPath() == (int)$ocdepartment->getCatNovinkiId()){
 			if ($this->session->data['language'] == 'uk-ua')
-				return 'https://radio-shop.com.ua/uk/novinki'.(($url == '')?'':'?'.$url);
+				return HTTPS_SERVER.'uk/novinki'.(($url == '')?'':'?'.$url);
 			else	
-				return 'https://radio-shop.com.ua/novinki'.(($url == '')?'':'?'.$url);
+				return HTTPS_SERVER.'novinki'.(($url == '')?'':'?'.$url);
 		}elseif ((string)$this->getPath() == '777')
 			if ($this->session->data['language'] == 'uk-ua')
-				return 'https://radio-shop.com.ua/uk/special'.(($url == '')?'':'?'.$url);
+				return HTTPS_SERVER.'uk/special'.(($url == '')?'':'?'.$url);
 			else
-				return 'https://radio-shop.com.ua/special'.(($url == '')?'':'?'.$url);
+				return HTTPS_SERVER.'special'.(($url == '')?'':'?'.$url);
 		else
 			return $this->url->link('product/category', $url);
 		/* //fixed darkedhart */
