@@ -1,9 +1,6 @@
 <?php
 class ControllerProductCompare extends Controller {
 	public function index() {
-				
-			$this->load->model('module/ukrcredits');
-			
 		$this->load->language('product/compare');
 
 		$this->load->model('catalog/product');
@@ -50,9 +47,6 @@ class ControllerProductCompare extends Controller {
 
 		$data['review_status'] = $this->config->get('config_review_status');
 
-				
-			$this->load->model('module/ukrcredits');
-			
 		$data['products'] = array();
 
 		$data['attribute_groups'] = array();
@@ -162,7 +156,6 @@ class ControllerProductCompare extends Controller {
 					'product_id'   => $product_info['product_id'],
 					'name'         => $product_info['name'],
 					'thumb'        => $image,
-'ukrcredits_stickers' => isset($ukrcredits_stickers)?$ukrcredits_stickers:array(),
 					'price'        => $price,
 					'special'      => $special,
 					'description'  => utf8_substr(strip_tags(html_entity_decode($product_info['description'], ENT_QUOTES, 'UTF-8')), 0, 200) . '..',

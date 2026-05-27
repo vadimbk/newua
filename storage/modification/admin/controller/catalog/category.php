@@ -838,58 +838,6 @@ $results = $this->model_catalog_category->getOctBlogarticlesAutocomplete(
     $this->response->addHeader('Content-Type: application/json');
     $this->response->setOutput(json_encode($json));
 }		   
-
-	 public function productsAutocomplete(){
-		 $json=array();
-		 
-		 if(isset($this->request->get['filter_name'])||isset($this->request->get['filter_model'])||isset($this->request->get['filter_category_id'])){
-		 
-			 $this->load->model('catalog/product');
-			 
-			 if(isset($this->request->get['filter_name'])){
-				$filter_name=$this->request->get['filter_name'];
-			 } else {
-				$filter_name='';
-			 }
-			 
-			 if(isset($this->request->get['filter_model'])){
-				$filter_model=$this->request->get['filter_model'];
-			 } else {
-				$filter_model='';
-			 }
-			 if(isset($this->request->get['filter_category_id'])){
-				$filter_category=$this->request->get['filter_category_id'];
-			 } else {
-				$filter_category='';
-			 }
-			 if(isset($this->request->get['limit'])){
-				$limit=$this->request->get['limit'];
-			 } else {
-				$limit=5000;
-			 }
-			 
-			 $filter_data=array(
-				 'filter_category'=>$filter_category,
-				 'filter_name'=>$filter_name,
-				 'filter_model'=>$filter_model,
-				 'start'=>0,
-				 'limit'=>$limit
-			 );
-			 
-			 $results = $this->model_catalog_product->getProducts($filter_data);
-			 
-			 foreach($results as $result){
-				 $json[]=array(
-					 'product_id'=>$result['product_id'],
-					 'name'=>strip_tags(html_entity_decode($result['name'],ENT_QUOTES,'UTF-8')),
-					 'model'=>$result['model'],
-					 'price'=>$result['price']
-				 );
-			 }
-		 }
-		 $this->response->setOutput(json_encode($json));
-	 }
-			
 	public function autocomplete() {
 		$json = array();
 

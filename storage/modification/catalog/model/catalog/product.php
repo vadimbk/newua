@@ -31,13 +31,6 @@ class ModelCatalogProduct extends Model {
 		$this->db->query("UPDATE " . DB_PREFIX . "product SET viewed = (viewed + 1) WHERE product_id = '" . (int)$product_id . "'");
 	}
 
-
-	public function getProductUkrcredits($product_id) {
-		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "product_ukrcredits WHERE product_id = '" . (int)$product_id . "'");
-
-		return $query->row;
-	}
-			
 	public function getProduct($product_id) {
 
 $this->load->model('extension/module/product_status');

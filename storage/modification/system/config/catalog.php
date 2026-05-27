@@ -39,24 +39,10 @@ $_['action_pre_action']  = array(
 
 // Action Events
 $_['action_event'] = array(
-
-			'model/*/before' => array(
-				'module/ukrcredits/beforemodel'
-			),
-			'model/*/after' => array(
-				'module/ukrcredits/aftermodel'
-			),
-			
 	'controller/*/before' => array(
-
-			'module/ukrcredits/controller',
-			
 		'event/language/before'
 	),
 	'controller/*/after' => array(
-
-			'module/ukrcredits/controller',
-			
 		'event/language/after'
 	),	
 	'view/*/before' => array(

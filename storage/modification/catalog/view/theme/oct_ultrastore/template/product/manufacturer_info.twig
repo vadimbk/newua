@@ -124,15 +124,7 @@
 							<div class="us-module-img">
 								<a href="{{ product.href }}" {% if ee_tracking and ee_click %}onclick="ee_product.click('{{ product.product_id }}', '{{ product.ee_position }}', '{{ ee_type }}')"{% endif %}>
 								{% if product.thumb %}
-										
-<div class="ukrcreditsticker">
-{% for sticker in product.ukrcredits_stickers %}
-	{% if sticker %}
-	<div class="ukrcredit{{ sticker.type}}" title="{{ sticker.mounthprice_text}}" data-toggle="tooltip"><span>{{ sticker.partsCount}}</span></div>
-	{% endif %}
-{% endfor %}
-</div>
-<img src="{{ product.thumb }}" class="img-fluid" alt="{{ product.name }}" title="{{ product.name }}" />
+										<img src="{{ product.thumb }}" class="img-fluid" alt="{{ product.name }}" title="{{ product.name }}" />
 										{% else %}
 										<img src="/image/placeholder.png" class="img-fluid" alt="{{ product.name }}" title="{{ product.name }}" />
 										{% endif %}

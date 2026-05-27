@@ -45,15 +45,6 @@ class ControllerProductProduct extends Controller {
 
 			$data['oct_popup_found_cheaper_status'] = $this->config->get('oct_popup_found_cheaper_status');
 			
-				
-			$this->load->model('module/ukrcredits');
-			
-
-			$this->document->addScript ('catalog/view/javascript/jquery/jquery-ui/jquery-ui.min.js');
-			$this->document->addScript ('catalog/view/javascript/jquery/jquery-ui/jquery.ui.touch-punch.min.js');
-			$this->document->addStyle ('catalog/view/javascript/jquery/magnific/magnific-popup.css');
-			$this->document->addScript ('catalog/view/javascript/jquery/magnific/jquery.magnific-popup.min.js');
-			
 		$this->load->language('product/product');
 $this->load->model('setting/setting');
 
@@ -300,10 +291,6 @@ $data['promotion']  = $promotions['product'];
 					$data['product_sticker_colors'] = $oct_stickers_data['sticker_colors'];
 				}
 			}
-			
-				
-			$this->load->model('module/ukrcredits');
-			$data['ukrcredits_stickers'] = $this->model_module_ukrcredits->checkproduct($product_info);
 			
 			$url = '';
 
@@ -975,9 +962,6 @@ $data['promotion']  = $promotions['product'];
 			$data['oct_attributs'] = (isset($oct_ultrastore_data['product_atributes']) && $oct_ultrastore_data['product_atributes']) ? $this->model_catalog_product->getOctProductAttributes($this->request->get['product_id'], $limit_attr) : '';
 			
 
-				
-			$this->load->model('module/ukrcredits');
-			
 
 			if ($this->config->get('config_checkout_guest') && $this->config->get('oct_popup_purchase_status')) {
 				$data['oct_popup_purchase_status'] = $this->config->get('oct_popup_purchase_status');
@@ -1097,9 +1081,6 @@ $data['promotion']  = $promotions['product'];
 				
 				/*$price_nds=(float)$price*1.2;*/
 
-				
-				$ukrcredits_stickers = $this->model_module_ukrcredits->checkproduct($result);
-			
 
 				if ($result['quantity'] <= 0) {
 					$stock = $result['stock_status'];
@@ -1166,7 +1147,6 @@ $data['promotion']  = $promotions['product'];
 			'you_save'	  	=> $result['you_save'],
 			
 					'thumb'       => $image,
-'ukrcredits_stickers' => isset($ukrcredits_stickers)?$ukrcredits_stickers:array(),
 					'name'        => $result['name'],
 					'description' => utf8_substr(trim(strip_tags(html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8'))), 0, $this->config->get('theme_' . $this->config->get('config_theme') . '_product_description_length')) . '..',
 					'price'       => $price,
@@ -1266,29 +1246,6 @@ $data['promotion']  = $promotions['product'];
 			$data['content_top'] = $this->load->controller('common/content_top');
 			$data['content_bottom'] = $this->load->controller('common/content_bottom');
 			$data['footer'] = $this->load->controller('common/footer');
-
-	if (version_compare(VERSION,'3.0','>=')) {
-		if ($this->config->get('payment_ukrcredits_status')) {
-			$data['ukrcredits_status'] = true;
-			$data['ukrcredits'] = str_replace("\n", '', $this->load->controller('module/ukrcredits'));
-			$data['ukrcredits_selector_button'] = $this->config->get('payment_ukrcredits_settings')['selector_button'];
-			$data['ukrcredits_selector_block'] = $this->config->get('payment_ukrcredits_settings')['selector_block'];
-			$data['ukrcredits_css_custom'] = $this->config->get('payment_ukrcredits_settings')['css_custom'];
-		} else {
-			$data['ukrcredits_status'] = false;
-		}
-	} else {
-		if ($this->config->get('ukrcredits_status')) {
-			$data['ukrcredits_status'] = true;
-			$data['ukrcredits'] = str_replace("\n", '', $this->load->controller('module/ukrcredits'));
-			$data['ukrcredits_selector_button'] = $this->config->get('ukrcredits_settings')['selector_button'];
-			$data['ukrcredits_selector_block'] = $this->config->get('ukrcredits_settings')['selector_block'];
-			$data['ukrcredits_css_custom'] = $this->config->get('ukrcredits_settings')['css_custom'];
-		} else {
-			$data['ukrcredits_status'] = false;
-		}	
-	}
-			
 
 // Full IndeX →
 			$fx['data'] = $data;
@@ -1410,29 +1367,6 @@ $data['promotion']  = $promotions['product'];
 			$data['content_top'] = $this->load->controller('common/content_top');
 			$data['content_bottom'] = $this->load->controller('common/content_bottom');
 			$data['footer'] = $this->load->controller('common/footer');
-
-	if (version_compare(VERSION,'3.0','>=')) {
-		if ($this->config->get('payment_ukrcredits_status')) {
-			$data['ukrcredits_status'] = true;
-			$data['ukrcredits'] = str_replace("\n", '', $this->load->controller('module/ukrcredits'));
-			$data['ukrcredits_selector_button'] = $this->config->get('payment_ukrcredits_settings')['selector_button'];
-			$data['ukrcredits_selector_block'] = $this->config->get('payment_ukrcredits_settings')['selector_block'];
-			$data['ukrcredits_css_custom'] = $this->config->get('payment_ukrcredits_settings')['css_custom'];
-		} else {
-			$data['ukrcredits_status'] = false;
-		}
-	} else {
-		if ($this->config->get('ukrcredits_status')) {
-			$data['ukrcredits_status'] = true;
-			$data['ukrcredits'] = str_replace("\n", '', $this->load->controller('module/ukrcredits'));
-			$data['ukrcredits_selector_button'] = $this->config->get('ukrcredits_settings')['selector_button'];
-			$data['ukrcredits_selector_block'] = $this->config->get('ukrcredits_settings')['selector_block'];
-			$data['ukrcredits_css_custom'] = $this->config->get('ukrcredits_settings')['css_custom'];
-		} else {
-			$data['ukrcredits_status'] = false;
-		}	
-	}
-			
 
 // Full IndeX →
 			$fx['data'] = $data;

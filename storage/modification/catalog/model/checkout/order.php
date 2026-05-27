@@ -288,29 +288,6 @@ class ModelCheckoutOrder extends Model {
 		return $query->rows;
 	}	
 			
-
-	public function setUkrcreditsOrderId($order_id, $paymenttype, $mono_order_id, $mono_order_status, $mono_order_substatus = false) {
-		$order_info = $this->getOrder($order_id);
-
-		if ($order_info && !$order_info['order_status_id']) {
-			$this->db->query("INSERT INTO " . DB_PREFIX . "order_ukrcredits SET order_id = '" . (int)$order_id . "', ukrcredits_payment_type = '" . $this->db->escape($paymenttype) . "', ukrcredits_order_id = '" . $this->db->escape($mono_order_id) . "', ukrcredits_order_status = '" . $this->db->escape($mono_order_status) . "', ukrcredits_order_substatus = '" . $this->db->escape($mono_order_substatus) . "'");
-	 	}		
-	}			
-	public function getOrderMb($mono_order_id) {
-		$ordermb_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "order_ukrcredits` WHERE ukrcredits_order_id = '" . $this->db->escape($mono_order_id) . "'");
-		if ($ordermb_query->num_rows) {
-			return $ordermb_query->row;			
-		} else {
-			return false;
-		}
-	}
-	public function updateUkrcreditsOrderMono($order_id, $state, $substate) {
-		$this->db->query("UPDATE " . DB_PREFIX . "order_ukrcredits SET ukrcredits_order_status = '" . $this->db->escape($state) . "', ukrcredits_order_substatus = '" . $this->db->escape($substate) . "' WHERE order_id = '" . (int)$order_id . "'");
-	}
-	public function updateUkrcreditsOrderPrivat($order_id, $privat_order_status) {
-		$this->db->query("UPDATE " . DB_PREFIX . "order_ukrcredits SET ukrcredits_order_status = '" . $this->db->escape($privat_order_status) . "' WHERE order_id = '" . (int)$order_id . "'");
-	}
-			
 	public function addOrderHistory($order_id, $order_status_id, $comment = '', $notify = false, $override = false) {
 		$order_info = $this->getOrder($order_id);
 		

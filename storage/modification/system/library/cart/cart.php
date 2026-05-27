@@ -95,11 +95,6 @@ class Cart {
                 
       
 	public function getProducts() {
-
-				$type = version_compare(VERSION,'3.0','>=') ? 'payment_' : '';
-				$typetotal = version_compare(VERSION,'3.0','>=') ? 'total_' : '';
-				$setting = $this->config->get($type.'ukrcredits_settings');
-			
 		$product_data = array();
 
 		$cart_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "cart WHERE api_id = '" . (isset($this->session->data['api_id']) ? (int)$this->session->data['api_id'] : 0) . "' AND customer_id = '" . (int)$this->customer->getId() . "' AND session_id = '" . $this->db->escape($this->session->getId()) . "'");
@@ -246,70 +241,14 @@ class Cart {
 				$product_discount_query = $this->db->query("SELECT price FROM " . DB_PREFIX . "product_discount WHERE product_id = '" . (int)$cart['product_id'] . "' AND customer_group_id = '" . (int)$this->config->get('config_customer_group_id') . "' AND quantity <= '" . (int)$discount_quantity . "' AND ((date_start = '0000-00-00' OR date_start < NOW()) AND (date_end = '0000-00-00' OR date_end > NOW())) ORDER BY quantity DESC, priority ASC, price ASC LIMIT 1");
 
 				if ($product_discount_query->num_rows) {
-					
-					if	(
-							(	
-								isset($this->session->data['payment_method']['code']) && 
-								(
-								($this->session->data['payment_method']['code'] == 'ukrcredits_pp' && !$setting['pp_special'])
-								|| 
-								($this->session->data['payment_method']['code'] == 'ukrcredits_ii' && !$setting['ii_special'])
-								||
-								($this->session->data['payment_method']['code'] == 'ukrcredits_mb' && !$setting['mb_special'])
-								)
-							)
-							||
-							(
-								isset($this->session->data['payment_method']['code']) 
-								&& 
-								$this->session->data['payment_method']['code'] != 'ukrcredits_pp'
-								&&
-								$this->session->data['payment_method']['code'] != 'ukrcredits_ii'
-								&&
-								$this->session->data['payment_method']['code'] != 'ukrcredits_mb'
-							)
-							||
-							!isset($this->session->data['payment_method']['code'])
-						)
-					{
-						$price = $product_discount_query->row['price'];
-					}
-			
+					$price = $product_discount_query->row['price'];
 				}
 
 				// Product Specials
 				$product_special_query = $this->db->query("SELECT price FROM " . DB_PREFIX . "product_special WHERE product_id = '" . (int)$cart['product_id'] . "' AND customer_group_id = '" . (int)$this->config->get('config_customer_group_id') . "' AND ((date_start = '0000-00-00' OR date_start < NOW()) AND (date_end = '0000-00-00' OR date_end > NOW())) ORDER BY priority ASC, price ASC LIMIT 1");
 
 				if ($product_special_query->num_rows) {
-					
-					if	(
-							(	
-								isset($this->session->data['payment_method']['code']) && 
-								(
-								($this->session->data['payment_method']['code'] == 'ukrcredits_pp' && !$setting['pp_special'])
-								|| 
-								($this->session->data['payment_method']['code'] == 'ukrcredits_ii' && !$setting['ii_special'])
-								||
-								($this->session->data['payment_method']['code'] == 'ukrcredits_mb' && !$setting['mb_special'])
-								)
-							)
-							||
-							(
-								isset($this->session->data['payment_method']['code']) 
-								&& 
-								$this->session->data['payment_method']['code'] != 'ukrcredits_pp'
-								&&
-								$this->session->data['payment_method']['code'] != 'ukrcredits_ii'
-								&&
-								$this->session->data['payment_method']['code'] != 'ukrcredits_mb'
-							)
-							||
-							!isset($this->session->data['payment_method']['code'])
-						)
-					{
-						$price = $product_special_query->row['price'];
-					}
-			
+					$price = $product_special_query->row['price'];
 				}
 
 				// Reward Points
@@ -361,55 +300,6 @@ class Cart {
 				}
 
 
-				$ucmarkup = 1;	
-				if (!$this->config->get($typetotal.'totalukrcredits_status')) {
-					if (isset($this->session->data['payment_method']['code'])) {
-						if ($this->session->data['payment_method']['code'] == 'ukrcredits_pp') {
-							$ukrcredits_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "product_ukrcredits WHERE product_id = '" . (int)$product_query->row['product_id'] . "'");
-							if (isset($ukrcredits_query->row)) {
-								if (isset($ukrcredits_query->row['markup_pp']) && $ukrcredits_query->row['markup_pp'] != 0) {
-									$ucmarkup = $ukrcredits_query->row['markup_pp'];
-								} else {
-									$ucmarkup = $setting['pp_markup'];
-								}
-							}
-							if ($setting['pp_markup_type'] == 'custom') {
-								$ukrcredits_pp_sel = isset($this->session->data['ukrcredits_pp_sel'])?$this->session->data['ukrcredits_pp_sel']:1;
-								$ucmarkup = ($setting['pp_markup_custom_PP'][$ukrcredits_pp_sel] + $setting['pp_markup_acquiring']) / 100 + 1;
-							}
-						}
-						if ($this->session->data['payment_method']['code'] == 'ukrcredits_ii') {
-							$ukrcredits_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "product_ukrcredits WHERE product_id = '" . (int)$product_query->row['product_id'] . "'");
-							if (isset($ukrcredits_query->row)) {
-								if (isset($ukrcredits_query->row['markup_ii']) && $ukrcredits_query->row['markup_ii'] != 0) {
-									$ucmarkup = $ukrcredits_query->row['markup_ii'];
-								} else {
-									$ucmarkup = $setting['ii_markup'];
-								}
-							}
-							if ($setting['ii_markup_type'] == 'custom') {
-								$ukrcredits_ii_sel = isset($this->session->data['ukrcredits_ii_sel'])?$this->session->data['ukrcredits_ii_sel']:1;
-								$ucmarkup = ($setting['ii_markup_custom_II'][$ukrcredits_ii_sel] + $setting['ii_markup_acquiring']) / 100 + 1;
-							}
-						}
-						if ($this->session->data['payment_method']['code'] == 'ukrcredits_mb') {
-							$ukrcredits_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "product_ukrcredits WHERE product_id = '" . (int)$product_query->row['product_id'] . "'");
-							if (isset($ukrcredits_query->row)) {
-								if (isset($ukrcredits_query->row['markup_mb']) && $ukrcredits_query->row['markup_mb'] != 0) {
-									$ucmarkup = $ukrcredits_query->row['markup_mb'];
-								} else {
-									$ucmarkup = $setting['mb_markup'];
-								}
-							}
-							if ($setting['mb_markup_type'] == 'custom') {
-								$ukrcredits_mb_sel = isset($this->session->data['ukrcredits_mb_sel'])?$this->session->data['ukrcredits_mb_sel']:2;
-								$ucmarkup = ($setting['mb_markup_custom_MB'][$ukrcredits_mb_sel] + $setting['mb_markup_acquiring']) / 100 + 1;
-							}
-						}
-					}
-				}
-			
-
 
 				if ($this->isGift($cart['cart_id'])) {
 					$price = $option_price = 0;
@@ -430,8 +320,8 @@ class Cart {
 					'minimum'         => $product_query->row['minimum'],
 					'subtract'        => $product_query->row['subtract'],
 					'stock'           => $stock,
-					'price'           => ($price + $option_price) * $ucmarkup,
-					'total'           => ($price + $option_price) * $ucmarkup * $cart['quantity'],
+					'price'           => ($price + $option_price),
+					'total'           => ($price + $option_price) * $cart['quantity'],
 					'reward'          => $reward * $cart['quantity'],
 					'points'          => ($product_query->row['points'] ? ($product_query->row['points'] + $option_points) * $cart['quantity'] : 0),
 					'tax_class_id'    => $product_query->row['tax_class_id'],

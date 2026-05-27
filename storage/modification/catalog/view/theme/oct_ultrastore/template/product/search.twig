@@ -161,15 +161,7 @@
 	 {% endif %}
     {# Bulk Specials Editor #}
 							<div class="us-module-img">
-								<a href="{{ product.href }}" {% if ee_tracking and ee_click %}onclick="ee_product.click('{{ product.product_id }}', '{{ product.ee_position }}', '{{ ee_type }}')"{% endif %}>
-<div class="ukrcreditsticker">
-{% for sticker in product.ukrcredits_stickers %}
-	{% if sticker %}
-	<div class="ukrcredit{{ sticker.type}}" title="{{ sticker.mounthprice_text}}" data-toggle="tooltip"><span>{{ sticker.partsCount}}</span></div>
-	{% endif %}
-{% endfor %}
-</div>
-<img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" /></a>
+								<a href="{{ product.href }}" {% if ee_tracking and ee_click %}onclick="ee_product.click('{{ product.product_id }}', '{{ product.ee_position }}', '{{ ee_type }}')"{% endif %}><img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" /></a>
 								{{ product['stickers'] is defined ? product['stickers'] : '' }}
 							</div>
 							<div class="us-module-caption d-flex flex-column">

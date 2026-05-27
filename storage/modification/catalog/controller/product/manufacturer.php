@@ -17,9 +17,6 @@ class ControllerProductManufacturer extends Controller {
 				}
 			}
 			
-				
-			$this->load->model('module/ukrcredits');
-			
 		$this->load->language('product/manufacturer');
 
 		$this->load->model('catalog/manufacturer');
@@ -353,9 +350,6 @@ class ControllerProductManufacturer extends Controller {
 
 			$data['compare'] = $this->url->link('product/compare');
 
-				
-			$this->load->model('module/ukrcredits');
-			
 			$data['products'] = array();
 
 			$data['oct_popup_view_status'] = $this->config->get('oct_popup_view_status');
@@ -476,9 +470,6 @@ class ControllerProductManufacturer extends Controller {
 					$rating = false;
 				}
 
-				
-				$ukrcredits_stickers = $this->model_module_ukrcredits->checkproduct($result);
-			
 
 			$oct_atributes = false;
 				
@@ -565,7 +556,6 @@ class ControllerProductManufacturer extends Controller {
 
 			'oct_atributes'       => $oct_atributes,
 			
-'ukrcredits_stickers' => isset($ukrcredits_stickers)?$ukrcredits_stickers:array(),
 					'name'        => $result['name'],
 					
 			'description' => (isset($oct_ultrastore_data['category_product_desc']) && $oct_ultrastore_data['category_product_desc'] == 'on') ? utf8_substr(trim(strip_tags(html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8'))), 0, $this->config->get('theme_' . $this->config->get('config_theme') . '_product_description_length')) . '..' : false,

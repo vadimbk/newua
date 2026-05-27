@@ -31,9 +31,6 @@ class ControllerExtensionModuleLatest extends Controller {
 
 		$this->load->model('tool/image');
 
-				
-			$this->load->model('module/ukrcredits');
-			
 
 			$data['oct_popup_view_status'] = $this->config->get('oct_popup_view_status');
 			
@@ -148,9 +145,6 @@ class ControllerExtensionModuleLatest extends Controller {
 					$rating = false;
 				}
 
-				
-				$ukrcredits_stickers = $this->model_module_ukrcredits->checkproduct($result);
-			
 
 				if ($result['quantity'] <= 0) {
 					$stock = $result['stock_status'];
@@ -204,7 +198,6 @@ class ControllerExtensionModuleLatest extends Controller {
 			'you_save'		=> $result['you_save'],
 			
 					'thumb'       => $image,
-'ukrcredits_stickers' => isset($ukrcredits_stickers)?$ukrcredits_stickers:array(),
 					'name'        => $result['name'],
 					'description' => utf8_substr(trim(strip_tags(html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8'))), 0, $this->config->get('theme_' . $this->config->get('config_theme') . '_product_description_length')) . '..',
 					'price'       => $price,

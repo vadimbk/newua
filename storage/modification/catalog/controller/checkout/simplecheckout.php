@@ -477,9 +477,6 @@ class ControllerCheckoutSimpleCheckout extends SimpleController {
             $this->_templateData['simple_footer'] = $this->simplecheckout->getLinkToFooterTpl();
         }
 
-
-			$this->document->addScript('catalog/view/javascript/jquery/jquery-ui/jquery-ui.min.js');
-			
         $this->setOutputContent(trim($this->renderPage('checkout/simplecheckout', $this->_templateData, $childrens)));
     }
 

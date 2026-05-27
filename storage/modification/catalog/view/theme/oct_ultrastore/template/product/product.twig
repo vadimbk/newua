@@ -53,15 +53,7 @@
 							{{ stickers is defined ? stickers : '' }}
 							
 
-								
-<div class="ukrcreditsticker">
-{% for sticker in ukrcredits_stickers %}
-	{% if sticker %}
-	<div class="ukrcredit{{ sticker.type}}" title="{{ sticker.mounthprice_text}}" data-toggle="tooltip"><span>{{ sticker.partsCount}}</span></div>
-	{% endif %}
-{% endfor %}
-</div>
-<img src="{{ thumb }}" class="img-fluid" alt="{{ heading_title }}" title="{{ heading_title }}" />
+								<img src="{{ thumb }}" class="img-fluid" alt="{{ heading_title }}" title="{{ heading_title }}" />
 							
 							</a>
 						</div>
@@ -657,15 +649,7 @@
 											<div class="modal-body us-modal-body-one-click">
 												<form id="form-review" class="d-flex">
 													<div class="us-modal-body-one-click-left text-center">
-														
-<div class="ukrcreditsticker">
-{% for sticker in ukrcredits_stickers %}
-	{% if sticker %}
-	<div class="ukrcredit{{ sticker.type}}" title="{{ sticker.mounthprice_text}}" data-toggle="tooltip"><span>{{ sticker.partsCount}}</span></div>
-	{% endif %}
-{% endfor %}
-</div>
-<img src="{{ thumb }}" class="us-modal-body-img" title="{{ heading_title }}" alt="{{ heading_title }}">
+														<img src="{{ thumb }}" class="us-modal-body-img" title="{{ heading_title }}" alt="{{ heading_title }}">
 														<div class="product_title">{{ heading_title }}</div>
 														<div class="us-review-block d-flex align-items-center justify-content-center">
 															<div class="control-label">{{ entry_rating }}</div>
@@ -781,15 +765,7 @@
 				</ul>
 				<div class="us-module-img">
 					<a href="{{ product.href }}" {% if ee_tracking and ee_click %}onclick="ee_product.click('{{ product.product_id }}', '{{ product.ee_position }}', '{{ ee_type }}')"{% endif %}>
-					
-<div class="ukrcreditsticker">
-{% for sticker in product.ukrcredits_stickers %}
-	{% if sticker %}
-	<div class="ukrcredit{{ sticker.type}}" title="{{ sticker.mounthprice_text}}" data-toggle="tooltip"><span>{{ sticker.partsCount}}</span></div>
-	{% endif %}
-{% endfor %}
-</div>
-<img src="{{ product.thumb }}" alt="Фото - {{ product.name }}" title="{{ product.name }}" class="img-fluid" />
+					<img src="{{ product.thumb }}" alt="Фото - {{ product.name }}" title="{{ product.name }}" class="img-fluid" />
 					</a>
 				</div>
 				<div class="us-module-title flex-grow-1">
@@ -1257,104 +1233,6 @@ function updateProductPrice() {
 updateProductPrice();
 {% endif %}
 </script>
-
-{% if ukrcredits_status %}
-<script type="text/javascript"><!--
-$('{{ ukrcredits_selector_button }}').after('{{ ukrcredits }}');
-$('body').on('click', '#button-ukrcredits', function(){
-  $('[data-toggle="tooltip"]').tooltip('hide');
-  $.ajax({
-    url: 'index.php?route=module/ukrcredits/checkoptions',
-    type: 'post',
-    data: $('{{ ukrcredits_selector_block }} input[type=\'text\'], {{ ukrcredits_selector_block }} input[type=\'hidden\'], {{ ukrcredits_selector_block }} input[type=\'radio\']:checked, {{ ukrcredits_selector_block }} input[type=\'checkbox\']:checked, {{ ukrcredits_selector_block }} select, {{ ukrcredits_selector_block }} textarea'),
-    dataType: 'json',
-    beforeSend: function() {
-      $('#button-ukrcredits').button('loading');
-    },
-    complete: function() {
-      $('#button-ukrcredits').button('reset');
-    },
-    success: function(json) {
-      $('.alert, .text-danger').remove();
-      $('.form-group').removeClass('has-error');
-
-      if (json['error']) {
-        if (json['error']['option']) {
-          for (i in json['error']['option']) {
-            var element = $('#input-option' + i.replace('_', '-'));
-
-            if (element.parent().hasClass('input-group')) {
-              element.parent().after('<div class="text-danger">' + json['error']['option'][i] + '</div>');
-            } else {
-              element.after('<div class="text-danger">' + json['error']['option'][i] + '</div>');
-            }
-          }
-        }
-
-        if (json['error']['recurring']) {
-          $('select[name=\'recurring_id\']').after('<div class="text-danger">' + json['error']['recurring'] + '</div>');
-        }
-
-        // Highlight any found errors
-        $('.text-danger').parent().addClass('has-error');
-      }
-
-      if (json['success']) {
-		$.magnificPopup.open({
-		//	type:'ajax',
-			tLoading: '',
-			tLoading: '<img src="catalog/view/theme/default/image/ukrcredits/PP_logo.png" />',
-			removalDelay: 300,
-			callbacks: {
-				beforeOpen: function() {
-				   this.st.mainClass = 'mfp-zoom-in';
-				}
-			},
-			items:{
-				type:'ajax',
-				src:'index.php?route=module/ukrcredits/loadpopup'
-			},
-			ajax: {
-			  settings: {
-				type: 'GET',
-				data: $('{{ ukrcredits_selector_block }} input[type=\'text\'], {{ ukrcredits_selector_block }} input[type=\'hidden\'], {{ ukrcredits_selector_block }} input[type=\'radio\']:checked, {{ ukrcredits_selector_block }} input[type=\'checkbox\']:checked, {{ ukrcredits_selector_block }} select, {{ ukrcredits_selector_block }} textarea'),
-			  }
-			}
-		});	
-      }
-    },
-    error: function(xhr, ajaxOptions, thrownError) {
-      alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-    }
-  });
-});
-//--></script>
-<style>
-#ukrcredit-popup {
-  position: relative;
-  background: #FFF;
-  padding: 20px;
-  width: auto;
-  max-width: 750px;
-  margin: 20px auto;
-}
-.mfp-zoom-in .mfp-content > div {
-  opacity: 0;
-  transition: all 0.2s ease-in-out;
-  transform: scale(0.7);
-}
-.mfp-zoom-in.mfp-ready .mfp-content > div {
-  opacity: 1;
-  transform: scale(1);
-}
-.mfp-zoom-in.mfp-removing .mfp-content > div {
-  transform: scale(0.7);
-  opacity: 0;
-}
-{{ ukrcredits_css_custom }}
-</style>
-{% endif %}
-			
 
 			{% if ((oct_analytics_yandex_ecommerce is defined and oct_analytics_yandex_ecommerce) and (oct_analytics_yandex_container is defined and oct_analytics_yandex_container)) %}
 				<script>

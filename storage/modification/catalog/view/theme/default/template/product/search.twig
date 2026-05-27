@@ -118,7 +118,7 @@
         <div class="product-layout product-list col-xs-12">
           <div class="product-thumb">
 <div class="aval-product-quantity hidden">{{ product.avail_product_quantity }}</div><div class="aval-product-id hidden">{{ product.product_id }}</div>
-            <div class="image"><a href="{{ product.href }}" {% if ee_tracking and ee_click %}onclick="ee_product.click('{{ product.product_id }}', '{{ product.ee_position }}', '{{ ee_type }}')"{% endif %}>
+            <div class="image"><a href="{{ product.href }}" {% if ee_tracking and ee_click %}onclick="ee_product.click('{{ product.product_id }}', '{{ product.ee_position }}', '{{ ee_type }}')"{% endif %}><img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-responsive" /></a></div>
 
     {# Bulk Specials Editor #}
     {% if product.timer %}
@@ -126,14 +126,6 @@
 	 {% endif %}
     {# Bulk Specials Editor #}
     
-<div class="ukrcreditsticker">
-{% for sticker in product.ukrcredits_stickers %}
-	{% if sticker %}
-	<div class="ukrcredit{{ sticker.type}}" title="{{ sticker.mounthprice_text}}" data-toggle="tooltip"><span>{{ sticker.partsCount}}</span></div>
-	{% endif %}
-{% endfor %}
-</div>
-<img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-responsive" /></a></div>
             <div>
               <div class="caption">
                 <h4><a href="{{ product.href }}" {% if ee_tracking and ee_click %}onclick="ee_product.click('{{ product.product_id }}', '{{ product.ee_position }}', '{{ ee_type }}')"{% endif %}>{{ product.name }}</a></h4>

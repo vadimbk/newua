@@ -33,11 +33,6 @@
         {% endif %} 
       
             <li><a href="#tab-links" data-toggle="tab">{{ tab_links }}</a></li>
-
-			{% if ukrcredits_status %}
-			<li><a href="#tab-ukrcredits" data-toggle="tab">{{ tab_ukrcredits }}</a></li>
-			{% endif %}
-			
             <li><a href="#tab-attribute" data-toggle="tab">{{ tab_attribute }}</a></li>
             <li><a href="#tab-option" data-toggle="tab">{{ tab_option }}</a></li>
             <li><a href="#tab-recurring" data-toggle="tab">{{ tab_recurring }}</a></li>
@@ -515,107 +510,6 @@
                 </div>
               </div>
             </div>
-
-			{% if ukrcredits_status %}
-			<div class="tab-pane" id="tab-ukrcredits">
-              <div class="table-responsive">
-                <table id="ukrcredits" class="table table-bordered table-hover">
-                  <thead>
-                    <tr>
-                      <td class="text-left">{{ credit_type }}</td>
-					  <td class="text-left">{{ entry_status }}</td> 
-                      <td class="text-left"><span data-toggle="tooltip" title="{{ help_partsCount }}">{{ partsCount }}</td>
-					  <td class="text-left"><span data-toggle="tooltip" title="{{ help_markup }}">{{ markup }}</td>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td class="text-left">{{ credit_type_pp }}</td>
-					  <td>
-						  <select name="product_pp" id="input-product_pp" class="form-control">
-							{% if product_pp %}
-								<option value="1" selected="selected">{{ text_enabled }}</option>
-								<option value="0">{{ text_disabled }}</option>
-							{% else %}
-								<option value="1">{{ text_enabled }}</option>
-								<option value="0" selected="selected">{{ text_disabled }}</option>
-							{% endif %}
-						  </select>
-					  </td>
-                      <td>
-						  <select name="partscount_pp" id="input-partscount_pp" class="form-control">
-							<option value="">{{ text_select }}</option>
-							{% for partscount in partscounts %}
-							{% if partscount_pp == partscount %}
-							<option value="{{ partscount }}" selected="selected">{{ partscount }}</option>
-							{% else %}
-							<option value="{{ partscount }}">{{ partscount }}</option>
-							{% endif %}
-							{% endfor %}
-						  </select>
-					  </td>
-					  <td class="text-left"><input type="text" name="markup_pp" value="{{ markup_pp }}" placeholder="1.0000" id="input-markup_pp" class="form-control" /></td>
-                    </tr>
-                    <tr>
-                      <td class="text-left">{{ credit_type_ii }}</td>
-					  <td>
-						  <select name="product_ii" id="input-product_ii" class="form-control">
-							{% if product_ii %}
-								<option value="1" selected="selected">{{ text_enabled }}</option>
-								<option value="0">{{ text_disabled }}</option>
-							{% else %}
-								<option value="1">{{ text_enabled }}</option>
-								<option value="0" selected="selected">{{ text_disabled }}</option>
-							{% endif %}
-						  </select>
-					  </td>
-                      <td>
-						  <select name="partscount_ii" id="input-partscount_ii" class="form-control">
-							<option value="">{{ text_select }}</option>
-							{% for partscount in partscounts %}
-							{% if partscount_ii == partscount %}
-							<option value="{{ partscount }}" selected="selected">{{ partscount }}</option>
-							{% else %}
-							<option value="{{ partscount }}">{{ partscount }}</option>
-							{% endif %}
-							{% endfor %}
-						  </select>
-					  </td>
-					  <td class="text-left"><input type="text" name="markup_ii" value="{{ markup_ii }}" placeholder="1.0000" id="input-markup_ii" class="form-control" /></td>
-                    </tr>
-                    <tr>
-                      <td class="text-left">{{ credit_type_mb }}</td>
-					  <td>
-						  <select name="product_mb" id="input-product_mb" class="form-control">
-							{% if product_mb %}
-								<option value="1" selected="selected">{{ text_enabled }}</option>
-								<option value="0">{{ text_disabled }}</option>
-							{% else %}
-								<option value="1">{{ text_enabled }}</option>
-								<option value="0" selected="selected">{{ text_disabled }}</option>
-							{% endif %}
-						  </select>
-					  </td>
-                      <td>
-						  <select name="partscount_mb" id="input-partscount_mb" class="form-control">
-							<option value="">{{ text_select }}</option>
-							{% for partscount in partscounts %}
-							{% if partscount_mb == partscount %}
-							<option value="{{ partscount }}" selected="selected">{{ partscount }}</option>
-							{% else %}
-							<option value="{{ partscount }}">{{ partscount }}</option>
-							{% endif %}
-							{% endfor %}
-						  </select>
-					  </td>
-					  <td class="text-left"><input type="text" name="markup_mb" value="{{ markup_mb }}" placeholder="1.0000" id="input-markup_mb" class="form-control" /></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>			
-			</div>
-			{% endif %}
-			
             <div class="tab-pane" id="tab-attribute">
               <div class="table-responsive">
                 <table id="attribute" class="table table-striped table-bordered table-hover">

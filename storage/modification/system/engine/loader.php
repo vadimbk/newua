@@ -77,9 +77,6 @@ final class Loader {
 		// Sanitize the call
 		$route = preg_replace('/[^a-zA-Z0-9_\/]/', '', (string)$route);
 		
-
-			$this->registry->get('event')->trigger('model/'.$route.'/before', array(&$route));
-			
 		if (!$this->registry->has('model_' . str_replace('/', '_', $route))) {
 			$file  = DIR_APPLICATION . 'model/' . $route . '.php';
 			$class = 'Model' . preg_replace('/[^a-zA-Z0-9]/', '', $route);
@@ -99,9 +96,6 @@ final class Loader {
 			} else {
 				throw new \Exception('Error: Could not load model ' . $route . '!');
 			}
-
-			$this->registry->get('event')->trigger('model/'.$route.'/after', array(&$route));
-			
 		}
 	}
 

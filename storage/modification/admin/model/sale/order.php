@@ -42,19 +42,6 @@ class ModelSaleOrder extends Model {
 
 			$reward = 0;
 
-
-			$order_ukrcredits_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "order_ukrcredits WHERE order_id = '" . (int)$order_id . "'");
-			
-			if ($order_ukrcredits_query->num_rows) {
-				$ukrcredits_order_id = $order_ukrcredits_query->row['ukrcredits_order_id'];
-				$ukrcredits_order_status = $order_ukrcredits_query->row['ukrcredits_order_status'];
-				$ukrcredits_order_substatus = $order_ukrcredits_query->row['ukrcredits_order_substatus'];
-			} else {
-				$ukrcredits_order_id = '';
-				$ukrcredits_order_status = '';
-				$ukrcredits_order_substatus = '';
-			}
-			
 			$order_product_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "order_product WHERE order_id = '" . (int)$order_id . "'");
 
 			foreach ($order_product_query->rows as $product) {
@@ -116,11 +103,6 @@ class ModelSaleOrder extends Model {
 				'payment_custom_field'    => json_decode($order_query->row['payment_custom_field'], true),
 				'payment_method'          => $order_query->row['payment_method'],
 				'payment_code'            => $order_query->row['payment_code'],
-
-				'ukrcredits_order_id'         => $ukrcredits_order_id,
-				'ukrcredits_order_status'     => $ukrcredits_order_status,
-				'ukrcredits_order_substatus'  => $ukrcredits_order_substatus,
-			
 				'shipping_firstname'      => $order_query->row['shipping_firstname'],
 				'shipping_lastname'       => $order_query->row['shipping_lastname'],
 				'shipping_company'        => $order_query->row['shipping_company'],

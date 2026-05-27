@@ -423,12 +423,8 @@ class ControllerCheckoutCart extends Controller {
 				// Unset all shipping and payment methods
 				unset($this->session->data['shipping_method']);
 				unset($this->session->data['shipping_methods']);
-				
-			//unset($this->session->data['payment_method']);
-			
-				
-			//unset($this->session->data['payment_methods']);
-			
+				unset($this->session->data['payment_method']);
+				unset($this->session->data['payment_methods']);
 
 				// Totals
 				$this->load->model('setting/extension');
@@ -550,12 +546,8 @@ class ControllerCheckoutCart extends Controller {
 
 			unset($this->session->data['shipping_method']);
 			unset($this->session->data['shipping_methods']);
-			
-			//unset($this->session->data['payment_method']);
-			
-			
-			//unset($this->session->data['payment_methods']);
-			
+			unset($this->session->data['payment_method']);
+			unset($this->session->data['payment_methods']);
 			unset($this->session->data['reward']);
 
 			$this->response->redirect($this->url->link('checkout/cart'));
@@ -615,12 +607,8 @@ class ControllerCheckoutCart extends Controller {
 
 			unset($this->session->data['shipping_method']);
 			unset($this->session->data['shipping_methods']);
-			
-			//unset($this->session->data['payment_method']);
-			
-			
-			//unset($this->session->data['payment_methods']);
-			
+			unset($this->session->data['payment_method']);
+			unset($this->session->data['payment_methods']);
 			unset($this->session->data['reward']);
 
 			// Totals

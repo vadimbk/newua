@@ -11,13 +11,6 @@ class ModelCatalogProduct extends Model {
 		
       
 
-if (isset($data['partscount_pp'])) {
-	if ($data['partscount_pp'] || $data['partscount_ii'] || $data['partscount_mb'] || $data['product_pp'] || $data['product_ii'] || $data['product_mb'] || $data['markup_pp'] || $data['markup_ii'] || $data['markup_mb']) {
-			$this->db->query("INSERT INTO " . DB_PREFIX . "product_ukrcredits SET product_id = '" . (int)$product_id . "', product_ii = '" . $this->db->escape($data['product_ii']) . "', product_pp = '" . $this->db->escape($data['product_pp']) . "', product_mb = '" . $this->db->escape($data['product_mb']) . "', partscount_pp = '" . $this->db->escape($data['partscount_pp']) . "', partscount_ii = '" . $this->db->escape($data['partscount_ii']) . "', partscount_mb = '" . $this->db->escape($data['partscount_mb']) . "', markup_pp = '" . $this->db->escape($data['markup_pp']) . "', markup_ii = '" . $this->db->escape($data['markup_ii']) . "', markup_mb = '" . $this->db->escape($data['markup_mb']) . "'");
-	}
-}
-			
-
 
 			if ($this->config->get('oct_stickers_status')) {
 				$this->db->query("UPDATE " . DB_PREFIX . "product SET oct_stickers = '' WHERE product_id = '" . (int)$product_id . "'");
@@ -312,14 +305,6 @@ if (isset($data['partscount_pp'])) {
 $this->cache->delete('promotion');
 		
       
-
-if (isset($data['partscount_pp'])) {
-	if ($data['partscount_pp'] || $data['partscount_ii'] || $data['partscount_mb'] || $data['product_pp'] || $data['product_ii'] || $data['product_mb'] || $data['markup_pp'] || $data['markup_ii'] || $data['markup_mb']) {
-			$this->db->query("DELETE FROM " . DB_PREFIX . "product_ukrcredits WHERE product_id = '" . (int)$product_id . "'");
-			$this->db->query("INSERT INTO " . DB_PREFIX . "product_ukrcredits SET product_id = '" . (int)$product_id . "', product_ii = '" . $this->db->escape($data['product_ii']) . "', product_pp = '" . $this->db->escape($data['product_pp']) . "', product_mb = '" . $this->db->escape($data['product_mb']) . "', partscount_pp = '" . $this->db->escape($data['partscount_pp']) . "', partscount_ii = '" . $this->db->escape($data['partscount_ii']) . "', partscount_mb = '" . $this->db->escape($data['partscount_mb']) . "', markup_pp = '" . $this->db->escape($data['markup_pp']) . "', markup_ii = '" . $this->db->escape($data['markup_ii']) . "', markup_mb = '" . $this->db->escape($data['markup_mb']) . "'");
-	}
-}
-			
 		$this->db->query("UPDATE " . DB_PREFIX . "product SET model = '" . $this->db->escape($data['model']) . "', sku = '" . $this->db->escape($data['sku']) . "', warranty = '" . $this->db->escape($data['warranty']) . "', upc = '" . $this->db->escape($data['upc']) . "', ean = '" . $this->db->escape($data['ean']) . "', jan = '" . $this->db->escape($data['jan']) . "', isbn = '" . $this->db->escape($data['isbn']) . "', mpn = '" . $this->db->escape($data['mpn']) . "', location = '" . $this->db->escape($data['location']) . "', quantity = '" . (int)$data['quantity'] . "', minimum = '" . (int)$data['minimum'] . "', subtract = '" . (int)$data['subtract'] . "', stock_status_id = '" . (int)$data['stock_status_id'] . "', date_available = '" . $this->db->escape($data['date_available']) . "', manufacturer_id = '" . (int)$data['manufacturer_id'] . "', shipping = '" . (int)$data['shipping'] . "', price = '" . (float)$data['price'] . "', cost_price = '" . (float)$data['cost_price'] . "', points = '" . (int)$data['points'] . "', weight = '" . (float)$data['weight'] . "', weight_class_id = '" . (int)$data['weight_class_id'] . "', length = '" . (float)$data['length'] . "', width = '" . (float)$data['width'] . "', height = '" . (float)$data['height'] . "', length_class_id = '" . (int)$data['length_class_id'] . "', status = '" . (int)$data['status'] . "', tax_class_id = '" . (int)$data['tax_class_id'] . "', sort_order = '" . (int)$data['sort_order'] . "', date_modified = NOW() WHERE product_id = '" . (int)$product_id . "'");
 
 
@@ -816,9 +801,6 @@ if (isset($data['partscount_pp'])) {
 			$data['product_seo_url'] = array(); // SEO URL Generator
 			$data['status'] = '0';
 
-		$data = array_merge($data, $this->getProductUkrcredits($product_id));
-			
-
 			$data['product_attribute'] = $this->getProductAttributes($product_id);
 
  		// OCFilter start
@@ -876,9 +858,6 @@ $this->model_extension_module_promotion->deletePromotionProduct($product_id);
         }
         // end: OCdevWizard In Stock Alert
       
-
-		$this->db->query("DELETE FROM " . DB_PREFIX . "product_ukrcredits WHERE product_id = '" . (int)$product_id . "'");
-			
 		$this->db->query("DELETE FROM " . DB_PREFIX . "product WHERE product_id = '" . (int)$product_id . "'");
 		// SEO URL Generator . begin
 		$this->db->query("DELETE FROM " . DB_PREFIX . "seo_url_generator_redirects WHERE query = 'product_id=" . (int)$product_id . "'");
@@ -1216,13 +1195,6 @@ $this->model_extension_module_promotion->deletePromotionProduct($product_id);
 		return $product_filter_data;
 	}
 
-
-	public function getProductUkrcredits($product_id) {
-		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "product_ukrcredits WHERE product_id = '" . (int)$product_id . "'");
-
-		return $query->row;
-	}
-			
 
         public function getProductExtraTabs($product_id) {
           $oct_product_extra_tab_data = [];

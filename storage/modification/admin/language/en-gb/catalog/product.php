@@ -131,17 +131,6 @@ $_['help_related']           = '(Autocomplete)';
 $_['help_tag']               = 'Comma separated';
 
 // Error
-
-$_['tab_ukrcredits']			= 'Кредиты';
-$_['credit_type']				= 'Вид кредитования:';
-$_['partsCount']				= 'Максимум месяцев:';
-$_['markup']					= 'Коэффициент наценки:';
-$_['help_partsCount']			= 'Введите максимальное количество месяцев кредитования';
-$_['help_markup']				= 'Если необходимо, установите наценку на стоимость товара, например 1.027, что составляет 2.7%';
-$_['credit_type_ii']			= 'Мгновенная рассрочка (Приватбанк)';
-$_['credit_type_pp']			= 'Оплата частями (Приватбанк)';
-$_['credit_type_mb']			= 'Покупка частями (Монобанк)';
-			
 $_['error_warning']          = 'Warning: Please check the form carefully for errors!';
 $_['error_permission']       = 'Warning: You do not have permission to modify products!';
 $_['error_name']             = 'Product Name must be greater than 1 and less than 255 characters!';

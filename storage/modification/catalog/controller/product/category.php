@@ -296,9 +296,6 @@ use Helper;
 				}
 			}
 			
-				
-			$this->load->model('module/ukrcredits');
-			
 		$this->load->language('product/category');
 
 		$this->load->model('catalog/category');
@@ -1282,9 +1279,6 @@ if (!empty($this->request->get['path'])) {
 			
 			}
 
-				
-			$this->load->model('module/ukrcredits');
-			
 
 			}
 			
@@ -1444,9 +1438,6 @@ if (!empty($this->request->get['path'])) {
 			
 
 
-				
-				$ukrcredits_stickers = $this->model_module_ukrcredits->checkproduct($result);
-			
 
 			$oct_atributes = false;
 				
@@ -1544,7 +1535,6 @@ $promotions = $this->model_extension_module_promotion->getHTMLProductPromotions(
 
 			'oct_atributes'       => $oct_atributes,
 			
-'ukrcredits_stickers' => isset($ukrcredits_stickers)?$ukrcredits_stickers:array(),
 					'name'        => $result['name'],
 					
 			'description' => (isset($oct_ultrastore_data['category_product_desc']) && $oct_ultrastore_data['category_product_desc'] == 'on') ? utf8_substr(trim(strip_tags(html_entity_decode($result['description'], ENT_QUOTES, 'UTF-8'))), 0, $this->config->get('theme_' . $this->config->get('config_theme') . '_product_description_length')) . '..' : false,
@@ -1969,7 +1959,6 @@ foreach ($articles as $article) {
         // 'description'     => html_entity_decode($article['shot_description'] ?? '', ENT_QUOTES, 'UTF-8'),
         'date_added'         => date('d.m.Y', strtotime($article['date_added'])),
         'thumb'              => $this->model_tool_image->resize($image, 300, 200),
-'ukrcredits_stickers' => isset($ukrcredits_stickers)?$ukrcredits_stickers:array(),
         'href'               => $this->url->link('octemplates/blog/oct_blogarticle', 'blogarticle_id=' . (int)$article['article_id'])
     ];
 }

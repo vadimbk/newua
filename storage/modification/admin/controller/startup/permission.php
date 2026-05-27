@@ -57,14 +57,6 @@ class ControllerStartupPermission extends Controller {
 			);
 
 
-			if ($route == 'extension/payment/ukrcredits') {
-				$route = 'payment/ukrcredits';
-			}
-			if ($route == 'extension/total/totalukrcredits') {
-				$route = 'total/totalukrcredits';
-			}
-			
-
         // start: OCdevWizard Helper
         if ($this->request->get['route'] == 'extension/ocdevwizard/helper' || preg_match('/extension\/ocdevwizard\/helper/', $this->request->get['route'])) {
           $route = 'extension/ocdevwizard/helper';
