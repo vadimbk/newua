@@ -1,11 +1,9 @@
 # =====================================================================
-# .gitignore — radio-shop.com.ua (OpenCart 3.0.2.0)
-# Repo root: /var/www/radio-shop.com.ua/
+# .gitignore — ls.radio-shop.com.ua (OpenCart 3.0.2.0, staging repo)
+# Repo root: /var/www/ls.radio-shop.com.ua/
+# This is staging's own repo (vadimbk/newua) — prod has a different one,
+# so DB creds in html/config.php do not leak across envs.
 # =====================================================================
-
-# --- OpenCart environment-specific configs (DB credentials, host URLs) ---
-html/config.php
-html/admin/config.php
 
 # --- OS / IDE / editor ---
 .DS_Store
