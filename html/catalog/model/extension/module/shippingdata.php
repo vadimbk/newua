@@ -25,7 +25,7 @@ class ModelModuleShippingData extends Model {
 			$sql .= " AND (`Description` LIKE '" . $this->db->escape($search) . "%' OR `DescriptionRu` LIKE '" . $this->db->escape($search) . "%')";
 		}
 		
-		$sql .= " ORDER BY  `" . $novaposhta->description_field . "` COLLATE utf8_unicode_ci";
+		$sql .= " ORDER BY  `" . $novaposhta->description_field . "`";
 		
 		return $this->db->query($sql)->rows;
 	}
