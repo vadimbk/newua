@@ -535,9 +535,9 @@ class ModelExtensionFeedOcextFeedGeneratorYaMarket extends Model {
         for ($i=0; $i<$csv_field_count; $i++)
         {
 
-            if (isset($csv_fields[$i]{0}) && $encl_len && $csv_fields[$i]{0} == $enclosure)
+            if (isset($csv_fields[$i][0]) && $encl_len && $csv_fields[$i][0] == $enclosure)
                 $csv_fields[$i] = substr($csv_fields[$i], 1);
-            if (isset($csv_fields[$i]{strlen($csv_fields[$i])-1}) && $encl_len && $csv_fields[$i]{strlen($csv_fields[$i])-1} == $enclosure)
+            if (isset($csv_fields[$i][strlen($csv_fields[$i])-1]) && $encl_len && $csv_fields[$i][strlen($csv_fields[$i])-1] == $enclosure)
                 $csv_fields[$i] = substr($csv_fields[$i], 0, strlen($csv_fields[$i])-1);
 
             $csv_fields[$i] = str_replace($enclosure.$enclosure, $enclosure, $csv_fields[$i]);
