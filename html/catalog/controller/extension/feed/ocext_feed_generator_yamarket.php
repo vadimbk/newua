@@ -3028,13 +3028,22 @@ class ControllerExtensionFeedOcextFeedGeneratorYaMarket extends Controller {
                     if($xml_parts && isset($this->general_setting[$this->parse_yml['export_filename']]) && $this->general_setting[$this->parse_yml['export_filename']]){
 
                         $file_name_and_path = $rootPath.'/'.$this->general_setting['filename_export'].'.xml';
-                        
-                        if(file_exists($file_name_and_path)){
-                            
-                            $handle = fopen($file_name_and_path, 'w+');
+
+                        $dirname = dirname($file_name_and_path);
+
+                        if(!is_dir($dirname)){
+
+                            mkdir($dirname, 0777, TRUE);
+
+                        }
+
+                        // create the target file if missing, or truncate it before appending parts
+                        $handle = fopen($file_name_and_path, 'w');
+
+                        if($handle){
 
                             fclose($handle);
-                            
+
                         }
 
                         foreach ($xml_parts as $xml_part) {
