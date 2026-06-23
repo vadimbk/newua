@@ -14,7 +14,7 @@ $_['text_logout']        = 'Выход';
 $_['text_checkout']      = 'Оформление заказа';
 $_['text_search']        = 'Поиск';
 $_['text_all']           = 'Смотреть Все';
-$_['tetx_besp']           = '<div class="phone-l-op">Уникальный ассортимент 30 000+ радиотехнических инструментов с доставкой 1-3 дня</div>';
+$_['tetx_besp']           = '<div class="phone-l-op">Уникальный ассортимент 40 000+ радиотехнических инструментов с доставкой 1-3 дня</div>';
 $_['time_work_submenu']           = '
 
 <!--<li class="dropdown-item us-dropdown-item"><strong><span style="color:red;">31.12</span> - 9.00-16.00</strong></li>

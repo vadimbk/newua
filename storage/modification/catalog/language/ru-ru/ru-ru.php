@@ -108,7 +108,7 @@ $_['text_contetn_inform']				= '
 			<div class="col-md-6 col-lg-4 adv-item">
 			<div class="imgbox-1"></div>
 			<div class="adv-title">Большой выбор</div>
-			<div class="avd-desc">Выбирайте из более 21 000 <br>товаров</div>
+			<div class="avd-desc">Выбирайте из более 40 000 <br>товаров</div>
 			</div>
 			<div class="col-md-6 col-lg-4 adv-item">
 			<div class="imgbox-2"></div>
@@ -145,7 +145,7 @@ $_['text_contetn_inform2']='			<div class="row advantage mob-advantage">
 			<div class="col-md-6 col-lg-4 adv-item">
 			<div class="imgbox-1"></div>
 			<div class="adv-title">Большой выбор</div>
-			<div class="avd-desc">Выбирайте из более 21 000 <br>товаров</div>
+			<div class="avd-desc">Выбирайте из более 40 000 <br>товаров</div>
 			</div>
 			<div class="col-md-6 col-lg-4 adv-item">
 			<div class="imgbox-2"></div>
