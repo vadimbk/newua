@@ -119,8 +119,8 @@ $_['text_contetn_inform']				= '
 			</div>
 			<div class="col-md-6 col-lg-4 adv-item">
 			<div class="imgbox-3"></div>
-			<div class="adv-title">Доставка 1-2 дні</div>
-			<div class="avd-desc">99% наших Клієнтів відзначають <br>швидку доставку</div>
+			<div class="adv-title">Доставка 1-3 дні</div>
+			<div class="avd-desc">99% наших Клієнтів зазначають <br>швидку доставку</div>
 			</div>
 			</div>
 
@@ -156,8 +156,8 @@ $_['text_contetn_inform2']='			<div class="row advantage mob-advantage">
 			</div>
 			<div class="col-md-6 col-lg-4 adv-item">
 			<div class="imgbox-3"></div>
-			<div class="adv-title">Доставка 1-2 дні</div>
-			<div class="avd-desc">99% наших Клієнтів відзначають <br>швидку доставку</div>
+			<div class="adv-title">Доставка 1-3 дні</div>
+			<div class="avd-desc">99% наших Клієнтів зазначають <br>швидку доставку</div>
 			</div>
 			</div>
 
