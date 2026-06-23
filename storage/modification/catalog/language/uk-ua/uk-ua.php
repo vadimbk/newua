@@ -86,18 +86,18 @@ $_['text_contetn_inform']				= '
 <div class="row skidki">
 			<div class="col-md-6 col-sk-5">
 			<div class="rect"><span>1%</span></div>
-			<div class="desc-sk"><span>знижка<br> від 3000 грн</span></div>
+			<div class="desc-sk"><span>знижка<br> від 1000 грн</span></div>
 			</div>
 						<div class="col-md-6 col-sk-5">
 			<div class="rect"><span>3%</span></div>
 			<div class="desc-sk"><span>знижка<br> від 5000 грн</span></div>
 			</div>
 						<div class="col-md-6 col-sk-5">
-			<div class="rect"><span>5%</span></div>
+			<div class="rect"><span>4%</span></div>
 			<div class="desc-sk"><span>знижка<br> від 10 000 грн</span></div>
 			</div>
 						<div class="col-md-6 col-sk-5">
-			<div class="rect"><span>7%</span></div>
+			<div class="rect"><span>5%</span></div>
 			<div class="desc-sk"><span>знижка<br> від 20 000 грн</span></div>
 			</div>
 						<div class="col-md-6 col-sk-5">
