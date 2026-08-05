@@ -1082,6 +1082,22 @@ $data['sku'] = $autosku_query1->row["MAX(sku)"]+1;
 			$data['date_available'] = date('Y-m-d');
 		}
 
+		// read-only labels and values: first-added and last-modified dates
+		$data['entry_date_added'] = $this->language->get('entry_date_added');
+		$data['entry_date_modified'] = $this->language->get('entry_date_modified');
+
+		if (!empty($product_info) && $product_info['date_added'] != '0000-00-00 00:00:00') {
+			$data['date_added'] = $product_info['date_added'];
+		} else {
+			$data['date_added'] = '';
+		}
+
+		if (!empty($product_info) && $product_info['date_modified'] != '0000-00-00 00:00:00') {
+			$data['date_modified'] = $product_info['date_modified'];
+		} else {
+			$data['date_modified'] = '';
+		}
+
 		if (isset($this->request->post['quantity'])) {
 			$data['quantity'] = $this->request->post['quantity'];
 		} elseif (!empty($product_info)) {
