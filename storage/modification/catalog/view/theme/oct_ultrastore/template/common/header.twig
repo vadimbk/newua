@@ -364,18 +364,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 				
 				<ul class="dropdown-menu nav-dropdown-menu address-dropdown-menu" aria-labelledby="dropdownMenuAddress">
 				    <li class="dropdown-item us-dropdown-item">{{ text_office }} <br> {{ address_office }}</li>
-				    <li class="us-mobile-map-box">
-					<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2541.4900786914795!2d30.446648215943547!3d50.431971596576915!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40d4cea5cdf185d9%3A0xc5358e32048e19a6!2zMTNBLCDRg9C7LiDQo9GI0LjQvdGB0LrQvtCz0L4sIDEz0JAsINCa0LjQtdCyLCAwMjAwMA!5e0!3m2!1sru!2sua!4v1619121261588!5m2!1sru!2sua" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" class="respon-contact"></iframe>
-					</li>
+				{# WebFlyer+CLD 2026-08-03: office moved to prosp. Valeriia Lobanovskoho, 4b, of. 165; map/scheme removed on purpose - pickup address is confirmed per order, customers must not drive over. Was: <li class="us-mobile-map-box"><iframe src="https://www.google.com/maps/embed?...Ushynskoho 13A..."></iframe></li> #}
 				</ul>
 				
-				<!--<ul class="dropdown-menu nav-dropdown-menu address-dropdown-menu" aria-labelledby="dropdownMenuAddress">
-				    <li class="dropdown-item us-dropdown-item">{{ text_shop }} <br>
-					{{ oct_ultrastore_data.contact_address[oct_lang_id] }}</li>
-				    {% if contact_map is defined and contact_map %}
-				    <li class="us-mobile-map-box">{{ contact_map }}</li>
-				    {% endif %}
-				</ul>-->
+				{# WebFlyer+CLD 2026-08-03: removed the commented-out block of the closed radio-market shop (vul. Ushynskoho 4, pavilion 9B): old address, old Google map (the second "Адреса магазину" dropdown, text_shop). The shop no longer exists, the block had been dead since the move. #}
 			</div>
 			{% endif %}
 			{% if oct_contact_opens is defined and oct_contact_opens is not empty %}
