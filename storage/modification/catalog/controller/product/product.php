@@ -608,6 +608,10 @@ $data['promotion']  = $promotions['product'];
 
 			$results = $this->model_catalog_product->getProductImages($this->request->get['product_id']);
 
+				// og:image must be a real jpg/png for external consumers (eSputnik, social, email) - never webp
+				$og_accept = isset($this->request->server['HTTP_ACCEPT']) ? $this->request->server['HTTP_ACCEPT'] : '';
+				$this->request->server['HTTP_ACCEPT'] = '';
+
 				if ($product_info['image']) {
 					$this->document->addOGMeta('property="og:image"', str_replace(' ', '%20', $this->model_tool_image->resize($product_info['image'], 600, 315)) );
 					$this->document->addOGMeta('property="og:image:width"', '600');
@@ -622,6 +626,8 @@ $data['promotion']  = $promotions['product'];
 					$this->document->addOGMeta('property="og:image:width"', '600');
 					$this->document->addOGMeta('property="og:image:height"', '315');
        			}
+
+				$this->request->server['HTTP_ACCEPT'] = $og_accept;
                 
 
 			if ($data['popup'] && $data['thumb'] && !empty($results)) {
