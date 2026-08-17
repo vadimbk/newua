@@ -161,9 +161,11 @@ RewriteRule ^index\.php$ / [R=301,L]
 
 Redirect 301 /sitemap.xml /sitemap_index.xml
 
-# Category 189 removed 2026-08-17, replaced by "Computer peripherals" (844)
-Redirect 301 /kompyuternye-aksessuary /kompyuternaya-periferiya
-Redirect 301 /uk/komp-yuterni-aksesuary /uk/komp-yuterna-periferiya
+# Categories 189 and 844 both retired 2026-08-17; send either slug to the root
+Redirect 301 /kompyuternye-aksessuary /
+Redirect 301 /uk/komp-yuterni-aksesuary /uk
+Redirect 301 /kompyuternaya-periferiya /
+Redirect 301 /uk/komp-yuterna-periferiya /uk
 
 Redirect 301 /metalloiskateli /
 Redirect 301 /uk/metaloshukachi /uk
@@ -981,12 +983,12 @@ Redirect 301 /vesy /
 Redirect 301 /elektrotransport /
 Redirect 301 /radioupravljaemye-modeli /
 Redirect 301 /kemping-i-rybalka /
-# 2026-08-17 category re-published: Redirect 301 /podstavki-dlya-noutbukov /
-# 2026-08-17 category re-published: Redirect 301 /kompyuternye-kolonki /
-# 2026-08-17 category re-published: Redirect 301 /myshi-kompyuternye /
-# 2026-08-17 category re-published: Redirect 301 /naushniki /
-# 2026-08-17 category re-published: Redirect 301 /chehly-dlya-planshetov /
-# 2026-08-17 category re-published: Redirect 301 /usb-haby /
+Redirect 301 /podstavki-dlya-noutbukov /
+Redirect 301 /kompyuternye-kolonki /
+Redirect 301 /myshi-kompyuternye /
+Redirect 301 /naushniki /
+Redirect 301 /chehly-dlya-planshetov /
+Redirect 301 /usb-haby /
 # 2026-08-17 category re-published: Redirect 301 /3d-pechat /
 Redirect 301 /uk/tajmery-godynnyky-pryjmachi /uk
 Redirect 301 /uk/godynnyky /uk
@@ -994,14 +996,14 @@ Redirect 301 /uk/vagy /uk
 Redirect 301 /uk/elektrotransport /uk
 Redirect 301 /uk/radiokerovani-modeli /uk
 Redirect 301 /uk/kemping-i-rybalka /uk
-# 2026-08-17 category re-published: Redirect 301 /uk/pidstavky-dlya-noutbukiv /uk
-# 2026-08-17 category re-published: Redirect 301 /uk/myshi-komp-yuterni /uk
-# 2026-08-17 category re-published: Redirect 301 /uk/navushnyky /uk
-# 2026-08-17 category re-published: Redirect 301 /uk/chohly-dlya-planshetiv /uk
-# 2026-08-17 category re-published: Redirect 301 /uk/usb-haby /uk
+Redirect 301 /uk/pidstavky-dlya-noutbukiv /uk
+Redirect 301 /uk/myshi-komp-yuterni /uk
+Redirect 301 /uk/navushnyky /uk
+Redirect 301 /uk/chohly-dlya-planshetiv /uk
+Redirect 301 /uk/usb-haby /uk
 # 2026-08-17 category re-published: Redirect 301 /uk/3d-druk /uk
 Redirect 301 /uk/tajmery /uk
-# 2026-08-17 category re-published: Redirect 301 /uk/komp-yuterni-kolonky /uk
+Redirect 301 /uk/komp-yuterni-kolonky /uk
 Redirect 301 /uk/multymetry//price/1000-76500 /uk/multymetry/price/1000-76500
 
 
