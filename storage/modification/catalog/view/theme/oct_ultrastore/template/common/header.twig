@@ -49,8 +49,11 @@ body{margin-top:-23px;}
 {% endfor %}
 {% if lang == "uk" %}
 <style>
-#oct-menu-dropdown-menu .oct-menu-li-else, #oct-menu-dropdown-menu .oct-menu-li-main:nth-child(2),
-#us_menu_mobile_content .oct-menu-li-else, #us_menu_mobile_content .oct-menu-li-main:nth-child(1), #us_menu_mobile_content .oct-menu-li-main:nth-child(2), #us_menu_mobile_content .oct-menu-li-main:nth-child(3)
+/* Scoped to the leading duplicate entries only (2026-08-17). This used to hide
+   every .oct-menu-li-else, which also swallowed top-level categories that simply
+   have no children - e.g. "Computer peripherals". */
+#oct-menu-dropdown-menu .oct-menu-li-else:nth-child(-n+4), #oct-menu-dropdown-menu .oct-menu-li-main:nth-child(2),
+#us_menu_mobile_content .oct-menu-li-else:nth-child(-n+4), #us_menu_mobile_content .oct-menu-li-main:nth-child(1), #us_menu_mobile_content .oct-menu-li-main:nth-child(2), #us_menu_mobile_content .oct-menu-li-main:nth-child(3)
 {
 	display:none;
 }
