@@ -3294,6 +3294,15 @@ span.us-product-info-is {
 	padding: 0 30px 30px;
 }
 
+/* Supplier-imported descriptions carry inline width/height in px on <img>.
+   The inline height beats .img-fluid height:auto, so once max-width caps the
+   width on narrow screens the image gets stretched vertically. */
+.us-product-description-cont img,
+.us-category-description-text img {
+	max-width: 100%;
+	height: auto !important;
+}
+
 #us-related-dop_tab-row {
 	padding-top: 30px;
 }
