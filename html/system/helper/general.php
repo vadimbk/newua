@@ -37,3 +37,31 @@ if(!function_exists('hash_equals')) {
 		}
 	}
 }
+/**
+ * Preorder rule.
+ *
+ * quantity is set by the supplier feed import and means "the supplier has it now",
+ * not a shelf count. stock_status_id is chosen by a manager and means "what to do
+ * once the supplier has none". A product is a preorder only when both apply:
+ * the supplier is out AND the manager marked it as still sourceable.
+ *
+ * oc_stock_status: 6 = expected in 2-3 days, 8 = on order, 11 = on order 7-14 days.
+ * Keep this list in sync with the in-stock-alert module button replacement list.
+ */
+function preorder_stock_status_ids() {
+	return array(6, 8, 11);
+}
+
+function is_preorder_product($quantity, $stock_status_id) {
+	if ($quantity > 0) {
+		return false;
+	}
+
+	return in_array((int)$stock_status_id, preorder_stock_status_ids(), true);
+}
+
+// oc_stock_status 5 = out of stock. Default availability for a new product, so a
+// product never reaches the storefront with an empty stock status.
+function default_stock_status_id() {
+	return 5;
+}

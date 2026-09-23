@@ -29,7 +29,7 @@ $_['entry_price']         = 'Цiна:';
 
 //Buy 1 Click
 $_['oct_product_oneclick']		  = 'Купити в один клік';
-$_['oct_product_oneclick_enter']  = 'Введіть номер телефону і ми передзвонимо';
+$_['oct_product_oneclick_enter']  = 'Введіть номер телефону і ми вам зателефонуємо';
 $_['oct_product_oneclick_placeholder']  = 'Номер телефону';
 $_['oct_product_oneclickbuy']	  = 'Купити';
 

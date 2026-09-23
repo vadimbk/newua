@@ -9,6 +9,39 @@ class ModelCheckoutOrder extends Model {
 	      $utm_content = (!empty($_COOKIE['utm_content'])) ? $_COOKIE['utm_content'] : null;
 	      $utm_term = (!empty($_COOKIE['utm_term'])) ? $_COOKIE['utm_term'] : null;
       
+
+		// Preorder rule, see system/helper/general.php. Append a line to the order comment
+		// so the admin order view, the manager notification and the CRM all show it without
+		// a new column. Wording kept identical to the one used on this shop since 2026-03.
+		if (!empty($data['products'])) {
+			$preorder_ids = array();
+
+			foreach ($data['products'] as $preorder_product) {
+				$preorder_ids[] = (int)$preorder_product['product_id'];
+			}
+
+			$preorder_query = $this->db->query("SELECT product_id FROM " . DB_PREFIX . "product WHERE product_id IN (" . implode(',', $preorder_ids) . ") AND quantity <= 0 AND stock_status_id IN (" . implode(',', preorder_stock_status_ids()) . ")");
+
+			$preorder_map = array();
+
+			foreach ($preorder_query->rows as $preorder_row) {
+				$preorder_map[(int)$preorder_row['product_id']] = true;
+			}
+
+			$preorder_names = array();
+
+			foreach ($data['products'] as $preorder_product) {
+				if (isset($preorder_map[(int)$preorder_product['product_id']])) {
+					$preorder_names[] = $preorder_product['name'];
+				}
+			}
+
+			if ($preorder_names) {
+				$data['comment'] = trim($data['comment']);
+				$data['comment'] .= ($data['comment'] ? "\n" : '') . 'ПІД ЗАМОВЛЕННЯ. 100% передплата. Товари: ' . implode(', ', $preorder_names);
+			}
+		}
+
 		$this->db->query("INSERT INTO `" . DB_PREFIX . "order` SET invoice_prefix = '" . $this->db->escape($data['invoice_prefix']) . "', store_id = '" . (int)$data['store_id'] . "', store_name = '" . $this->db->escape($data['store_name']) . "', store_url = '" . $this->db->escape($data['store_url']) . "', customer_id = '" . (int)$data['customer_id'] . "', customer_group_id = '" . (int)$data['customer_group_id'] . "', firstname = '" . $this->db->escape($data['firstname']) . "', lastname = '" . $this->db->escape($data['lastname']) . "', email = '" . $this->db->escape($data['email']) . "', telephone = '" . $this->db->escape($data['telephone']) . "', custom_field = '" . $this->db->escape(isset($data['custom_field']) ? json_encode($data['custom_field']) : '') . "', payment_firstname = '" . $this->db->escape($data['payment_firstname']) . "', payment_lastname = '" . $this->db->escape($data['payment_lastname']) . "', payment_company = '" . $this->db->escape($data['payment_company']) . "', payment_address_1 = '" . $this->db->escape($data['payment_address_1']) . "', payment_address_2 = '" . $this->db->escape($data['payment_address_2']) . "', payment_city = '" . $this->db->escape($data['payment_city']) . "', payment_postcode = '" . $this->db->escape($data['payment_postcode']) . "', payment_country = '" . $this->db->escape($data['payment_country']) . "', payment_country_id = '" . (int)$data['payment_country_id'] . "', payment_zone = '" . $this->db->escape($data['payment_zone']) . "', payment_zone_id = '" . (int)$data['payment_zone_id'] . "', payment_address_format = '" . $this->db->escape($data['payment_address_format']) . "', payment_custom_field = '" . $this->db->escape(isset($data['payment_custom_field']) ? json_encode($data['payment_custom_field']) : '') . "', payment_method = '" . $this->db->escape($data['payment_method']) . "', payment_code = '" . $this->db->escape($data['payment_code']) . "', shipping_firstname = '" . $this->db->escape($data['shipping_firstname']) . "', shipping_lastname = '" . $this->db->escape($data['shipping_lastname']) . "', shipping_company = '" . $this->db->escape($data['shipping_company']) . "', shipping_address_1 = '" . $this->db->escape($data['shipping_address_1']) . "', shipping_address_2 = '" . $this->db->escape($data['shipping_address_2']) . "', shipping_city = '" . $this->db->escape($data['shipping_city']) . "', shipping_postcode = '" . $this->db->escape($data['shipping_postcode']) . "', shipping_country = '" . $this->db->escape($data['shipping_country']) . "', shipping_country_id = '" . (int)$data['shipping_country_id'] . "', shipping_zone = '" . $this->db->escape($data['shipping_zone']) . "', shipping_zone_id = '" . (int)$data['shipping_zone_id'] . "', shipping_address_format = '" . $this->db->escape($data['shipping_address_format']) . "', shipping_custom_field = '" . $this->db->escape(isset($data['shipping_custom_field']) ? json_encode($data['shipping_custom_field']) : '') . "', shipping_method = '" . $this->db->escape($data['shipping_method']) . "', shipping_code = '" . $this->db->escape($data['shipping_code']) . "', comment = '" . $this->db->escape($data['comment']) . "', total = '" . (float)$data['total'] . "', affiliate_id = '" . (int)$data['affiliate_id'] . "', commission = '" . (float)$data['commission'] . "', marketing_id = '" . (int)$data['marketing_id'] . "', tracking = '" . $this->db->escape($data['tracking']) . "', language_id = '" . (int)$data['language_id'] . "', currency_id = '" . (int)$data['currency_id'] . "', currency_code = '" . $this->db->escape($data['currency_code']) . "', currency_value = '" . (float)$data['currency_value'] . "', ip = '" . $this->db->escape($data['ip']) . "', forwarded_ip = '" .  $this->db->escape($data['forwarded_ip']) . "', user_agent = '" . $this->db->escape($data['user_agent']) . "', accept_language = '" . $this->db->escape($data['accept_language']) . "', 
       	date_added = NOW(), date_modified = NOW(),  referer = '" . $this->db->escape($referer) . "' , utm_source = '" . $this->db->escape($utm_source) . "' , utm_medium = '" . $this->db->escape($utm_medium) . "' , utm_campaign = '" . $this->db->escape($utm_campaign) . "' , utm_content = '" . $this->db->escape($utm_content) . "' , utm_term = '" . $this->db->escape($utm_term) . "'
       ");

@@ -13,7 +13,7 @@
     <tbody>
 	    {% for product in products %}
 	    <tr>
-	      <td><a href="{{ product.href }}">{{ product.name }}</a> {% for option in product.option %} <br />
+	      <td><a href="{{ product.href }}">{{ product.name }}</a>{% if product.preorder %} <span class="preorder-badge">{{ text_preorder }}</span>{% endif %} {% for option in product.option %} <br />
 	        &nbsp;<small> - {{ option.name }}: {{ option.value }}</small> {% endfor %}
 	        {% if product.recurring %} <br />
 	        <span class="label label-info">{{ text_recurring_item }}</span> <small>{{ product.recurring }}</small> {% endif %}</td>

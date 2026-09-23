@@ -32,7 +32,7 @@
 						<div class="us-cart-item-desc">
 							<div class="mb-3">
 							<a href="{{ product.href }}" class="us-cart-item-link">
-								{{ product.name }}
+								{{ product.name }}{% if product.preorder %} <span class="preorder-badge">{{ text_preorder }}</span>{% endif %}
 							</a>
 							{% if product.sku %}
 							<div data-productKey="{{ product.product_id }}"></div>

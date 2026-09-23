@@ -7,6 +7,9 @@
 		</div>
 	</div>
 	<div class="content-top-box">{{ content_top }}</div>
+	{% if preorder %}
+	<div class="preorder-note">{{ text_preorder_cart }}</div>
+	{% endif %}
 	{% if attention %}
 	<script>
 	usNotify('warning', '{{ attention }}');
@@ -36,7 +39,7 @@
 							<a href="javascript:;" class="us-cart-del" onclick="cart.remove('{{ product.cart_id }}');"><i class="fas fa-trash-alt"></i></a>
 							{% if product.thumb %}<a href="{{ product.href }}" class="us-cart-item-img-link"><img src="{{ product.thumb }}" class="us-cart-item-img"  alt="{{ product.name }}" title="{{ product.name }}" /></a>{% endif %}
 							<div class="us-cart-item-desc">
-								<a href="{{ product.href }}" class="us-cart-item-link">{{ product.name }}</a>{% if not product.stock %}<span class="required">***</span>{% endif %}
+								<a href="{{ product.href }}" class="us-cart-item-link">{{ product.name }}</a>{% if not product.stock %}<span class="required">***</span>{% endif %}{% if product.preorder %} <span class="preorder-badge">{{ text_preorder }}</span>{% endif %}
 								
 								<div data-productKey="{{ product.product_id }}"></div>
 								<div class="aval-product-page-id hidden">{{ product.product_id }}</div>

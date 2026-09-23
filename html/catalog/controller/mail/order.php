@@ -120,6 +120,11 @@ class ControllerMailOrder extends Controller {
 			$data['comment'] = '';
 		}
 
+		// Preorder rule, see system/helper/general.php. The order comment table in
+		// order_add.twig is disabled, so surface the preorder fact with its own flag.
+		$data['preorder'] = (strpos($order_info['comment'], 'ПІД ЗАМОВЛЕННЯ. 100% передплата. Товари: ') !== false);
+		$data['text_preorder_cart'] = $language->get('text_preorder_cart');
+
 		if ($order_info['payment_address_format']) {
 			$format = $order_info['payment_address_format'];
 		} else {

@@ -218,13 +218,10 @@ currency: 'UAH'
 																	
 							
 
-{% if product.stock_status_id == 11 %}
-<span class="outstock">{{ text_pod_zakaz_7 }}</span>
-
-{% elseif product.quantity == 0 %}
+{% if product.quantity == 0 %}
 <span class="status-stock instock">{{ text_in_stock }}</span>
 {% else %}
-<span class="outstock">{{ text_out_stock }}</span>
+<span class="outstock">{{ product.stock_status ? product.stock_status : text_out_stock }}</span>
 {% endif %}
 
 

@@ -183,7 +183,7 @@
 {% if product.quantity == 0 %}
 <span class="status-stock instock">{{ text_in_stock }}</span>
 {% else %}
-<span class="outstock">{{ text_out_stock }}</span>
+<span class="outstock">{{ product.stock ? product.stock : text_out_stock }}</span>
 {% endif %}
 								
 								

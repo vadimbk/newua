@@ -312,6 +312,7 @@ $data['peremenaya'] = false;
                     'recurring' => $recurring,
                     'quantity'  => $product['quantity'],
                     'stock'     => $product['stock'] ? true : !(!$this->config->get('config_stock_checkout') || $this->config->get('config_stock_warning')),
+                    'preorder'  => !empty($product['preorder']),
                     'reward'    => ($product['reward'] ? sprintf($this->language->get('text_points'), $product['reward']) : ''),
                     'price'     => $price,
                     'prices'     =>round($product['price']*45),

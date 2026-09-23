@@ -54,7 +54,7 @@
                                     <a href="{{ product['href'] }}"><img src="{{ product['thumb'] }}" alt="{{ product['name'] }}" title="{{ product['name'] }}" /></a>
                                 </div>
                             {% endif %}
-                            <a href="{{ product['href'] }}">{{ product['name'] }}</a>
+                            <a href="{{ product['href'] }}">{{ product['name'] }}</a>{% if product['preorder'] %} <span class="preorder-badge">{{ text_preorder }}</span>{% endif %}
 							<div class="aval-product-page-id hidden">{{ product.product_id }}</div>
                             {% if not product['stock'] and (config_stock_warning or not config_stock_checkout) %}
                                 <span class="product-warning">***</span>

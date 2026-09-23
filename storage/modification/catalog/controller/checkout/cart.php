@@ -156,12 +156,22 @@ class ControllerCheckoutCart extends Controller {
 					'recurring' => $recurring,
 					'quantity'  => $product['quantity'],
 					'stock'     => $product['stock'] ? true : !(!$this->config->get('config_stock_checkout') || $this->config->get('config_stock_warning')),
+					'preorder'  => !empty($product['preorder']),
 					'reward'    => ($product['reward'] ? sprintf($this->language->get('text_points'), $product['reward']) : ''),
 					'price'     => $price,
 					'prices'     => round($product['price']*45),
 					'total'     => $total,
 					'href'      => $this->url->link('product/product', 'product_id=' . $product['product_id'])
 				);
+			}
+
+			// Preorder rule, see system/helper/general.php.
+			$data['preorder'] = false;
+
+			foreach ($data['products'] as $cart_product) {
+				if ($cart_product['preorder']) {
+					$data['preorder'] = true;
+				}
 			}
 
 			// Gift Voucher

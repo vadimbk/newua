@@ -38,6 +38,15 @@
       </tr>
     </tbody>
   </table>
+  {% if preorder %}
+  <table style="border-collapse: collapse; width: 100%; margin-bottom: 20px;">
+    <tbody>
+      <tr>
+        <td style="font-size: 13px; text-align: left; padding: 10px; background-color: #fff7ef; border-left: 3px solid #e67e22; color: #8a4b00;"><b>{{ text_preorder_cart }}</b></td>
+      </tr>
+    </tbody>
+  </table>
+  {% endif %}
   {% if comment %}
   <!--<table style="border-collapse: collapse; width: 100%; border-top: 1px solid #E7E7E7; border-left: 1px solid #E7E7E7; margin-bottom: 20px;">
     <thead>

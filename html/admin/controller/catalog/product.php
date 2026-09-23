@@ -909,7 +909,9 @@ $data['sku'] = $autosku_query1->row["MAX(sku)"]+1;
 		} elseif (!empty($product_info)) {
 			$data['stock_status_id'] = $product_info['stock_status_id'];
 		} else {
-			$data['stock_status_id'] = 0;
+			// Default for a brand new product: out of stock, so a product never ends up
+			// with an empty availability. See system/helper/general.php.
+			$data['stock_status_id'] = default_stock_status_id();
 		}
 
 		if (isset($this->request->post['status'])) {

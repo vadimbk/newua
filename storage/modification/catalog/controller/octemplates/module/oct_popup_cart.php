@@ -160,6 +160,7 @@ class ControllerOCTemplatesModuleOctPopupCart extends Controller {
 					'product_id' => $product['product_id'],
 					'thumb' => $image,
 					'name' => $product['name'],
+					'preorder' => !empty($product['preorder']),
 					'sku' => $product_info['sku'],
 					'model' => $product['model'],
 					'option' => $option_data,

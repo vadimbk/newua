@@ -8114,3 +8114,23 @@ display: inline-block;
 }
 
 .table_min_price td{padding:5px;}
+/* Preorder markers */
+.preorder-badge {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 1px 7px;
+    border-radius: 3px;
+    background: #e67e22;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.preorder-note {
+    margin: 0 0 15px;
+    padding: 10px 14px;
+    border-left: 3px solid #e67e22;
+    background: #fff7ef;
+    color: #8a4b00;
+    font-size: 14px;
+}
