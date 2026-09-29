@@ -35,6 +35,10 @@ $_['entry_sort_order']       = 'Sort order';
 $_['entry_category']         = 'Show in categories';
 $_['entry_related']          = 'Recommended articles';
 $_['entry_related_product']  = 'Featured products';
+$_['entry_product_block']    = 'Products in article text';
+$_['help_product_block']     = 'In-text product block. Its position is set by the &lt;div class=&quot;art-products&quot;&gt;&lt;/div&gt; marker in the description; without it the block goes before the last H2. Reorder with the arrow.';
+$_['entry_products_title']   = 'Product block title';
+$_['help_products_title']    = 'Empty: default &quot;Popular products&quot; title.';
 $_['entry_tag']              = 'Article tags';
 $_['entry_layout']           = 'Layout';
 

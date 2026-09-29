@@ -61,6 +61,7 @@ class ModelOCTemplatesBlogOCTBlogArticle extends Model {
 				'name'             => $query->row['name'],
 				'shot_description' => $query->row['shot_description'],
 				'description'      => $query->row['description'],
+				'products_title'   => $query->row['products_title'],
 				'meta_title'       => $query->row['meta_title'],
 				'meta_description' => $query->row['meta_description'],
 				'meta_keyword'     => $query->row['meta_keyword'],
@@ -323,6 +324,24 @@ class ModelOCTemplatesBlogOCTBlogArticle extends Model {
 
 			if ($product_info) {
 				$product_data[$result['product_id']] = $product_info;
+			}
+		}
+
+		return $product_data;
+	}
+
+	public function getArticleProductBlock($blogarticle_id) {
+		$this->load->model('catalog/product');
+
+		$product_data = [];
+
+		$query = $this->db->query("SELECT product_id FROM " . DB_PREFIX . "oct_blogarticle_product_block WHERE blogarticle_id = '" . (int)$blogarticle_id . "' ORDER BY sort_order, product_id");
+
+		foreach ($query->rows as $result) {
+			$product_info = $this->model_catalog_product->getProduct($result['product_id']);
+
+			if ($product_info) {
+				$product_data[] = $product_info;
 			}
 		}
 

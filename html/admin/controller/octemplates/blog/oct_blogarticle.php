@@ -751,6 +751,28 @@ foreach ($author as $blogblogauthor_id) {
 			}
 		}
 
+		if (isset($this->request->post['article_product_block'])) {
+			$products = $this->request->post['article_product_block'];
+		} elseif (isset($this->request->get['blogarticle_id'])) {
+			$products = $this->model_octemplates_blog_oct_blogarticle->getArticleProductBlock($this->request->get['blogarticle_id']);
+		} else {
+			$products = [];
+		}
+
+		$data['article_product_blocks'] = [];
+
+		foreach ($products as $product_id) {
+			$product_info = $this->model_catalog_product->getProduct($product_id);
+
+			if ($product_info) {
+				$data['article_product_blocks'][] = [
+					'product_id' => $product_info['product_id'],
+					'name'       => $product_info['name'],
+					'model'      => $product_info['model']
+				];
+			}
+		}
+
 		if (isset($this->request->post['article_seo_url'])) {
 			$data['article_seo_url'] = $this->request->post['article_seo_url'];
 		} elseif (isset($this->request->get['blogarticle_id'])) {

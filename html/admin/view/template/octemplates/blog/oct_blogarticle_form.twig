@@ -95,6 +95,12 @@
 										</div>
 									</div>
 									<div class="form-group">
+										<label class="col-sm-2 control-label" for="input-products-title{{ language.language_id }}"><span data-toggle="tooltip" title="{{ help_products_title }}">{{ entry_products_title }}</span></label>
+										<div class="col-sm-10">
+											<input type="text" name="article_description[{{ language.language_id }}][products_title]" value="{{ article_description[language.language_id] ? article_description[language.language_id].products_title }}" placeholder="{{ entry_products_title }}" id="input-products-title{{ language.language_id }}" class="form-control" />
+										</div>
+									</div>
+									<div class="form-group">
 										<label class="col-sm-2 control-label" for="input-tag{{ language.language_id }}"><span data-toggle="tooltip" title="{{ help_tag }}">{{ entry_tag }}</span></label>
 										<div class="col-sm-10">
 											<input type="text" name="article_description[{{ language.language_id }}][tag]" value="{{ article_description[language.language_id] ? article_description[language.language_id].tag }}" placeholder="{{ entry_tag }}" id="input-tag{{ language.language_id }}" class="form-control" />
@@ -217,6 +223,19 @@
 										{% for article_related in article_related_products %}
 										<div id="article-related-product{{ article_related.product_id }}"><i class="fa fa-minus-circle"></i> {{ article_related.name }}
 											<input type="hidden" name="article_related_product[]" value="{{ article_related.product_id }}" />
+										</div>
+										{% endfor %}
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label" for="input-product-block"><span data-toggle="tooltip" title="{{ help_product_block }}">{{ entry_product_block }}</span></label>
+								<div class="col-sm-10">
+									<input type="text" name="product-block" value="" placeholder="{{ entry_product_block }}" id="input-product-block" class="form-control" />
+									<div id="article-product-block" class="well well-sm" style="height: 180px; overflow: auto;">
+										{% for product_block in article_product_blocks %}
+										<div id="article-product-block{{ product_block.product_id }}"><i class="fa fa-arrow-up" style="cursor: pointer;"></i> <i class="fa fa-minus-circle" style="cursor: pointer;"></i> {{ product_block.name }} ({{ product_block.model }})
+											<input type="hidden" name="article_product_block[]" value="{{ product_block.product_id }}" />
 										</div>
 										{% endfor %}
 									</div>
@@ -458,6 +477,42 @@ $('input[name=\'related-product\']').autocomplete({
 
 $('#article-related-product').delegate('.fa-minus-circle', 'click', function() {
 	$(this).parent().remove();
+});
+
+// In-text product block
+$('input[name=\'product-block\']').autocomplete({
+	'source': function(request, response) {
+		$.ajax({
+			url: 'index.php?route=catalog/product/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+			dataType: 'json',
+			cache: false,
+			success: function(json) {
+				response($.map(json, function(item) {
+					return {
+						label: item['name'],
+						value: item['product_id']
+					}
+				}));
+			}
+		});
+	},
+	'select': function(item) {
+		$('input[name=\'product-block\']').val('');
+
+		$('#article-product-block' + item['value']).remove();
+
+		$('#article-product-block').append('<div id="article-product-block' + item['value'] + '"><i class="fa fa-arrow-up" style="cursor: pointer;"></i> <i class="fa fa-minus-circle" style="cursor: pointer;"></i> ' + item['label'] + '<input type="hidden" name="article_product_block[]" value="' + item['value'] + '" /></div>');
+	}
+});
+
+$('#article-product-block').delegate('.fa-minus-circle', 'click', function() {
+	$(this).parent().remove();
+});
+
+$('#article-product-block').delegate('.fa-arrow-up', 'click', function() {
+	var row = $(this).parent();
+
+	row.prev().before(row);
 });
 </script>
 <script>

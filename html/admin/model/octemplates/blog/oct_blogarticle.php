@@ -20,7 +20,7 @@ class ModelOCTemplatesBlogOCTBlogArticle extends Model {
 		}
 
 		foreach ($data['article_description'] as $language_id => $value) {
-			$this->db->query("INSERT INTO " . DB_PREFIX . "oct_blogarticle_description SET blogarticle_id = '" . (int)$blogarticle_id . "', language_id = '" . (int)$language_id . "', name = '" . $this->db->escape($value['name']) . "', shot_description = '" . $this->db->escape($value['shot_description']) . "', description = '" . $this->db->escape($value['description']) . "', tag = '" . $this->db->escape($value['tag']) . "', meta_title = '" . $this->db->escape($value['meta_title']) . "', meta_description = '" . $this->db->escape($value['meta_description']) . "', meta_keyword = '" . $this->db->escape($value['meta_keyword']) . "'");
+			$this->db->query("INSERT INTO " . DB_PREFIX . "oct_blogarticle_description SET blogarticle_id = '" . (int)$blogarticle_id . "', language_id = '" . (int)$language_id . "', name = '" . $this->db->escape($value['name']) . "', shot_description = '" . $this->db->escape($value['shot_description']) . "', description = '" . $this->db->escape($value['description']) . "', tag = '" . $this->db->escape($value['tag']) . "', meta_title = '" . $this->db->escape($value['meta_title']) . "', meta_description = '" . $this->db->escape($value['meta_description']) . "', meta_keyword = '" . $this->db->escape($value['meta_keyword']) . "', products_title = '" . $this->db->escape(isset($value['products_title']) ? $value['products_title'] : '') . "'");
 		}
 
 		if (isset($data['article_store'])) {
@@ -63,6 +63,12 @@ class ModelOCTemplatesBlogOCTBlogArticle extends Model {
 			}
 		}
 
+		if (isset($data['article_product_block'])) {
+			foreach (array_values(array_unique($data['article_product_block'])) as $sort_order => $product_id) {
+				$this->db->query("INSERT INTO " . DB_PREFIX . "oct_blogarticle_product_block SET blogarticle_id = '" . (int)$blogarticle_id . "', product_id = '" . (int)$product_id . "', sort_order = '" . (int)$sort_order . "'");
+			}
+		}
+
 		// SEO URL
 		if (isset($data['article_seo_url'])) {
 			foreach ($data['article_seo_url'] as $store_id => $language) {
@@ -96,7 +102,7 @@ class ModelOCTemplatesBlogOCTBlogArticle extends Model {
 		$this->db->query("DELETE FROM " . DB_PREFIX . "oct_blogarticle_description WHERE blogarticle_id = '" . (int)$blogarticle_id . "'");
 
 		foreach ($data['article_description'] as $language_id => $value) {
-			$this->db->query("INSERT INTO " . DB_PREFIX . "oct_blogarticle_description SET blogarticle_id = '" . (int)$blogarticle_id . "', language_id = '" . (int)$language_id . "', name = '" . $this->db->escape($value['name']) . "', shot_description = '" . $this->db->escape($value['shot_description']) . "', description = '" . $this->db->escape($value['description']) . "', tag = '" . $this->db->escape($value['tag']) . "', meta_title = '" . $this->db->escape($value['meta_title']) . "', meta_description = '" . $this->db->escape($value['meta_description']) . "', meta_keyword = '" . $this->db->escape($value['meta_keyword']) . "'");
+			$this->db->query("INSERT INTO " . DB_PREFIX . "oct_blogarticle_description SET blogarticle_id = '" . (int)$blogarticle_id . "', language_id = '" . (int)$language_id . "', name = '" . $this->db->escape($value['name']) . "', shot_description = '" . $this->db->escape($value['shot_description']) . "', description = '" . $this->db->escape($value['description']) . "', tag = '" . $this->db->escape($value['tag']) . "', meta_title = '" . $this->db->escape($value['meta_title']) . "', meta_description = '" . $this->db->escape($value['meta_description']) . "', meta_keyword = '" . $this->db->escape($value['meta_keyword']) . "', products_title = '" . $this->db->escape(isset($value['products_title']) ? $value['products_title'] : '') . "'");
 		}
 
 		$this->db->query("DELETE FROM " . DB_PREFIX . "oct_blogarticle_to_store WHERE blogarticle_id = '" . (int)$blogarticle_id . "'");
@@ -152,6 +158,14 @@ class ModelOCTemplatesBlogOCTBlogArticle extends Model {
 			}
 		}
 
+		$this->db->query("DELETE FROM " . DB_PREFIX . "oct_blogarticle_product_block WHERE blogarticle_id = '" . (int)$blogarticle_id . "'");
+
+		if (isset($data['article_product_block'])) {
+			foreach (array_values(array_unique($data['article_product_block'])) as $sort_order => $product_id) {
+				$this->db->query("INSERT INTO " . DB_PREFIX . "oct_blogarticle_product_block SET blogarticle_id = '" . (int)$blogarticle_id . "', product_id = '" . (int)$product_id . "', sort_order = '" . (int)$sort_order . "'");
+			}
+		}
+
 		// SEO URL
 		$this->db->query("DELETE FROM " . DB_PREFIX . "seo_url WHERE query = 'blogarticle_id=" . (int)$blogarticle_id . "'");
 
@@ -189,6 +203,7 @@ class ModelOCTemplatesBlogOCTBlogArticle extends Model {
 			$data['article_description'] = $this->getArticleDescriptions($blogarticle_id);
 			$data['article_image'] = $this->getArticleImages($blogarticle_id);
 			$data['article_related'] = $this->getArticleRelated($blogarticle_id);
+			$data['article_product_block'] = $this->getArticleProductBlock($blogarticle_id);
 			$data['article_category'] = $this->getArticleCategories($blogarticle_id);
 			$data['author'] = $this->getArticleAuthor($blogarticle_id);
 			$data['article_layout'] = $this->getArticleLayouts($blogarticle_id);
@@ -209,6 +224,7 @@ class ModelOCTemplatesBlogOCTBlogArticle extends Model {
 		$this->db->query("DELETE FROM " . DB_PREFIX . "oct_blogarticle_to_layout WHERE blogarticle_id = '" . (int)$blogarticle_id . "'");
 		$this->db->query("DELETE FROM " . DB_PREFIX . "oct_blogarticle_to_store WHERE blogarticle_id = '" . (int)$blogarticle_id . "'");
 		$this->db->query("DELETE FROM " . DB_PREFIX . "oct_blogcomments WHERE blogarticle_id = '" . (int)$blogarticle_id . "'");
+		$this->db->query("DELETE FROM " . DB_PREFIX . "oct_blogarticle_product_block WHERE blogarticle_id = '" . (int)$blogarticle_id . "'");
 		$this->db->query("DELETE FROM " . DB_PREFIX . "seo_url WHERE query = 'blogarticle_id=" . (int)$blogarticle_id . "'");
 
 		$this->cache->delete('oct_blogarticle');
@@ -293,6 +309,7 @@ class ModelOCTemplatesBlogOCTBlogArticle extends Model {
 				'meta_title'       => $result['meta_title'],
 				'meta_description' => $result['meta_description'],
 				'meta_keyword'     => $result['meta_keyword'],
+				'products_title'   => $result['products_title'],
 				'tag'              => $result['tag']
 			);
 		}
@@ -376,6 +393,18 @@ class ModelOCTemplatesBlogOCTBlogArticle extends Model {
 		}
 
 		return $article_related_data;
+	}
+
+	public function getArticleProductBlock($blogarticle_id) {
+		$product_block_data = array();
+
+		$query = $this->db->query("SELECT product_id FROM " . DB_PREFIX . "oct_blogarticle_product_block WHERE blogarticle_id = '" . (int)$blogarticle_id . "' ORDER BY sort_order, product_id");
+
+		foreach ($query->rows as $result) {
+			$product_block_data[] = $result['product_id'];
+		}
+
+		return $product_block_data;
 	}
 
 	public function getArticleRelatedProducts($blogarticle_id) {

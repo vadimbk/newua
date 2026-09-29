@@ -23,3 +23,6 @@ $_['error_text']					= 'Коментар повинен бути від 25 до 
 $_['error_rating']				= 'Необхідно поставити оцінку статті!';
 $_['text_error']					= 'Сторінка не знайдена';
 $_['heading_title']					= 'Блог';
+$_['text_art_products_title']	= 'Популярні товари';
+$_['text_art_products_more']	= 'Детальніше';
+$_['text_art_products_instock']	= 'В наявності';

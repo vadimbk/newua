@@ -1,0 +1,13 @@
+<div class="art-products">
+	<div class="art-products__title">{{ title }}</div>
+	<div class="art-products__list">
+		{% for product in products %}
+		<a class="art-product" href="{{ product.href }}">
+			<img src="{{ product.thumb }}" alt="{{ product.name }}" width="160" height="160" loading="lazy">
+			<span class="art-product__name">{{ product.name }}</span>
+			<span class="art-product__stock{% if not product.in_stock %} art-product__stock--out{% endif %}">{{ product.stock }}</span>
+			<span class="art-product__btn">{{ text_more }}</span>
+		</a>
+		{% endfor %}
+	</div>
+</div>

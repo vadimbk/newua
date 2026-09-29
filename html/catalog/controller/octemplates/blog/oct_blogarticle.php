@@ -176,6 +176,7 @@ $data['breadcrumbs'][] = array(
 
 			$data['blogarticle_id'] = (int)$this->request->get['blogarticle_id'];
 			$data['description'] = html_entity_decode($article_info['description'], ENT_QUOTES, 'UTF-8');
+			$data['description'] = $this->addProductBlock($data['description'], $blogarticle_id, $article_info['products_title']);
 			$data['date_added'] = date($this->language->get('datetime_format_blog'), strtotime($article_info['date_added']));
 			
 			/*author*/
@@ -458,5 +459,57 @@ $data['breadcrumbs'][] = array(
 
 		$this->response->addHeader('Content-Type: application/json');
 		$this->response->setOutput(json_encode($json));
+	}
+
+	/*
+	 * Renders the in-text product block (oc_oct_blogarticle_product_block) into the article body.
+	 * Placement: the first <div class="art-products"></div> marker; without a marker, before the
+	 * last <h2>; without an <h2>, at the end. Unavailable products are dropped by getProduct().
+	 */
+	private function addProductBlock($description, $blogarticle_id, $title) {
+		$marker = '~<div[^>]*class="art-products"[^>]*>(?:\s|&nbsp;|\xC2\xA0|<br\s*/?>)*</div>~i';
+
+		$results = $this->model_octemplates_blog_oct_blogarticle->getArticleProductBlock($blogarticle_id);
+
+		if (!$results) {
+			return preg_replace($marker, '', $description);
+		}
+
+		$this->load->model('tool/image');
+
+		$data['products'] = [];
+
+		foreach ($results as $result) {
+			$data['products'][] = [
+				'name'     => $result['name'],
+				'thumb'    => $this->model_tool_image->resize($result['image'] ? $result['image'] : 'placeholder.png', 228, 228),
+				'href'     => $this->url->link('product/product', 'product_id=' . $result['product_id']),
+				'in_stock' => $result['quantity'] > 0,
+				'stock'    => $result['quantity'] > 0 ? $this->language->get('text_art_products_instock') : $result['stock_status']
+			];
+		}
+
+		$data['title'] = trim((string)$title) !== '' ? $title : $this->language->get('text_art_products_title');
+		$data['text_more'] = $this->language->get('text_art_products_more');
+
+		$block = $this->load->view('octemplates/blog/oct_blogarticle_products', $data);
+
+		$this->document->addStyle('catalog/view/theme/oct_ultrastore/stylesheet/oct_blogarticle_products.css');
+
+		if (preg_match($marker, $description)) {
+			$description = preg_replace_callback($marker, function () use ($block) {
+				return $block;
+			}, $description, 1);
+
+			return preg_replace($marker, '', $description);
+		}
+
+		$pos = strripos($description, '<h2');
+
+		if ($pos !== false) {
+			return substr($description, 0, $pos) . $block . substr($description, $pos);
+		}
+
+		return $description . $block;
 	}
 }

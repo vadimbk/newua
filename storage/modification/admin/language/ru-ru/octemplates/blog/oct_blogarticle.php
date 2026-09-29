@@ -44,6 +44,10 @@ $_['entry_sort_order']       = 'Порядок сортировки';
 $_['entry_category']         = 'Показывать в категориях';
 $_['entry_related']          = 'Рекомендуемые статьи';
 $_['entry_related_product']  = 'Рекомендуемые товары';
+$_['entry_product_block']    = 'Товары в тексте статьи';
+$_['help_product_block']     = 'Блок товаров внутри текста. Место задает метка &lt;div class=&quot;art-products&quot;&gt;&lt;/div&gt; в описании; без метки блок выводится перед последним подзаголовком H2. Порядок меняется стрелкой.';
+$_['entry_products_title']   = 'Заголовок блока товаров';
+$_['help_products_title']    = 'Если пусто: &quot;Популярные товары&quot;.';
 $_['entry_tag']              = 'Теги статьи';
 $_['entry_layout']           = 'Макет';
 

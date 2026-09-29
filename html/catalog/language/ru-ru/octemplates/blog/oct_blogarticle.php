@@ -24,3 +24,6 @@ $_['error_rating']				= 'Необходимо поставить оценку с
 $_['text_search'] = 'Результаты поиска';
 $_['text_error']					= 'Страница не найдена';
 $_['heading_title']					= 'Блог';
+$_['text_art_products_title']	= 'Популярные товары';
+$_['text_art_products_more']	= 'Подробнее';
+$_['text_art_products_instock']	= 'В наличии';
