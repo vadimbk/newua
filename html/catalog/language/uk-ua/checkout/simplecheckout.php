@@ -103,4 +103,7 @@ $_['text_besp']   = '<strong>БЕЗКОШТОВНА ДОСТАВКА</strong> о
 <strong>Нова Пошта - від 3000 грн.</strong><br>
 Передплата на картку або онлайн-оплата..-->';
 $_['text_bespdost']   = '<strong>Акція! Безкоштовна доставка</strong>';
+$_['text_comment_payer']     = 'Платник: %s, ЄДРПОУ/ІПН %s';
+$_['text_comment_recipient'] = 'Отримувач: %s, %s';
+$_['text_comment_buyer']     = 'Замовник: %s';
 ?>

@@ -217,6 +217,33 @@ class ControllerExtensionModuleSalesdrive extends Controller
 		if ( isset($simplecustom_order['zvon']) && !empty($simplecustom_order['zvon']) ){
 			$data["vamPerezvonit"] = $simplecustom_order['zvon']; // Отчество
 		}
+
+		// Payer company and another recipient from Simple checkout fields (raw values, not radio labels).
+		$simple_fields_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "order_simple_fields` WHERE order_id = '" . (int)$order_id . "'");
+
+		if ($simple_fields_query->num_rows) {
+			$simple_fields = $simple_fields_query->row;
+
+			if (isset($simple_fields['payer_type']) && $simple_fields['payer_type'] == '2' && !empty($simple_fields['field20'])) {
+				$company_name = htmlspecialchars_decode($simple_fields['field20']);
+				$data['company'] = $company_name;
+				$data['counterparty'] = array(
+					'name' => $company_name,
+					'code' => isset($simple_fields['payer_edrpou']) ? $simple_fields['payer_edrpou'] : ''
+				);
+			}
+
+			// The SD contact becomes the recipient (waybill recipient); the buyer moves to the comment.
+			if (isset($simple_fields['recipient_other']) && $simple_fields['recipient_other'] == '1' && !empty($simple_fields['recipient_lastname'])) {
+				$this->load->language('checkout/simplecheckout');
+				$buyer = array_filter(array(trim($data['lName'] . ' ' . $data['fName']), $data['phone'], $data['email']));
+				$data['comment'] = trim($data['comment'] . "\n" . sprintf($this->language->get('text_comment_buyer'), implode(', ', $buyer)));
+				$data['fName'] = htmlspecialchars_decode($simple_fields['recipient_firstname']);
+				$data['lName'] = htmlspecialchars_decode($simple_fields['recipient_lastname']);
+				$data['phone'] = $simple_fields['recipient_phone'];
+				$data['email'] = '';
+			}
+		}
 		
 		// DEBUG
 /*

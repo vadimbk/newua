@@ -99,4 +99,7 @@ $_['text_besp']   = '
 <strong>Новая Почта – от 5000 грн.</strong><br>
 Онлайн-оплата или Подписка на расчетный счет';
 $_['text_bespdost']   = '<strong>Акция! Бесплатная доставка</strong>';
+$_['text_comment_payer']     = 'Плательщик: %s, ЕГРПОУ/ИНН %s';
+$_['text_comment_recipient'] = 'Получатель: %s, %s';
+$_['text_comment_buyer']     = 'Заказчик: %s';
 ?>

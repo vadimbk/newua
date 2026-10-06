@@ -463,9 +463,10 @@ class SimpleCheckout extends Simple {
         $objects = array('customer', 'address', 'order');
         $langCode = $this->getCurrentLanguageCode();
         $result = array();
+        $lines = array();
 
         if (!empty($this->session->data['simple']['comment'])) {
-            $result[] = $this->session->data['simple']['comment'];
+            $lines[] = $this->session->data['simple']['comment'];
         }
 
         foreach ($blocks as $block) {
@@ -516,7 +517,23 @@ class SimpleCheckout extends Simple {
             }
         }
 
-        return implode(', ', $result);
+        if (!empty($result)) {
+            $lines[] = implode(', ', $result);
+        }
+
+        // Payer company and another recipient go on their own lines; labels come from the language file.
+        $customer = isset($this->session->data['simple']['customer']) ? $this->session->data['simple']['customer'] : array();
+
+        if (isset($customer['payer_type']) && $customer['payer_type'] == '2' && !empty($customer['field20'])) {
+            $lines[] = sprintf($this->language->get('text_comment_payer'), $customer['field20'], isset($customer['payer_edrpou']) ? $customer['payer_edrpou'] : '');
+        }
+
+        if (isset($customer['recipient_other']) && $customer['recipient_other'] == '1' && !empty($customer['recipient_lastname'])) {
+            $recipientName = trim($customer['recipient_lastname'] . ' ' . (isset($customer['recipient_firstname']) ? $customer['recipient_firstname'] : ''));
+            $lines[] = sprintf($this->language->get('text_comment_recipient'), $recipientName, isset($customer['recipient_phone']) ? $customer['recipient_phone'] : '');
+        }
+
+        return implode("\n", $lines);
     }
 
     public function getShippingStubs() {
