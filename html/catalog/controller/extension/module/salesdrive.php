@@ -223,25 +223,42 @@ class ControllerExtensionModuleSalesdrive extends Controller
 
 		if ($simple_fields_query->num_rows) {
 			$simple_fields = $simple_fields_query->row;
+			$comment_extra = array();
 
 			if (isset($simple_fields['payer_type']) && $simple_fields['payer_type'] == '2' && !empty($simple_fields['field20'])) {
 				$company_name = htmlspecialchars_decode($simple_fields['field20']);
+				$company_code = isset($simple_fields['payer_edrpou']) ? htmlspecialchars_decode($simple_fields['payer_edrpou']) : '';
 				$data['company'] = $company_name;
 				$data['counterparty'] = array(
 					'name' => $company_name,
-					'code' => isset($simple_fields['payer_edrpou']) ? $simple_fields['payer_edrpou'] : ''
+					'code' => $company_code
 				);
+				$comment_extra['text_comment_payer'] = array($company_name, $company_code);
 			}
 
-			// The SD contact becomes the recipient (waybill recipient); the buyer moves to the comment.
+			// The SD contact stays the buyer; the recipient goes to the order field "polucatel".
 			if (isset($simple_fields['recipient_other']) && $simple_fields['recipient_other'] == '1' && !empty($simple_fields['recipient_lastname'])) {
-				$this->load->language('checkout/simplecheckout');
-				$buyer = array_filter(array(trim($data['lName'] . ' ' . $data['fName']), $data['phone'], $data['email']));
-				$data['comment'] = trim($data['comment'] . "\n" . sprintf($this->language->get('text_comment_buyer'), implode(', ', $buyer)));
-				$data['fName'] = htmlspecialchars_decode($simple_fields['recipient_firstname']);
-				$data['lName'] = htmlspecialchars_decode($simple_fields['recipient_lastname']);
-				$data['phone'] = $simple_fields['recipient_phone'];
-				$data['email'] = '';
+				$recipient_name = htmlspecialchars_decode(trim($simple_fields['recipient_lastname'] . ' ' . $simple_fields['recipient_firstname']));
+				$recipient_phone = htmlspecialchars_decode($simple_fields['recipient_phone']);
+				$data['polucatel'] = $recipient_name . ', ' . $recipient_phone;
+				$comment_extra['text_comment_recipient'] = array($recipient_name, $recipient_phone);
+			}
+
+			// The payer/recipient lines in the order comment are for the OpenCart admin only; SD gets them as fields.
+			if ($comment_extra) {
+				$skip_lines = array();
+
+				foreach (array('uk-ua', 'ru-ru') as $language_code) {
+					$comment_language = new Language($language_code);
+					$comment_language->load('checkout/simplecheckout');
+
+					foreach ($comment_extra as $language_key => $language_args) {
+						$skip_lines[] = vsprintf($comment_language->get($language_key), $language_args);
+					}
+				}
+
+				$comment_lines = explode("\n", str_replace("\r", '', $data['comment']));
+				$data['comment'] = trim(implode("\n", array_diff($comment_lines, $skip_lines)));
 			}
 		}
 		
