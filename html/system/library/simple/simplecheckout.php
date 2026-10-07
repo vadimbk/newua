@@ -610,7 +610,16 @@ class SimpleCheckout extends Simple {
         if (empty($this->session->data['simple'])) {
             return $quote;
         }
-        
+
+        // Pickup is offered to companies only (payer type 2 in the customer block).
+        if (isset($quote['code']) && $quote['code'] == 'pickup') {
+            $payerType = isset($this->session->data['simple']['customer']['payer_type']) ? $this->session->data['simple']['customer']['payer_type'] : '';
+
+            if ($payerType != '2') {
+                return array();
+            }
+        }
+
         $groupId = $this->session->data['simple']['customer']['customer_group_id'];
 
         $all = '';
