@@ -62,6 +62,20 @@
                     </div>
                     
                     <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-organization-default"><span data-toggle="tooltip" title="<?php echo $help_organization_default; ?>"><?php echo $entry_organization_default; ?></span></label>
+                        <div class="col-sm-10">
+                            <input type="number" min="1" step="1" name="module_salesdrive_organization_default" value="<?php echo $module_salesdrive_organization_default; ?>" placeholder="<?php echo $entry_organization_default; ?>" id="input-organization-default" class="form-control" />
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-organization-nds"><span data-toggle="tooltip" title="<?php echo $help_organization_nds; ?>"><?php echo $entry_organization_nds; ?></span></label>
+                        <div class="col-sm-10">
+                            <input type="number" min="1" step="1" name="module_salesdrive_organization_nds" value="<?php echo $module_salesdrive_organization_nds; ?>" placeholder="<?php echo $entry_organization_nds; ?>" id="input-organization-nds" class="form-control" />
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
                         <label class="col-sm-2 control-label" for="input-status">Язык товаров</label>
                         <div class="col-sm-10">
                             <select name="module_salesdrive_product_language" id="input-status" class="form-control">

@@ -125,6 +125,10 @@ class ControllerExtensionModuleSalesdrive extends Controller
 			}
 			$post_data['module_salesdrive_match_order_statuses'] = $this->processDataArray($post_data['module_salesdrive_match_order_statuses']);
 			
+			foreach (array('module_salesdrive_organization_default', 'module_salesdrive_organization_nds') as $organization_key) {
+				$post_data[$organization_key] = (isset($post_data[$organization_key]) && (int)$post_data[$organization_key] > 0) ? (int)$post_data[$organization_key] : '';
+			}
+			
 			$this->model_setting_setting->editSetting('module_salesdrive', $post_data);
 
             $this->session->data['success'] = 'Настройки модуля успешно обновлены';
@@ -181,6 +185,18 @@ class ControllerExtensionModuleSalesdrive extends Controller
             $data['module_salesdrive_product_bind'] = $this->request->post['module_salesdrive_product_bind'];
         } else {
             $data['module_salesdrive_product_bind'] = $this->config->get('module_salesdrive_product_bind') ? $this->config->get('module_salesdrive_product_bind') : "id";
+        }
+
+        if (isset($this->request->post['module_salesdrive_organization_default'])) {
+            $data['module_salesdrive_organization_default'] = $this->request->post['module_salesdrive_organization_default'];
+        } else {
+            $data['module_salesdrive_organization_default'] = $this->config->get('module_salesdrive_organization_default');
+        }
+
+        if (isset($this->request->post['module_salesdrive_organization_nds'])) {
+            $data['module_salesdrive_organization_nds'] = $this->request->post['module_salesdrive_organization_nds'];
+        } else {
+            $data['module_salesdrive_organization_nds'] = $this->config->get('module_salesdrive_organization_nds');
         }
 
         if (isset($this->request->post['module_salesdrive_status'])) {
