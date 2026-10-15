@@ -1,7 +1,9 @@
 <?php
 
 $_['heading_title']    = 'CRM Salesdrive Integration';
-$_['entry_organization_default'] = 'SalesDrive organization ID (default)';
-$_['entry_organization_nds']     = 'SalesDrive organization ID (payment with VAT)';
-$_['help_organization_default']  = 'Sent as organizationId for every order whose payment code is not with_nds. Empty = not sent.';
-$_['help_organization_nds']      = 'Sent as organizationId for orders with payment code with_nds. Empty = not sent.';
+$_['entry_voronka_field']   = 'SalesDrive VORONKA field (API name)';
+$_['entry_voronka_nds']     = 'VORONKA value for payment with VAT';
+$_['entry_voronka_default'] = 'VORONKA value for other payments';
+$_['help_voronka_field']    = 'API name of the SalesDrive select field, e.g. vORONKA_2. Empty = not sent.';
+$_['help_voronka_nds']      = 'Option parameter for orders with payment code with_nds, e.g. id_742 (TOV Radioshop). Empty = not sent.';
+$_['help_voronka_default']  = 'Option parameter for all other payment methods, e.g. id_743 (FOPs). Empty = not sent.';

@@ -125,8 +125,8 @@ class ControllerExtensionModuleSalesdrive extends Controller
 			}
 			$post_data['module_salesdrive_match_order_statuses'] = $this->processDataArray($post_data['module_salesdrive_match_order_statuses']);
 			
-			foreach (array('module_salesdrive_organization_default', 'module_salesdrive_organization_nds') as $organization_key) {
-				$post_data[$organization_key] = (isset($post_data[$organization_key]) && (int)$post_data[$organization_key] > 0) ? (int)$post_data[$organization_key] : '';
+			foreach (array('module_salesdrive_voronka_field', 'module_salesdrive_voronka_nds', 'module_salesdrive_voronka_default') as $voronka_key) {
+				$post_data[$voronka_key] = isset($post_data[$voronka_key]) ? preg_replace('/[^A-Za-z0-9_]/', '', $post_data[$voronka_key]) : '';
 			}
 			
 			$this->model_setting_setting->editSetting('module_salesdrive', $post_data);
@@ -187,16 +187,22 @@ class ControllerExtensionModuleSalesdrive extends Controller
             $data['module_salesdrive_product_bind'] = $this->config->get('module_salesdrive_product_bind') ? $this->config->get('module_salesdrive_product_bind') : "id";
         }
 
-        if (isset($this->request->post['module_salesdrive_organization_default'])) {
-            $data['module_salesdrive_organization_default'] = $this->request->post['module_salesdrive_organization_default'];
+        if (isset($this->request->post['module_salesdrive_voronka_field'])) {
+            $data['module_salesdrive_voronka_field'] = $this->request->post['module_salesdrive_voronka_field'];
         } else {
-            $data['module_salesdrive_organization_default'] = $this->config->get('module_salesdrive_organization_default');
+            $data['module_salesdrive_voronka_field'] = $this->config->get('module_salesdrive_voronka_field');
         }
 
-        if (isset($this->request->post['module_salesdrive_organization_nds'])) {
-            $data['module_salesdrive_organization_nds'] = $this->request->post['module_salesdrive_organization_nds'];
+        if (isset($this->request->post['module_salesdrive_voronka_nds'])) {
+            $data['module_salesdrive_voronka_nds'] = $this->request->post['module_salesdrive_voronka_nds'];
         } else {
-            $data['module_salesdrive_organization_nds'] = $this->config->get('module_salesdrive_organization_nds');
+            $data['module_salesdrive_voronka_nds'] = $this->config->get('module_salesdrive_voronka_nds');
+        }
+
+        if (isset($this->request->post['module_salesdrive_voronka_default'])) {
+            $data['module_salesdrive_voronka_default'] = $this->request->post['module_salesdrive_voronka_default'];
+        } else {
+            $data['module_salesdrive_voronka_default'] = $this->config->get('module_salesdrive_voronka_default');
         }
 
         if (isset($this->request->post['module_salesdrive_status'])) {

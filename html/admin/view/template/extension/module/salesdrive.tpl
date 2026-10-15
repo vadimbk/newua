@@ -62,16 +62,23 @@
                     </div>
                     
                     <div class="form-group">
-                        <label class="col-sm-2 control-label" for="input-organization-default"><span data-toggle="tooltip" title="<?php echo $help_organization_default; ?>"><?php echo $entry_organization_default; ?></span></label>
+                        <label class="col-sm-2 control-label" for="input-voronka-field"><span data-toggle="tooltip" title="<?php echo $help_voronka_field; ?>"><?php echo $entry_voronka_field; ?></span></label>
                         <div class="col-sm-10">
-                            <input type="number" min="1" step="1" name="module_salesdrive_organization_default" value="<?php echo $module_salesdrive_organization_default; ?>" placeholder="<?php echo $entry_organization_default; ?>" id="input-organization-default" class="form-control" />
+                            <input type="text" name="module_salesdrive_voronka_field" value="<?php echo $module_salesdrive_voronka_field; ?>" placeholder="<?php echo $entry_voronka_field; ?>" id="input-voronka-field" class="form-control" />
                         </div>
                     </div>
                     
                     <div class="form-group">
-                        <label class="col-sm-2 control-label" for="input-organization-nds"><span data-toggle="tooltip" title="<?php echo $help_organization_nds; ?>"><?php echo $entry_organization_nds; ?></span></label>
+                        <label class="col-sm-2 control-label" for="input-voronka-nds"><span data-toggle="tooltip" title="<?php echo $help_voronka_nds; ?>"><?php echo $entry_voronka_nds; ?></span></label>
                         <div class="col-sm-10">
-                            <input type="number" min="1" step="1" name="module_salesdrive_organization_nds" value="<?php echo $module_salesdrive_organization_nds; ?>" placeholder="<?php echo $entry_organization_nds; ?>" id="input-organization-nds" class="form-control" />
+                            <input type="text" name="module_salesdrive_voronka_nds" value="<?php echo $module_salesdrive_voronka_nds; ?>" placeholder="<?php echo $entry_voronka_nds; ?>" id="input-voronka-nds" class="form-control" />
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="input-voronka-default"><span data-toggle="tooltip" title="<?php echo $help_voronka_default; ?>"><?php echo $entry_voronka_default; ?></span></label>
+                        <div class="col-sm-10">
+                            <input type="text" name="module_salesdrive_voronka_default" value="<?php echo $module_salesdrive_voronka_default; ?>" placeholder="<?php echo $entry_voronka_default; ?>" id="input-voronka-default" class="form-control" />
                         </div>
                     </div>
                     

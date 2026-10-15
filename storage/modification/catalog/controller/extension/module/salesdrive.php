@@ -362,10 +362,10 @@ class ControllerExtensionModuleSalesdrive extends Controller
 
 		$data['shipping_method'] = $shipping_method;
 		$data['payment_method'] = $payment_method;
-		$organization_key = ($payment_code == 'with_nds') ? 'module_salesdrive_organization_nds' : 'module_salesdrive_organization_default';
-		$organization_id = (int)$this->config->get($organization_key);
-		if ($organization_id > 0) {
-			$data['organizationId'] = $organization_id;
+		$voronka_field = trim((string)$this->config->get('module_salesdrive_voronka_field'));
+		$voronka_value = trim((string)$this->config->get(($payment_code == 'with_nds') ? 'module_salesdrive_voronka_nds' : 'module_salesdrive_voronka_default'));
+		if ($voronka_field !== '' && $voronka_value !== '' && !isset($data[$voronka_field])) {
+			$data[$voronka_field] = $voronka_value;
 		}
 		$data['comment'] = $comment;
 
