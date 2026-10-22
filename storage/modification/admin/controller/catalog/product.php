@@ -1399,6 +1399,12 @@ $data['sku'] = $autosku_query1->row["MAX(sku)"]+1;
 				'customer_group_id' => $product_special['customer_group_id'],
 				'priority'          => $product_special['priority'],
 				'price'             => $product_special['price'],
+
+    /* Bulk Specials Editor */
+    'timer'                    => ($timer_exist) ? $product_special['timer'] : '',
+    'product_special_group_id' => ($timer_exist) ? $product_special['product_special_group_id'] : 0,
+    /* Bulk Specials Editor */
+
 				'date_start'        => ($product_special['date_start'] != '0000-00-00') ? $product_special['date_start'] : '',
 				'date_end'          => ($product_special['date_end'] != '0000-00-00') ? $product_special['date_end'] :  ''
 			);
