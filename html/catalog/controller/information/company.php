@@ -64,7 +64,12 @@ class ControllerInformationCompany extends Controller {
 		}
 
 		if (!$json) {
-			$json['file'] = $file = $filename;
+			// A random directory per upload: equal names must not overwrite each other, the mail attachment keeps the original name.
+			$json['file'] = $filename;
+
+			$file = token(32) . '/' . str_replace(array('/', '\\'), '', $filename);
+
+			mkdir(DIR_UPLOAD . dirname($file), 0755);
 
 			move_uploaded_file($this->request->files['file']['tmp_name'], DIR_UPLOAD . $file);
 
@@ -85,6 +90,25 @@ class ControllerInformationCompany extends Controller {
 			
 	
 	
+	// The form sends only the upload code. The path comes from oc_upload, so a forged value cannot point to another file.
+	private function getUploadPath() {
+		if (empty($this->request->post['file']) || !preg_match('/^[a-f0-9]{40}$/', $this->request->post['file'])) {
+			return '';
+		}
+
+		$this->load->model('tool/upload');
+
+		$upload = $this->model_tool_upload->getUploadByCode($this->request->post['file']);
+
+		if (!$upload) {
+			return '';
+		}
+
+		$path = realpath(DIR_UPLOAD . $upload['filename']);
+
+		return ($path && strpos($path, realpath(DIR_UPLOAD) . '/') === 0 && is_file($path)) ? $path : '';
+	}
+
 	public function index() {
 		$this->load->language('information/company');
 
@@ -106,9 +130,11 @@ class ControllerInformationCompany extends Controller {
 			$mail->setSubject(html_entity_decode(sprintf($this->language->get('email_subject')), ENT_QUOTES, 'UTF-8'));
 			$mail->setHtml("<table style='border-collapse: collapse;width:500px;'><tr><td style='border: 1px solid #000;padding:10px;width: 200px;'><strong>"."". $this->language->get('email_company'). " </strong></td><td style='border: 1px solid #000;padding:10px;';>" .  $this->request->post['company']. "</td></tr><tr><td style='border: 1px solid #000;padding:10px;'><strong>". $this->language->get('entry_name') ."</strong></td><td style='border: 1px solid #000;padding:10px;'>"."".$this->request->post['name']."</td></tr><tr><td style='border: 1px solid #000;padding:10px;';><strong>". $this->language->get('email_mail') ."</strong></td><td style='border: 1px solid #000;padding:10px;';>".$this->request->post['email']."</td></tr><tr><td style='border: 1px solid #000;padding:10px;';><strong>"."". $this->language->get('email_phone') ."</strong></td><td style='border: 1px solid #000;padding:10px;';> "."". $this->request->post['phone']. "</td></tr><tr><td style='border: 1px solid #000;padding:10px;';><strong>" .$this->language->get('email_sposob')."</strong></td><td style='border: 1px solid #000;padding:10px;';> "."".$this->request->post['option']."</td></tr><tr><td colspan='2' style='border: 1px solid #000;padding:10px;';><strong>".$this->language->get('email_message'). "</strong></td></tr><tr><td colspan='2' style='border: 1px solid #000;padding:10px;';> " . $this->request->post['enquiry']."</td></tr></table>"."\n\n"."<strong>".$this->language->get('email_time')."</strong>".date('d/m/Y, H:i:s',strtotime('+2 hour')), ENT_QUOTES, 'UTF-8');
 			
-        if($this->request->post['file']){
-                    $mail->addAttachment(DIR_UPLOAD.$this->request->post['file']);
-                }		
+			$upload_path = $this->getUploadPath();
+
+			if ($upload_path) {
+				$mail->addAttachment($upload_path);
+			}
 
 			 if(isset($temp_name)){
      unlink( $temp_name );
@@ -139,9 +165,6 @@ class ControllerInformationCompany extends Controller {
 			$mail->setHtml("<a href='" . HTTP_SERVER . "'><img src='" . HTTP_SERVER . "image/catalog/radioshop-268.png'/></a>"."".$this->language->get('thanks').""."<table style='border-collapse: collapse;width:500px;'><tr><td colspan='2' style='border: 1px solid #5f87d1;padding:10px;';><strong>".$this->language->get('you_send')."</strong></td></tr><tr><td style='border: 1px solid #5f87d1;padding:10px;width: 200px;'><strong>"."". $this->language->get('email_company'). " </strong></td><td style='border: 1px solid #5f87d1;padding:10px;';>" .  $this->request->post['company']. "</td></tr><tr><td style='border: 1px solid #5f87d1;padding:10px;'><strong>". $this->language->get('entry_name') ."</strong></td><td style='border: 1px solid #5f87d1;padding:10px;'>"."".$this->request->post['name']."</td></tr><tr><td style='border: 1px solid #5f87d1;padding:10px;';><strong>". $this->language->get('email_mail') ."</strong></td><td style='border: 1px solid #5f87d1;padding:10px;';>".$this->request->post['email']."</td></tr><tr><td style='border: 1px solid #5f87d1;padding:10px;';><strong>"."". $this->language->get('email_phone') ."</strong></td><td style='border: 1px solid #5f87d1;padding:10px;';> "."". $this->request->post['phone']. "</td></tr><tr><td style='border: 1px solid #5f87d1;padding:10px;';><strong>" .$this->language->get('email_sposob')."</strong></td><td style='border: 1px solid #5f87d1;padding:10px;';> "."".$this->request->post['option']."</td></tr><tr><td colspan='2' style='border: 1px solid #5f87d1;padding:10px;';><strong>".$this->language->get('email_message'). "</strong></td></tr><tr><td colspan='2' style='border: 1px solid #5f87d1;padding:10px;';> " . $this->request->post['enquiry']."</td></tr></table>"."\n\n"."<strong>", ENT_QUOTES, 'UTF-8');
 			
 			
-			if($this->request->post['file']){
-                    $mail->addAttachment(DIR_UPLOAD.$this->request->post['file']);
-                }		
 
 			 if(isset($temp_name)){
      unlink( $temp_name );
