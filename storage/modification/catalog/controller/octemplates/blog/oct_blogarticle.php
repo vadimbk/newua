@@ -637,9 +637,27 @@ $data['breadcrumbs'][] = array(
 
 		$this->load->model('tool/image');
 
+
+			$data['oct_popup_view_status'] = $this->config->get('oct_popup_view_status');
+			
 		$data['products'] = [];
 
 		foreach ($results as $result) {
+
+				if ($result['quantity'] <= 0) {
+					$stock = $result['stock_status'];
+				} else {
+					$stock = false;
+				}
+
+				$can_buy = true;
+
+				if ($result['quantity'] <= 0 && !$this->config->get('config_stock_checkout')) {
+					$can_buy = false;
+				} elseif ($result['quantity'] <= 0 && $this->config->get('config_stock_checkout')) {
+					$can_buy = true;
+				}
+			
 			$data['products'][] = [
 				'name'     => $result['name'],
 				'thumb'    => $this->model_tool_image->resize($result['image'] ? $result['image'] : 'placeholder.png', 228, 228),
