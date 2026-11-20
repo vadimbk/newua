@@ -710,8 +710,10 @@ if (isset($this->request->get['filter_upc'])) {
 		} elseif (!empty($product_info)) {
 			$data['sku'] = $product_info['sku'];
 		} else {
-			$autosku_query1 = $this->db->query("SELECT MAX(sku) FROM " . DB_PREFIX . "product");
-$data['sku'] = $autosku_query1->row["MAX(sku)"]+1;
+			// Next internal sku: the highest purely numeric sku below 100000, plus one.
+			// MAX(sku) on the varchar column returned supplier codes such as 'EMT-2-0617' (= 1 in PHP).
+			$autosku_query1 = $this->db->query("SELECT MAX(CAST(sku AS UNSIGNED)) AS max_sku FROM " . DB_PREFIX . "product WHERE sku REGEXP '^[0-9]+$' AND CAST(sku AS UNSIGNED) < 100000");
+			$data['sku'] = (int)$autosku_query1->row['max_sku'] + 1;
 		}
 		
 				if (isset($this->request->post['warranty'])) {
