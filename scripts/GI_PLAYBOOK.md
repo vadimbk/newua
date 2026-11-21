@@ -119,6 +119,10 @@ $PHP scripts/gi_attr_uk.php $P $D/import_journal_prod.json scripts/gi_attr_uk.js
 (same product_id) so both DBs carry the same sku.
 Then ask Vadym to save any one product in the prod admin without changes: the LSCache module purges the Product/Category tags,
 and only then the new products appear in category listings. Do not wipe the whole prod LSCache.
+The save does not purge every cached category or filter page (seen 2026-11-21). For leftovers, scan the cache and delete only the
+matching entry files: many entries are gzip-compressed, so a text grep misses them; use
+`$PHP scripts/lscache_scan.php /var/www/radio-shop.com.ua/cache '<needle>'` (decompresses bodies).
+A useful needle is `/var/www/radio-shop.com.ua/html/image/`: OpenCart prints that filesystem path as `<img src>` when it cannot make a thumbnail.
 
 Verify with `curl -sk --resolve radio-shop.com.ua:443:127.0.0.1 ...`: random new product pages (200, local images only),
 a category listing (`x-litespeed-cache: miss` after the purge), search, admin product list thumbnails.
@@ -149,6 +153,8 @@ The redirect table is read only when the keyword is absent from `oc_seo_url`. If
 ## 6. Known traps
 - Supplier vendor in the feed is unreliable: always use the supplier site.
 - Some feed names lack the article or carry look-alike letters; reported by the build, not changed.
-- After replacing image files on disk, pages in LSCache still point to the old result until the Product/Category purge.
+- After replacing image files on disk, pages in LSCache still point to the old result; purge as in step 7 and scan for leftovers.
+- The 2024 GI batch also had WebP pictures under `.jpg` names (54 files, converted 2026-11-21). After any image work, check that every
+  file referenced by `oc_product.image` / `oc_product_image` is jpeg, png or gif.
 - Many broken image URLs in admin can trigger the anti-flood ban on the front proxy 10.100.0.91 (blank 403 for that IP).
 - Dev `ls` cannot receive supplier crons; without step 8 its GI prices drift within a day.
